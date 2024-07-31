@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="<%= lang.toggleLang === 'Switch to Hindi' ? 'en' : 'hi' %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labour Job Finder</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaC-DSCVmVs7-JAYz0mWL4Ks36S7sMJGmWHA&usqp=CAU" alt="Logo">
+        </div>
+        <ul>
+            <li><a href="/"><%= lang.home %></a></li>
+            <li><a href="/register"><%= lang.register %></a></li>
+            <li><a href="/login"><%= lang.login %></a></li>
+            <li>
+                <button id="toggleLangBtn"><%= lang.toggleLang %></button>
+            </li>
+        </ul>
+        <div class="search-bar">
+            <input type="text" id="jobSearchInput" placeholder="<%= lang.searchJobs %>">
+            <button id="jobSearchBtn"><%= lang.search %></button>
+        </div>
+    </nav>
+
+    <header class="hero-section">
+        <div class="hero-content">
+            <!-- <h1><%= lang.welcome %></h1>
+            <p><%= lang.intro %></p>
+            <button class="cta-button"><%= lang.register %></button> -->
+        </div>
+    </header>
+  
+    <section class="job-listings">
+     
+        <h2><%= lang.jobListings %>(Normal)</h2>
+        <div class="jobs" id="jobListings">
+            <% jobs.forEach(function(job) { %>
+                <div class="job-card">
+                    <h3><%= job.title %></h3>
+                    <p><%= job.description %></p>
+                    <p><%= lang.location %>: <%= job.location %></p>
+                    <button><%= lang.apply %></button><button><%= lang.details %></button>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+   
+    <section class="job-listings">
+       
+        <h2><%= lang.jobListings  %>(Technician)</h2>
+        <div class="jobs" id="jobListings">
+            <% jobs2.forEach(function(job) { %>
+                <div class="job-card">
+                    <h3><%= job.title %></h3>
+                    <p><%= job.description %></p>
+                    <p><%= lang.location %>: <%= job.location %></p>
+                    <button><%= lang.apply %></button><button><%= lang.details %></button>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+   
+
+    <!-- Chatbot Widget -->
+    <div class="chat-widget">
+        <div class="chat-header">
+            <span>Chatbot</span>
+            <button id="closeChat">x</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type your message...">
+            <button id="sendChat">Send</button>
+        </div>
+    </div>
+    <button id="openChat" class="chat-toggle">
+        <img src="https://img.icons8.com/ios-filled/50/000000/chat.png" alt="Chat">
+    </button>
+
+    <script src="/script.js"></script>
+
+  
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Labour Job Finder</p>
+    </footer>
+</body>
+</html>
