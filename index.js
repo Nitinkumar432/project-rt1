@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser()); // Use cookie-parser
+app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,7 +22,7 @@ const language = {
         jobListings: "Job Listings",
         location: "Location",
         apply: "Apply Now",
-        details:"See details"
+        details: "See details"
     },
     hi: {
         home: "होम",
@@ -34,7 +34,7 @@ const language = {
         jobListings: "नौकरी सूची",
         location: "स्थान",
         apply: "अभी आवेदन करें",
-        details:"जानकारी देखें"
+        details: "जानकारी देखें"
     }
 };
 
@@ -42,14 +42,33 @@ const language = {
 const jobs = [
     { title: "Construction Worker", description: "Work on various construction sites.", location: "Delhi" },
     { title: "Gardener", description: "Maintain gardens and landscapes.", location: "Mumbai" },
-    { title: "Factory Worker", description: "Operate machinery in a factory.", location: "Chennai" }
+    { title: "Factory Worker", description: "Operate machinery in a factory.", location: "Chennai" },
+    { title: "Bridge Construction", description: "Operate machinery.", location: "Hazipur" }
 ];
 const jobs2 = [
     { title: "Electrician", description: "Install and repair electrical systems.", location: "Delhi" },
     { title: "Plumber", description: "Fix and install plumbing systems.", location: "Mumbai" },
-    { title: "Machine Operator", description: "Operate and maintain industrial machines.", location: "Chennai" }
+    { title: "Machine Operator", description: "Operate and maintain industrial machines.", location: "Chennai" },
+    { title: "Laptop Repair ", description: "Operate and maintain Laptop  parts.", location: "patna" }
 ];
 
+const breakingNews = [
+    "Breaking News: New policy for workers announced!",
+    "Update: Minimum wage increased in Delhi.",
+    "Alert: Heavy rainfall expected in Mumbai this week."
+];
+const notices = [
+    "Breaking News: New policy for workers announced!",
+    "Update: Minimum wage increased in Delhi.",
+    "Alert: Heavy rainfall expected in Mumbai this week."
+];
+const newsItems = [
+    { text: "Breaking News: Major event happening now! - महत्वपूर्ण समाचार: बड़ा घटना अभी हो रही है!" },
+    { text: "Update: New technology launch next week! - अपडेट: अगले सप्ताह नई तकनीक की लॉन्च!" },
+    { text: "Special Report: Market trends analysis - विशेष रिपोर्ट: बाजार प्रवृत्तियों का विश्लेषण" },
+    { text: "Alert: Weather warning issued - अलर्ट: मौसम की चेतावनी जारी" }
+    // Add more news items as needed
+];
 
 app.use((req, res, next) => {
     if (!req.cookies.lang) {
@@ -62,7 +81,7 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     const lang = req.cookies.lang || 'en';
     console.log('Serving home page');
-    res.render('home.ejs', { lang: language[lang], jobs ,jobs2});
+    res.render('home.ejs', { lang: language[lang], jobs, jobs2,newsItems,notices});
 });
 
 app.get('/change-language', (req, res) => {
@@ -78,14 +97,14 @@ app.get('/hello', (req, res) => {
 });
 
 // Handle register and login routes
-app.post('/register', (req, res) => {
+app.get('/register', (req, res) => {
     console.log('Register page accessed');
-    res.send("Register page is open");
+    res.render("register.ejs");
 });
 
 app.get('/login', (req, res) => {
     console.log('Login page accessed');
-    res.send("Login page is open");
+    res.render("login.ejs");
 });
 
 app.listen(port, () => {

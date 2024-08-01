@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Labour Job Finder</title>
+    <link rel="stylesheet" href="/register.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Register</h1>
+        <form id="registerForm" action="/register" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="fatherName">Father's Name</label>
+                <input type="text" id="fatherName" name="fatherName" required>
+            </div>
+            <div class="form-group">
+                <label for="motherName">Mother's Name</label>
+                <input type="text" id="motherName" name="motherName" required>
+            </div>
+            <div class="form-group">
+                <label for="experience">Experience</label>
+                <input type="text" id="experience" name="experience" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location</label>
+                <input type="text" id="location" name="location" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" required>
+            </div>
+            <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" id="district" name="district" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="form-group otp-group" style="display:none;">
+                <label for="otp">OTP</label>
+                <input type="text" id="otp" name="otp">
+                <button type="button" id="validateOtpBtn">Validate OTP</button>
+            </div>
+            <button type="button" id="sendOtpBtn">Send OTP</button>
+            <button type="submit" id="registerBtn" style="display:none;">Register</button>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#sendOtpBtn').on('click', function() {
+                var phone = $('#phone').val();
+                if (phone.length === 10) {
+                    $.ajax({
+                        url: '/send-otp',
+                        method: 'POST',
+                        data: { phone: phone },
+                        success: function(response) {
+                            if (response.success) {
+                                $('.otp-group').show();
+                                $('#sendOtpBtn').hide();
+                            } else {
+                                alert('Failed to send OTP. Please try again.');
+                            }
+                        }
+                    });
+                } else {
+                    alert('Please enter a valid 10-digit phone number.');
+                }
+            });
+
+            $('#validateOtpBtn').on('click', function() {
+                var otp = $('#otp').val();
+                $.ajax({
+                    url: '/validate-otp',
+                    method: 'POST',
+                    data: { otp: otp },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#registerBtn').show();
+                            $('.otp-group').hide();
+                            alert('OTP validated successfully. You can now register.');
+                        } else {
+                            alert('Invalid OTP. Please try again.');
+                        }
+                    }
+                });
+            });
+
+            $('#registerForm').on('submit', function(event) {
+                var phone = $('#phone').val();
+                if (!phone || phone.length !== 10) {
+                    alert('Please validate your phone number first.');
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -83,5 +83,48 @@ document.getElementById('jobSearchBtn').addEventListener('click', () => {
 });
 
 
+
 //term and conditions
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Check if the modal should be shown
+    if (!sessionStorage.getItem('laborModalShown')) {
+        setTimeout(() => {
+            document.getElementById('laborTermsModal').style.display = 'block';
+        }, 5000); // 5 seconds delay
+    }
+
+    // Close button functionality
+    document.querySelector('.labor-close-btn').addEventListener('click', () => {
+        document.getElementById('laborTermsModal').style.display = 'none';
+    });
+
+    // Checkbox functionality
+    const agreeCheckbox = document.getElementById('laborAgreeCheckbox');
+    const submitBtn = document.getElementById('laborSubmitBtn');
+
+    agreeCheckbox.addEventListener('change', () => {
+        submitBtn.disabled = !agreeCheckbox.checked;
+    });
+
+    // Handle form submission
+    submitBtn.addEventListener('click', () => {
+        // Set flag in session storage to prevent showing the modal again
+        sessionStorage.setItem('laborModalShown', 'true');
+        document.getElementById('laborTermsModal').style.display = 'none';
+    });
+});
+
+
+//breaking news section
+document.addEventListener('DOMContentLoaded', () => {
+    const ticker = document.getElementById('ticker');
+
+    ticker.addEventListener('mouseover', () => {
+        ticker.style.animationPlayState = 'paused'; // Pause animation on hover
+    });
+
+    ticker.addEventListener('mouseout', () => {
+        ticker.style.animationPlayState = 'running'; // Resume animation when mouse leaves
+    });
+});

@@ -1,110 +1,111 @@
 <!DOCTYPE html>
-<html lang="<%= lang.toggleLang === 'Switch to Hindi' ? 'en' : 'hi' %>">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Labour Job Finder</title>
-    <link rel="stylesheet" href="/style.css">
-    <script src="script.js"></script>
+    <title>Labor Job Terms and Conditions Modal</title>
+    <style>
+        /* Modal styles */
+        .labor-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6); /* Darker background for better visibility */
+            backdrop-filter: blur(8px); /* Add stronger blur effect to background */
+        }
 
+        .labor-modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 15px; /* More rounded corners */
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4); /* Stronger shadow effect */
+            animation: fadeIn 0.5s; /* Animation */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .labor-close-btn {
+            color: #333;
+            float: right;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .labor-close-btn:hover,
+        .labor-close-btn:focus {
+            color: #ff6f61; /* Change color on hover */
+        }
+
+        .labor-modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            font-family: 'Arial', sans-serif; /* Modern font */
+        }
+
+        .labor-terms {
+            max-height: 500px; /* Limit height for scrolling */
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px; /* Prevent scrollbar overlap */
+            border: 1px solid #ddd; /* Border for terms section */
+            border-radius: 10px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light background */
+        }
+
+        .labor-terms p {
+            margin: 15px 0;
+            line-height: 1.6; /* Improved readability */
+        }
+
+        .labor-label {
+            display: block;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            font-family: 'Arial', sans-serif; /* Modern font */
+        }
+
+        .labor-checkbox {
+            margin-right: 10px;
+        }
+
+        .labor-button {
+            background-color: #28a745; /* Green background */
+            color: #fff;
+            border: none;
+            border-radius: 10px; /* Rounded corners */
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .labor-button:hover {
+            background-color: #218838; /* Darker green on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .labor-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaC-DSCVmVs7-JAYz0mWL4Ks36S7sMJGmWHA&usqp=CAU" alt="Logo">
-        </div>
-        <ul>
-            <li><a href="/"><%= lang.home %></a></li>
-            <li><a href="/register"><%= lang.register %></a></li>
-            <li><a href="/login"><%= lang.login %></a></li>
-            <li>
-                <button id="toggleLangBtn"><%= lang.toggleLang %></button>
-            </li>
-        </ul>
-        <div class="search-bar">
-            <input type="text" id="jobSearchInput" placeholder="<%= lang.searchJobs %>">
-            <button id="jobSearchBtn"><%= lang.search %></button>
-        </div>
-    </nav>
-
-    <!-- Marquee Section -->
-    <div class="news-ticker-container">
-        <div class="news-ticker" id="ticker">
-            <% newsItems.forEach(item => { %>
-                <div class="news-item"><%= item.text %></div>
-            <% }) %>
-        </div>
-    </div>
-
-
-    <header class="hero-section">
-        <div class="hero-content">
-            <!-- <h1><%= lang.welcome %></h1>
-            <p><%= lang.intro %></p>
-            <button class="cta-button"><%= lang.register %></button> -->
-        </div>
-    </header>
-  
-    <section class="job-listings">
-        <h2><%= lang.jobListings %> (Normal)</h2>
-        <div class="jobs" id="jobListings">
-            <% jobs.forEach(function(job) { %>
-                <div class="job-card">
-                    <h3><%= job.title %></h3>
-                    <p><%= job.description %></p>
-                    <p><%= lang.location %>: <%= job.location %></p>
-                    <button><%= lang.apply %></button>
-                    <button><%= lang.details %></button>
-                </div>
-            <% }); %>
-        </div>
-    </section>
-   
-    <section class="job-listings">
-        <h2><%= lang.jobListings %> (Technician)</h2>
-        <div class="jobs" id="jobListings">
-            <% jobs2.forEach(function(job) { %>
-                <div class="job-card">
-                    <h3><%= job.title %></h3>
-                    <p><%= job.description %></p>
-                    <p><%= lang.location %>: <%= job.location %></p>
-                    <button><%= lang.apply %></button>
-                    <button><%= lang.details %></button>
-                </div>
-            <% }); %>
-        </div>
-    </section>
-    <section class="notices">
-        <h2>Notices</h2>
-        <div class="notice-list">
-            <% notices.forEach(function(notice) { %>
-                <div class="notice-card">
-                    <p><%= notice %></p>
-                </div>
-            <% }); %>
-        </div>
-    </section>
-
-    <!-- Chatbot Widget -->
-    <div class="chat-widget">
-        <div class="chat-header">
-            <span>Chatbot</span>
-            <button id="closeChat">x</button>
-        </div>
-        <div class="chat-body" id="chatBody">
-            <!-- Messages will appear here -->
-        </div>
-        <div class="chat-footer">
-            <input type="text" id="chatInput" placeholder="Type your message...">
-            <button id="sendChat">Send</button>
-        </div>
-    </div>
-    <button id="openChat" class="chat-toggle">
-        <img src="https://img.icons8.com/ios-filled/50/000000/chat.png" alt="Chat">
-    </button>
-
-    <script src="/script.js"></script>
-   
     <div id="laborTermsModal" class="labor-modal">
         <div class="labor-modal-content">
             <span class="labor-close-btn">&times;</span>
@@ -169,8 +170,36 @@
             <button type="button" id="laborSubmitBtn" class="labor-button" disabled>Proceed</button>
         </div>
     </div>
-    <footer>
-        <p>&copy; 2024 Labour Job Finder</p>
-    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Check if the modal should be shown
+            if (!sessionStorage.getItem('laborModalShown')) {
+                setTimeout(() => {
+                    document.getElementById('laborTermsModal').style.display = 'block';
+                }, 5000); // 5 seconds delay
+            }
+
+            // Close button functionality
+            document.querySelector('.labor-close-btn').addEventListener('click', () => {
+                document.getElementById('laborTermsModal').style.display = 'none';
+            });
+
+            // Checkbox functionality
+            const agreeCheckbox = document.getElementById('laborAgreeCheckbox');
+            const submitBtn = document.getElementById('laborSubmitBtn');
+
+            agreeCheckbox.addEventListener('change', () => {
+                submitBtn.disabled = !agreeCheckbox.checked;
+            });
+
+            // Handle form submission
+            submitBtn.addEventListener('click', () => {
+                // Set flag in session storage to prevent showing the modal again
+                sessionStorage.setItem('laborModalShown', 'true');
+                document.getElementById('laborTermsModal').style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
