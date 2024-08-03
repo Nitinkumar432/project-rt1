@@ -601,7 +601,7 @@ footer {
 /* //breaking news section */
 .news-ticker-container {
     background: linear-gradient(90deg, #4a4a4a, #333); /* Gradient background */
-    color: #ee948c;
+    color: #ffffff;
     overflow: hidden;
     position: relative;
     height: 70px; /* Increased height for better visibility */
@@ -646,7 +646,7 @@ footer {
 
 .news-item:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Slight highlight on hover */
-    color: #ff6f61; /* Change text color on hover */
+    color: #ffffff; /* Change text color on hover */
     cursor: pointer;
     transform: scale(1.05); /* Slight zoom effect on hover */
 }
@@ -678,3 +678,4 @@ footer {
         margin-right: 20px; /* Adjust spacing for smaller screens */
     }
 }
+/* //job content */

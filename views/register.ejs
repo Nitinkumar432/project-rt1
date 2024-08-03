@@ -1,108 +1,185 @@
 <!DOCTYPE html>
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Labour Job Finder</title>
-    <link rel="stylesheet" href="/register.css">
+    <title>Register - Rozgar Setu Labour Job Finder</title>
+    <link rel="stylesheet" href="register.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <h1>Rozgar Setu Labour Job Finder</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
     <div class="container">
-        <h1>Register</h1>
+        <div class="footer-placeholder"></div> <!-- Space for footer -->
+        <h2>Register</h2>
         <form id="registerForm" action="/register" method="post">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required placeholder="Enter your name">
             </div>
             <div class="form-group">
                 <label for="fatherName">Father's Name</label>
-                <input type="text" id="fatherName" name="fatherName" required>
+                <input type="text" id="fatherName" name="fatherName" required placeholder="Enter your father's name">
             </div>
             <div class="form-group">
                 <label for="motherName">Mother's Name</label>
-                <input type="text" id="motherName" name="motherName" required>
+                <input type="text" id="motherName" name="motherName" required placeholder="Enter your mother's name">
             </div>
             <div class="form-group">
                 <label for="experience">Experience</label>
-                <input type="text" id="experience" name="experience" required>
+                <input type="text" id="experience" name="experience" required placeholder="Enter your experience">
             </div>
             <div class="form-group">
                 <label for="age">Age</label>
-                <input type="number" id="age" name="age" required>
+                <input type="number" id="age" name="age" required placeholder="Enter your age">
             </div>
             <div class="form-group">
                 <label for="location">Location</label>
-                <input type="text" id="location" name="location" required>
+                <input type="text" id="location" name="location" required placeholder="Enter your location">
             </div>
             <div class="form-group">
                 <label for="state">State</label>
-                <input type="text" id="state" name="state" required>
+                <input type="text" id="state" name="state" required placeholder="Enter your state">
             </div>
             <div class="form-group">
                 <label for="district">District</label>
-                <input type="text" id="district" name="district" required>
+                <input type="text" id="district" name="district" required placeholder="Enter your district">
             </div>
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="text" id="phone" name="phone" required>
+                <input type="text" id="phone" name="phone" required placeholder="Enter your phone number">
             </div>
             <div class="form-group otp-group" style="display:none;">
                 <label for="otp">OTP</label>
-                <input type="text" id="otp" name="otp">
+                <input type="text" id="otp" name="otp" placeholder="Enter OTP">
                 <button type="button" id="validateOtpBtn">Validate OTP</button>
+                <p id="otpStatus"></p>
             </div>
             <button type="button" id="sendOtpBtn">Send OTP</button>
             <button type="submit" id="registerBtn" style="display:none;">Register</button>
         </form>
     </div>
+    
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Preview Your Details</h3>
+            <div id="previewDetails"></div>
+            <button id="downloadDetailsBtn">Download</button>
+            <button id="confirmDetailsBtn">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 Rozgar Setu. All Rights Reserved.</p>
+            <p><a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+        </div>
+    </footer>
+
     <script>
         $(document).ready(function() {
-            $('#sendOtpBtn').on('click', function() {
-                var phone = $('#phone').val();
-                if (phone.length === 10) {
-                    $.ajax({
-                        url: '/send-otp',
-                        method: 'POST',
-                        data: { phone: phone },
-                        success: function(response) {
-                            if (response.success) {
-                                $('.otp-group').show();
-                                $('#sendOtpBtn').hide();
-                            } else {
-                                alert('Failed to send OTP. Please try again.');
-                            }
-                        }
-                    });
-                } else {
-                    alert('Please enter a valid 10-digit phone number.');
-                }
-            });
-
-            $('#validateOtpBtn').on('click', function() {
-                var otp = $('#otp').val();
-                $.ajax({
-                    url: '/validate-otp',
-                    method: 'POST',
-                    data: { otp: otp },
-                    success: function(response) {
-                        if (response.success) {
-                            $('#registerBtn').show();
-                            $('.otp-group').hide();
-                            alert('OTP validated successfully. You can now register.');
-                        } else {
-                            alert('Invalid OTP. Please try again.');
-                        }
+            $('#sendOtpBtn').click(function() {
+                var allFieldsFilled = true;
+                $('#registerForm input[required]').each(function() {
+                    if ($(this).val().trim() === '') {
+                        allFieldsFilled = false;
+                        alert('Please fill out all required fields.');
+                        return false;
                     }
                 });
+
+                if (allFieldsFilled) {
+                    // Show preview modal
+                    var previewContent = `
+                        <table>
+                            <tr><th>Field</th><th>Value</th></tr>
+                            <tr><td>Name</td><td>${$('#name').val()}</td></tr>
+                            <tr><td>Father's Name</td><td>${$('#fatherName').val()}</td></tr>
+                            <tr><td>Mother's Name</td><td>${$('#motherName').val()}</td></tr>
+                            <tr><td>Experience</td><td>${$('#experience').val()}</td></tr>
+                            <tr><td>Age</td><td>${$('#age').val()}</td></tr>
+                            <tr><td>Location</td><td>${$('#location').val()}</td></tr>
+                            <tr><td>State</td><td>${$('#state').val()}</td></tr>
+                            <tr><td>District</td><td>${$('#district').val()}</td></tr>
+                            <tr><td>Phone Number</td><td>${$('#phone').val()}</td></tr>
+                        </table>
+                    `;
+                    $('#previewDetails').html(previewContent);
+                    $('#previewModal').fadeIn();
+                }
             });
 
-            $('#registerForm').on('submit', function(event) {
-                var phone = $('#phone').val();
-                if (!phone || phone.length !== 10) {
-                    alert('Please validate your phone number first.');
-                    event.preventDefault();
+            $('#confirmDetailsBtn').click(function() {
+                $('#previewModal').fadeOut();
+                $('.otp-group').fadeIn();
+                $('#registerBtn').fadeIn();
+                $('#sendOtpBtn').text('Resend OTP'); // Change button text
+                alert('OTP sent: 123456');
+            });
+
+            $('#downloadDetailsBtn').click(function() {
+                var previewContent = `
+                    Name: ${$('#name').val()}
+                    Father's Name: ${$('#fatherName').val()}
+                    Mother's Name: ${$('#motherName').val()}
+                    Experience: ${$('#experience').val()}
+                    Age: ${$('#age').val()}
+                    Location: ${$('#location').val()}
+                    State: ${$('#state').val()}
+                    District: ${$('#district').val()}
+                    Phone Number: ${$('#phone').val()}
+                `;
+                var blob = new Blob([previewContent], { type: 'text/plain;charset=utf-8' });
+                var link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'form-details.txt';
+                link.click();
+            });
+
+            $('#validateOtpBtn').click(function() {
+                var enteredOtp = $('#otp').val();
+                var correctOtp = '123456';
+                if (enteredOtp === correctOtp) {
+                    $('#otpStatus').text('OTP validated successfully!');
+                    $('#otpStatus').css('color', 'green');
+                    $('#validateOtpBtn').prop('disabled', true); // Disable validate button
+                    $('#sendOtpBtn').prop('disabled', true); // Disable resend button
+                    $('#registerBtn').fadeIn(); // Show Register button
+                } else {
+                    $('#otpStatus').text('Invalid OTP, please try again.');
+                    $('#otpStatus').css('color', 'red');
                 }
+            });
+
+            $('.close').click(function() {
+                $('#previewModal').fadeOut();
+            });
+
+            $('#registerForm').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+                console.log('Form Data:', $(this).serialize()); // Log form data to console
+                $.post('/register', $(this).serialize(), function(response) {
+                    // Handle the response if needed
+                    console.log('Server Response:', response);
+                });
             });
         });
     </script>

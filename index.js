@@ -102,8 +102,17 @@ app.get('/register', (req, res) => {
     res.render("register.ejs");
 });
 
+// Handle form submission from the register page
+app.post('/register', (req, res) => {
+    console.log('Form submitted');
+    console.log('Form Data:', req.body); // Print the submitted form data to console
+    res.send('Form submitted successfully'); // Respond to the client
+});
+
 app.get('/login', (req, res) => {
     console.log('Login page accessed');
+  
+
     res.render("login.ejs");
 });
 
