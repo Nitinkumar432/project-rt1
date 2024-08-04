@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Jobs</title>
+    <link rel="stylesheet" href="/findjob.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>RozgarSetu</h1>
+            <nav>
+                <ul>
+                    <li><a href="/"><%= lang.home %></a></li>
+                    <!-- <li><a href="/register"><%= lang.register %></a></li>
+                    <li><a href="/login"><%= lang.login %></a></li>
+                    <li><a href="/findjob"><%= lang.job %></a></li> -->
+                    <li><a href="/change-language?lang=<%= lang === language.en ? 'hi' : 'en' %>"><%= lang.toggleLang %></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h2><%= lang.intro %></h2>
+
+        <form action="/findjob" method="get" class="search-form">
+            <input type="text" name="job-title" placeholder="Job Title" class="search-input">
+            <input type="text" name="location" placeholder="Location" class="search-input">
+            <input type="number" name="salary" placeholder="Minimum Salary" class="search-input">
+            <button type="submit" class="search-button">Search</button>
+            <button type="button" id="detect-location" class="detect-location-button">Detect Location</button>
+        </form>
+
+        <div class="jobs-container">
+            <% jobs.forEach(job => { %>
+                <div class="job-card">
+                    <div class="job-description-container">
+                        <h3 class="job-description-header"><%= job.title %></h3>
+                        <p>Job_ID: <%= job.Job_post_id %></p>
+                        <p class="job-description-details"><%= job.description %></p>
+                        <p><%= lang.location %>: <%= job.location %></p>
+                        <p>Total Posts: <%= job.total_post %></p>
+                        <p>Salary: ₹<%= job.salary %></p>
+                        <button class="apply-btn" data-job-title="<%= job.title %>" data-job-id="<%= job.Job_post_id %>"><%= lang.apply %></button>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+
+        <!-- Modal for applying to a job -->
+        <div id="apply-modal" class="custom-modal">
+            <div class="custom-modal-content">
+                <span class="custom-close">&times;</span>
+                <form id="apply-form" action="/apply" method="post" class="custom-form">
+                    <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
+                    <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
+                    <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
+        
+                    <label for="name" class="custom-label">Your Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required class="custom-input">
+        
+                    <label for="fatherName" class="custom-label">Father's Name</label>
+                    <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="custom-input">
+        
+                    <label for="dob" class="custom-label">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required class="custom-input">
+        
+                    <label for="age" class="custom-label">Your Age</label>
+                    <input type="number" id="age" name="age" placeholder="Your Age" required class="custom-input">
+        
+                    <label for="experience" class="custom-label">Experience</label>
+                    <input type="text" id="experience" name="experience" placeholder="Experience" required class="custom-input">
+        
+                    <label for="phone" class="custom-label">Phone Number</label>
+                    <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="custom-input">
+        
+                    <label for="address" class="custom-label">Address</label>
+                    <input type="text" id="address" name="address" placeholder="Address" required class="custom-input">
+        
+                    <label for="pincode" class="custom-label">Pincode</label>
+                    <input type="text" id="pincode" name="pincode" placeholder="Pincode" required class="custom-input">
+        
+                    <label for="state" class="custom-label">State</label>
+                    <input type="text" id="state" name="state" placeholder="State" required class="custom-input">
+        
+                    <label for="minimumSalary" class="custom-label">Expected Minimum Salary</label>
+                    <input type="number" id="minimumSalary" name="minimumSalary" placeholder="Minimum Salary" required class="custom-input">
+        
+                    <label for="availability" class="custom-label">Availability</label>
+                    <input type="text" id="availability" name="availability" placeholder="Availability" required class="custom-input">
+        
+                    <button type="submit" class="custom-submit-button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Labour Job Finder</p>
+    </footer>
+
+    <script src="/findjob.js"></script>
+</body>
+</html>

@@ -115,6 +115,14 @@ nav .search-bar button img {
     width: 20px;
     height: 20px;
 }
+.findjob{
+   border:2px solid rgb(8, 103, 167);
+  
+     
+    
+
+} 
+
 
 /* Responsive Design */
 @media (max-width: 1000px) {
