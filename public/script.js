@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const images = [
         'https://labour.gov.in/sites/default/files/imagee.png',
@@ -127,4 +128,46 @@ document.addEventListener('DOMContentLoaded', () => {
     ticker.addEventListener('mouseout', () => {
         ticker.style.animationPlayState = 'running'; // Resume animation when mouse leaves
     });
+});
+
+
+//login model
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById("uniqueLoginModal");
+    const btn = document.getElementById("uniqueLoginLink");
+    const span = document.getElementsByClassName("custom-close")[0];
+    const form = document.getElementById("uniqueLoginForm");
+    const phoneNumber = document.getElementById("phoneNumber");
+    const password = document.getElementById("password");
+
+    // Show the modal
+    btn.onclick = function(event) {
+        event.preventDefault();
+        modal.style.display = "block";
+        modal.classList.add("show");
+        history.pushState(null, null, '/login'); // Change the URL
+    }
+
+    // Close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+        modal.classList.remove("show");
+        history.pushState(null, null, '/'); // Revert the URL back
+    }
+
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+            modal.classList.remove("show");
+            history.pushState(null, null, '/'); // Revert the URL back
+        }
+    }
+
+    // Validate form before submission
+    form.onsubmit = function(event) {
+        if (phoneNumber.value.trim() === "" || password.value.trim() === "") {
+            event.preventDefault();
+            alert("Please enter both phone number and password.");
+        }
+    }
 });

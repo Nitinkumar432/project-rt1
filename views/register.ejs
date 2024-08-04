@@ -6,12 +6,15 @@
     <title>Register - Rozgar Setu Labour Job Finder</title>
     <link rel="stylesheet" href="register.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+     
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header>
         <div class="header-container">
-            <h1>Rozgar Setu Labour Job Finder</h1>
+            <h1>Rozgar Setu</h1>
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
@@ -69,11 +72,18 @@
                 <button type="button" id="validateOtpBtn">Validate OTP</button>
                 <p id="otpStatus"></p>
             </div>
+            <div class="form-group password-group" style="display:none;">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            <div class="form-group confirm-password-group" style="display:none;">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+            </div>
             <button type="button" id="sendOtpBtn">Send OTP</button>
             <button type="submit" id="registerBtn" style="display:none;">Register</button>
         </form>
     </div>
-    
 
     <!-- Preview Modal -->
     <div id="previewModal" class="modal">
@@ -83,6 +93,16 @@
             <div id="previewDetails"></div>
             <button id="downloadDetailsBtn">Download</button>
             <button id="confirmDetailsBtn">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Registration Successful!</h3>
+            <p>Your registration was successful. Welcome to Rozgar Setu!</p>
+            <button  class= "registerBtn" id="homeBtn">Go to Home</button>
         </div>
     </div>
 
@@ -97,15 +117,16 @@
     <script>
         $(document).ready(function() {
             $('#sendOtpBtn').click(function() {
+                // Ensure all required fields are filled
                 var allFieldsFilled = true;
                 $('#registerForm input[required]').each(function() {
-                    if ($(this).val().trim() === '') {
+                    if ($(this).val().trim() === '' && $(this).attr('type') !== 'password') {
                         allFieldsFilled = false;
                         alert('Please fill out all required fields.');
                         return false;
                     }
                 });
-
+    
                 if (allFieldsFilled) {
                     // Show preview modal
                     var previewContent = `
@@ -126,15 +147,14 @@
                     $('#previewModal').fadeIn();
                 }
             });
-
+    
             $('#confirmDetailsBtn').click(function() {
                 $('#previewModal').fadeOut();
                 $('.otp-group').fadeIn();
-                $('#registerBtn').fadeIn();
                 $('#sendOtpBtn').text('Resend OTP'); // Change button text
                 alert('OTP sent: 123456');
             });
-
+    
             $('#downloadDetailsBtn').click(function() {
                 var previewContent = `
                     Name: ${$('#name').val()}
@@ -153,7 +173,7 @@
                 link.download = 'form-details.txt';
                 link.click();
             });
-
+    
             $('#validateOtpBtn').click(function() {
                 var enteredOtp = $('#otp').val();
                 var correctOtp = '123456';
@@ -163,25 +183,57 @@
                     $('#validateOtpBtn').prop('disabled', true); // Disable validate button
                     $('#sendOtpBtn').prop('disabled', true); // Disable resend button
                     $('#registerBtn').fadeIn(); // Show Register button
+                    $('.password-group').fadeIn(); // Ensure password fields are visible
+                    $('.confirm-password-group').fadeIn(); // Ensure confirm password fields are visible
                 } else {
                     $('#otpStatus').text('Invalid OTP, please try again.');
                     $('#otpStatus').css('color', 'red');
                 }
             });
-
+    
             $('.close').click(function() {
                 $('#previewModal').fadeOut();
+                $('#successModal').fadeOut();
             });
-
+    
             $('#registerForm').submit(function(event) {
                 event.preventDefault(); // Prevent default form submission
-                console.log('Form Data:', $(this).serialize()); // Log form data to console
-                $.post('/register', $(this).serialize(), function(response) {
-                    // Handle the response if needed
-                    console.log('Server Response:', response);
+    
+                // Check if passwords match
+                if ($('#password').val() !== $('#confirmPassword').val()) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+    
+                // Validate all required fields again
+                var allFieldsFilled = true;
+                $('#registerForm input[required]').each(function() {
+                    if ($(this).val().trim() === '' && $(this).attr('type') !== 'password') {
+                        allFieldsFilled = false;
+                        alert('Please fill out all required fields.');
+                        return false;
+                    }
                 });
+    
+                if (allFieldsFilled) {
+                    console.log('Form Data:', $(this).serialize()); // Log form data to console
+                    $.post('/register', $(this).serialize(), function(response) {
+                        // Show success modal and redirect to home page
+                        $('#successModal').fadeIn();
+                        setTimeout(function() {
+                            window.location.href = '/';
+                        }, 2000); // Redirect after 2 seconds
+                    });
+                } else {
+                    alert('Please fill out all required fields.');
+                }
+            });
+    
+            $('#homeBtn').click(function() {
+                window.location.href = '/';
             });
         });
     </script>
+    
 </body>
 </html>

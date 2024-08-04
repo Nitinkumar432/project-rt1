@@ -109,11 +109,21 @@ app.post('/register', (req, res) => {
     res.send('Form submitted successfully'); // Respond to the client
 });
 
-app.get('/login', (req, res) => {
-    console.log('Login page accessed');
+// app.get('/login', (req, res) => {
+//     console.log('Login page accessed');
   
 
-    res.render("login.ejs");
+//     res.render('login.ejs');
+// });
+app.post('/login', (req, res) => {
+    const { phone, password } = req.body;
+    console.log(`Login With ${phone} and password is ${password}`);
+    // Here, you would handle the login logic, like checking the credentials
+    res.send(`Logged in with phone: ${phone} and password: ${password}`);
+});
+
+app.get('/forgot-password', (req, res) => {
+    res.send('Forgot Password Page');
 });
 
 app.listen(port, () => {

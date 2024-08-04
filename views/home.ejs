@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RozgarSetu</title>
     <link rel="stylesheet" href="/style.css">
-    <script src="script.js"></script>
-
+    <script src="/script.js" defer></script>
 </head>
 <body>
     <nav>
@@ -16,16 +15,38 @@
         <ul>
             <li><a href="/"><%= lang.home %></a></li>
             <li><a href="/register"><%= lang.register %></a></li>
-            <li><a href="/login"><%= lang.login %></a></li>
+            <li><a href="#" id="uniqueLoginLink"><%= lang.login %></a></li>
             <li>
                 <button id="toggleLangBtn"><%= lang.toggleLang %></button>
             </li>
         </ul>
         <div class="search-bar">
-            <input type="text" id="jobSearchInput" placeholder="<%= lang.searchJobs %>">
+            <input type="text" id="jobSearchInput" placeholder="<%= lang.searchJobs || 'search job' %>">
+
             <button id="jobSearchBtn"><%= lang.search %></button>
         </div>
     </nav>
+
+    <!-- Login Modal -->
+    <div id="uniqueLoginModal" class="custom-modal">
+        <div class="custom-modal-content">
+            <span class="custom-close">&times;</span>
+            <div class="modal-header">
+                <img src="https://w7.pngwing.com/pngs/140/543/png-transparent-logo-company-business-business-blue-angle-company.png" alt="Company Logo" class="logo">
+                <h2>Login</h2>
+            </div>
+            <form id="uniqueLoginForm" class="custom-form" action="/login" method="POST">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="number" id="phoneNumber" name="phone" placeholder="Enter PhoneNumber" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                <button class="custom-login-btn" type="submit">Login</button>
+                <a href="/forgot-password">Forgot Password?</a>
+            </form>
+        </div>
+    </div>
+
+
 
     <!-- Marquee Section -->
     <div class="news-ticker-container">
