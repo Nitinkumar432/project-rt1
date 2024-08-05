@@ -359,3 +359,99 @@ textarea:focus {
     from { opacity: 0; }
     to { opacity: 1; }
 }
+/* Responsive Design for Small Screens */
+
+/* Adjust header padding and font size */
+@media (max-width: 768px) {
+    header {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    nav ul li {
+        margin: 0.5rem 0;
+    }
+}
+
+/* Adjust search form layout */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .search-button, .detect-location-button {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+/* Adjust job card layout */
+@media (max-width: 768px) {
+    .jobs-container {
+        flex-direction: column;
+    }
+
+    .job-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .job-card h3 {
+        font-size: 1.1rem;
+    }
+
+    .job-description {
+        font-size: 0.9rem;
+    }
+}
+
+/* Adjust modal for small screens */
+@media (max-width: 768px) {
+    .modal-content, .custom-modal-content {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .close, .custom-close {
+        top: 0.25rem;
+        right: 0.25rem;
+        font-size: 1.25rem;
+    }
+}
+
+/* Adjust form inputs for small screens */
+@media (max-width: 768px) {
+    .custom-form {
+        gap: 0.25rem;
+    }
+
+    .custom-input, textarea {
+        font-size: 0.75rem;
+    }
+
+    .custom-submit-button {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+}
+
+/* Adjust success message for small screens */
+@media (max-width: 768px) {
+    .success-message {
+        font-size: 0.9rem;
+    }
+}
