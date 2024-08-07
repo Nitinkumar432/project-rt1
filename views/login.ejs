@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whatsapp</title>
+</head>
+<body>
+    <h3>All Chat</h3>
+    <% for(let chat of alldata) { %>
+       
+            <p>fathername : <%= chat.fatherName%></p>
+           
+                <p>mothernamde : <%= chat.motherName %></p>
+                <p>experience : <%= chat.experience %></p>
+             
+            </div>
+            <p>To : <%= chat.phone %></p>
+            <!-- <p>Date : <%= chat.date %></p> -->
+        </div>
+        <hr>
+    <% } %>
+</body>
+</html>

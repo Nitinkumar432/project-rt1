@@ -1,4 +1,6 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+
 const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -9,8 +11,31 @@ app.use(cookieParser());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+//design of backend
+//till here
 
+const mongoose = require('mongoose');
+const Register = require('./models/register_data.js');
 const port = 3000;
+main().then(() => {
+    console.log('Connection successful');
+}).catch(err => console.log(err));
+
+async function main() {
+    await mongoose.connect('mongodb://127.0.0.1:27017/labour_register', {
+     
+    });
+}
+//storing sample data
+// let logind1=new Login({
+//     phone_number:7488204975,
+//     password:"Nitin@123"
+
+// })
+// logind1.save().then((res)=>{
+//     console.log(res);
+// }).catch(err=>console.log(err));
+// till backend
 
 const language = {
     en: {
@@ -43,16 +68,16 @@ const language = {
 
 // Sample job data
 const jobs = [
-    { title: "Construction Worker", description: "Work on various construction sites.", location: "Delhi" },
-    { title: "Gardener", description: "Maintain gardens and landscapes.", location: "Mumbai" },
-    { title: "Factory Worker", description: "Operate machinery in a factory.", location: "Chennai" },
-    { title: "Bridge Construction", description: "Operate machinery.", location: "Hazipur" }
+    { title: "Construction Worker", description: "Work on various construction sites.", location: "Delhi",Job_post_id:uuidv4()  },
+    { title: "Gardener", description: "Maintain gardens and landscapes.", location: "Mumbai",Job_post_id:uuidv4() },
+    { title: "Factory Worker", description: "Operate machinery in a factory.", location: "Chennai",Job_post_id:uuidv4() },
+    { title: "Bridge Construction", description: "Operate machinery.", location: "Hazipur",Job_post_id:uuidv4() }
 ];
 const jobs2 = [
-    { title: "Electrician", description: "Install and repair electrical systems.", location: "Delhi" },
-    { title: "Plumber", description: "Fix and install plumbing systems.", location: "Mumbai" },
-    { title: "Machine Operator", description: "Operate and maintain industrial machines.", location: "Chennai" },
-    { title: "Laptop Repair ", description: "Operate and maintain Laptop  parts.", location: "patna" }
+    { title: "Electrician", description: "Install and repair electrical systems.", location: "Delhi" ,Job_post_id:uuidv4()},
+    { title: "Plumber", description: "Fix and install plumbing systems.", location: "Mumbai",Job_post_id:uuidv4() },
+    { title: "Machine Operator", description: "Operate and maintain industrial machines.", location: "Chennai" ,Job_post_id:uuidv4()},
+    { title: "Laptop Repair ", description: "Operate and maintain Laptop  parts.", location: "patna",Job_post_id:uuidv4() }
 ];
 
 
@@ -107,11 +132,45 @@ app.get('/register', (req, res) => {
 });
 
 // Handle form submission from the register page
-app.post('/register', (req, res) => {
-    console.log('Form submitted');j;
+app.post('/register', async  (req, res) => {
+    console.log('Form submitted');
     console.log('Form Data:', req.body); // Print the submitted form data to console
-    res.send('Form submitted successfully'); // Respond to the client
+    
+    const { name, fatherName, motherName, experience, age, location, state, district, phone, password, confirmPassword } = req.body;
+  
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        return res.status(400).send('Passwords do not match');
+    }
+    // if(Register.findOne({phone:phone})){
+    //     return res.status(400).send('Passwords do not match');
+    // }
+
+    try {
+        // Create new user
+        const newUser = new Register({
+            name,
+            fatherName,
+            motherName,
+            experience,
+            age,
+            location,
+            state,
+            district,
+            phone,
+            password
+        });
+
+        // Save user to the database
+        await newUser.save();
+        res.status(201).send('User registered successfully');
+    } catch (error) {
+      
+        console.error('Error saving user to the database:', error);
+        return res.status(400).send('Error registering user: ' + error.message);
+    }
 });
+
 
 // app.get('/login', (req, res) => {
 //     console.log('Login page accessed');
@@ -119,12 +178,46 @@ app.post('/register', (req, res) => {
 
 //     res.render('login.ejs');
 // });
-app.post('/login', (req, res) => {
-    const { phone, password } = req.body;
-    console.log(`Login With ${phone} and password is ${password}`);
-    // Here, you would handle the login logic, like checking the credentials
-    res.send(`Logged in with phone: ${phone} and password: ${password}`);
+app.get('/alldata', async (req,res)=>{
+    let alldata= await Register.find();
+    console.log(alldata);
+    res.render("login.ejs",{alldata});
 });
+app.get('/login',(req,res)=>{
+    const {phone, password} = req.body;
+    // console.log(`Login With Phone: ${phone}, Password: ${password}`);
+    res.send("hello login successfully Redirection to main page");
+    
+
+
+})
+app.post('/login', async (req, res) => {
+    try {
+        const phone = req.body.phone; // Extract phone from request body
+        const password = req.body.password; // Extract password from request body
+
+        // Find the user in the database
+        const user = await Register.findOne({ phone: phone });
+
+        if (user) {
+            // Compare the provided password with the hashed password
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            if (isMatch) {
+                console.log(`Logged in with phone: ${phone}`);
+                res.send(`Logged in with phone: ${phone}`);
+            } else {
+                res.send('YOU entered Wrong phone number or password');
+            }
+        } else {
+            res.send('YOU entered Wrong phone number or password');
+        }
+    } catch (err) {
+        // Handle errors
+        res.status(500).send('Server error');
+    }
+});
+
 
 app.get('/forgot-password', (req, res) => {
     res.send('Forgot Password Page');
@@ -268,7 +361,7 @@ app.post('/apply', (req, res) => {
     console.log(`Availability: ${availability}`);
 
     // Redirect or send a response
-    res.redirect('/findjob');
+    // res.redirect('/findjob');
 });
 
 

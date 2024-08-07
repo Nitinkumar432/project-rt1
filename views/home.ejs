@@ -6,6 +6,8 @@
     <title>RozgarSetu</title>
     <link rel="stylesheet" href="/style.css">
     <script src="/script.js" defer></script>
+    <!-- <script src="/findjob.js"></script> -->
+    <!-- <link rel="stylesheet" href="/findjob.css"> -->
 </head>
 <body>
     <nav>
@@ -17,7 +19,7 @@
             <li class="findjob"><a href="/findjob"><%= lang.job %></a></li>
             <li><a href="/"><%= lang.home %></a></li>
             <li><a href="/register"><%= lang.register %></a></li>
-            <li><a href="#" id="uniqueLoginLink"><%= lang.login %></a></li>
+            <li><a href="#" id="loginBtnUnique"><%= lang.login %></a></li>
             <li>
                 <button id="toggleLangBtn"><%= lang.toggleLang %></button>
             </li>
@@ -29,24 +31,77 @@
         </div>
     </nav>
 
-    <!-- Login Modal -->
-    <div id="uniqueLoginModal" class="custom-modal">
+    <!-- //job apply model -->
+    <div id="apply-modal" class="custom-modal">
         <div class="custom-modal-content">
             <span class="custom-close">&times;</span>
-            <div class="modal-header">
-                <img src="https://w7.pngwing.com/pngs/140/543/png-transparent-logo-company-business-business-blue-angle-company.png" alt="Company Logo" class="logo">
-                <h2>Login</h2>
-            </div>
-            <form id="uniqueLoginForm" class="custom-form" action="/login" method="POST">
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="number" id="phoneNumber" name="phone" placeholder="Enter PhoneNumber" required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter Password" required>
-                <button class="custom-login-btn" type="submit">Login</button>
-                <a href="/forgot-password">Forgot Password?</a>
+            <form id="apply-form" action="/apply" method="post" class="custom-form">
+                <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
+                <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
+                <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
+    
+                <label for="name" class="custom-label">Your Name</label>
+                <input type="text" id="name" name="name" placeholder="Your Name" required class="custom-input">
+    
+                <label for="fatherName" class="custom-label">Father's Name</label>
+                <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="custom-input">
+    
+                <label for="dob" class="custom-label">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required class="custom-input">
+    
+                <label for="age" class="custom-label">Your Age</label>
+                <input type="number" id="age" name="age" placeholder="Your Age" required class="custom-input">
+    
+                <label for="experience" class="custom-label">Experience</label>
+                <input type="text" id="experience" name="experience" placeholder="Experience" required class="custom-input">
+    
+                <label for="phone" class="custom-label">Phone Number</label>
+                <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="custom-input">
+    
+                <label for="address" class="custom-label">Address</label>
+                <input type="text" id="address" name="address" placeholder="Address" required class="custom-input">
+    
+                <label for="pincode" class="custom-label">Pincode</label>
+                <input type="text" id="pincode" name="pincode" placeholder="Pincode" required class="custom-input">
+    
+                <label for="state" class="custom-label">State</label>
+                <input type="text" id="state" name="state" placeholder="State" required class="custom-input">
+    
+                <label for="minimumSalary" class="custom-label">Expected Minimum Salary</label>
+                <input type="number" id="minimumSalary" name="minimumSalary" placeholder="Minimum Salary" required class="custom-input">
+    
+                <label for="availability" class="custom-label">Availability</label>
+                <input type="text" id="availability" name="availability" placeholder="Availability" required class="custom-input">
+    
+                <button type="submit" class="custom-submit-button">Submit</button>
             </form>
         </div>
     </div>
+    <div id="success-message" style="display: none;">Job applied successfully!</div>
+
+
+    <!-- Login Modal -->
+    <div id="loginModalUnique" class="modal-unique">
+        <div class="modal-content-unique">
+            <span class="close-unique">&times;</span>
+            <div class="modal-header-unique">
+                <img src="https://w7.pngwing.com/pngs/140/543/png-transparent-logo-company-business-business-blue-angle-company.png" alt="Company Logo" class="logo-unique">
+                <h2>Login</h2>
+            </div>
+            <form id="loginFormUnique" class="form-unique" action="/login" method="POST">
+                <label for="phoneNumberUnique">Phone Number:</label>
+                <input type="number" id="phoneNumberUnique" name="phone" placeholder="Enter Phone Number" required>
+                
+                <label for="passwordUnique">Password:</label>
+                <input type="password" id="passwordUnique" name="password" placeholder="Enter Password" required>
+                
+                <button class="btn-login-submit-unique" type="submit">Login</button>
+                <a href="/forgot-password" class="link-unique">Forgot Password?</a>
+            </form>
+        </div>
+    </div>
+
+
 
 
 
@@ -74,10 +129,12 @@
             <% jobs.forEach(function(job) { %>
                 <div class="job-card">
                     <h3><%= job.title %></h3>
+                    <h4>Job_Id : <%= job.Job_post_id %></h4>
                     <p><%= job.description %></p>
                     <p><%= lang.location %>: <%= job.location %></p>
-                    <button><%= lang.apply %></button>
-                    <button ><%= lang.details %></button>
+                    <button class="apply-btn" data-job-title="<%= job.title %>" data-job-id="<%= job.Job_post_id %>"><%= lang.apply %></button>
+
+                    <button  ><%= lang.details %></button>
                 </div>
             <% }); %>
            
@@ -90,14 +147,16 @@
             <% jobs2.forEach(function(job) { %>
                 <div class="job-card">
                     <h3><%= job.title %></h3>
+                    <h4>Job_Id : <%= job.Job_post_id %></h4>
                     <p><%= job.description %></p>
                     <p><%= lang.location %>: <%= job.location %></p>
-                    <button><%= lang.apply %></button>
+                    <button class="apply-btn" data-job-title="<%= job.title %>" data-job-id="<%= job.Job_post_id %>"><%= lang.apply %></button>
                     <button><%= lang.details %></button>
                 </div>
             <% }); %>
         </div>
     </section>
+    
     <section class="notices">
         <h2>Notices</h2>
         <div class="notice-list">
@@ -127,7 +186,7 @@
         <img src="https://img.icons8.com/ios-filled/50/000000/chat.png" alt="Chat">
     </button>
 
-    <script src="/script.js"></script>
+   
    
     <div id="laborTermsModal" class="labor-modal">
         <div class="labor-modal-content">
@@ -196,5 +255,6 @@
     <footer>
         <p>&copy; 2024 Labour Job Finder</p>
     </footer>
+    
 </body>
 </html>
