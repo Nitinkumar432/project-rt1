@@ -794,6 +794,7 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 0.5rem; /* Further reduced gap */
+    
 }
 
 /* Label styling */
@@ -806,7 +807,7 @@ footer {
 
 /* Input styling */
 .custom-input {
-    padding: 0.5rem; /* Keep the padding small */
+    padding: 0.8rem; /* Keep the padding small */
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 0.75rem; /* Reduced font size */
