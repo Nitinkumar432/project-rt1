@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 const bodyParser=require("body-parser");
 const app = express();
 //jwt
-const jwt = require('jsonwebtoken');
+app.use(express.json());
+
+
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
@@ -111,12 +113,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-    const lang = req.cookies.lang || 'en';
-    console.log('Serving home page');
-    res.render('home.ejs', { lang: language[lang], jobs, jobs2,newsItems,notices});
-});
 
+//change language logic
 app.get('/change-language', (req, res) => {
     const newLang = req.query.lang;
     res.cookie('lang', newLang);
@@ -155,7 +153,7 @@ app.post('/register', async (req, res) => {
         }
 
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
         const newUser = new Register({
@@ -168,7 +166,7 @@ app.post('/register', async (req, res) => {
             state,
             district,
             phone,
-            password: hashedPassword
+            password: password
         });
 
         // Save user to the database
@@ -206,50 +204,115 @@ app.get('/alldata', async (req,res)=>{
     console.log(alldata);
     res.render("login.ejs",{alldata});
 });
-app.get('/login',(req,res)=>{
-    const {phone, password} = req.body;
-    // console.log(`Login With Phone: ${phone}, Password: ${password}`);
-    res.send("hello login successfully Redirection to main page");
+// app.get('/login',(req,res)=>{
+//     const {phone, password} = req.body;
+//     // console.log(`Login With Phone: ${phone}, Password: ${password}`);
+//     res.render("home.ejs");
     
 
 
-})
+// })
 
+
+const jwt = require('jsonwebtoken');
+const secretKey = 'xyxx'; // Ensure this key is used consistently for signing and verifying tokens
+// post login
 app.post('/login', async (req, res) => {
     try {
-        const { phone, password } = req.body;  // Destructure phone and password from req.body
-        console.log(`Received login data: Phone - ${phone}, Entered Password - ${password}`);
+        const { phone, password } = req.body;
 
-        // Find the user in the database by phone
         const user = await Register.findOne({ phone: phone });
 
         if (user) {
-            console.log(`User found: ${user}`);
-
-            // Directly compare the entered password with the stored password (no bcrypt needed)
-            const isMatch = password === user.password;
-
-            console.log(`Stored Password: ${user.password}`);
-            console.log(`Password comparison result: ${isMatch}`);
+            const isMatch = password === user.password; // Adjust if using bcrypt
 
             if (isMatch) {
-                console.log(`Successfully logged in with phone: ${phone}`);
-                res.send('Login successful. Redirecting to the main page...');
-                
-               
+                const token = jwt.sign({ phone: phone }, secretKey, { expiresIn: '1h' });
+
+                res.cookie('token', token, { httpOnly: true });
+                res.redirect(`/?login=success&phone=${phone}`);
             } else {
-                console.log('Incorrect password attempt.');
                 res.status(401).send('Incorrect phone number or password.');
             }
         } else {
-            console.log('User not found');
             res.status(401).send('Incorrect phone number or password.');
+        
         }
     } catch (err) {
-        // Handle errors
         console.error('Error during login:', err);
         res.status(500).send('Server error');
     }
+});
+// home route
+app.get('/', (req, res) => {
+    try {
+        const lang = req.cookies.lang || 'en';
+        const token = req.cookies.token || null;
+        let user = null;
+
+        if (token) {
+            console.log("token is : ",token);
+            try {
+                const decoded = jwt.verify(token, secretKey);
+                user = decoded;
+            } catch (err) {
+                console.log('Invalid token:', err);
+                res.clearCookie('token');
+            }
+        }
+
+        // Check if the login was successful based on query parameters
+        const loginSuccess = req.query.login === 'success';
+        const phone = req.query.phone || null;
+
+        res.render('home.ejs', { 
+            lang: language[lang], 
+            jobs, 
+            jobs2, 
+            newsItems, 
+            notices,
+            user,
+            loginSuccess,
+            phone // Pass phone number for the pop-up
+        });
+    } catch (err) {
+        console.error('Error serving the home page:', err);
+        res.status(500).send('An error occurred while serving the home page.');
+    }
+});
+
+// token verify
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
+
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, secretKey, (err, user) => {
+        if (err) {
+            console.error('Error verifying token:', err);
+            return res.sendStatus(403);
+        }
+        req.user = user;
+        next();
+    });
+};
+
+app.get('/protected', authenticateToken, (req, res) => {
+    res.send(`Welcome, ${req.user.phone}!`);
+});
+const handleTokenError = (err) => {
+    if (err.name === 'JsonWebTokenError') {
+        console.error('JWT Error:', err.message);
+    } else if (err.name === 'TokenExpiredError') {
+        console.error('JWT Expired:', err.message);
+    } else {
+        console.error('Unknown JWT Error:', err);
+    }
+};
+
+app.get('/logout', (req, res) => {
+    res.clearCookie('token'); // Clear the token cookie
+    res.redirect('/'); // Redirect to home page
 });
 
 app.get('/forgot-password', (req, res) => {

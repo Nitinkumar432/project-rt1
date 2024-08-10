@@ -18,12 +18,26 @@
         <ul>
             <li class="findjob"><a href="/findjob"><%= lang.job %></a></li>
             <li><a href="/"><%= lang.home %></a></li>
-            <li><a href="/register"><%= lang.register %></a></li>
-            <li><a href="#" id="loginBtnUnique"><%= lang.login %></a></li>
+            <% if (user) { %>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"><%= user.phone %> <span>&#9662;</span></a> <!-- Dropdown trigger -->
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/applied-jobs">Applied Jobs</a></li>
+                        <li><a href="/logout">Logout</a></li>
+                        <!-- Add more options as needed -->
+                    </ul>
+                </li>
+            <% } else { %>
+                <li><a href="/register"><%= lang.register %></a></li>
+                <li><a href="#" id="loginBtnUnique"><%= lang.login %></a></li>
+            <% } %>
             <li>
                 <button id="toggleLangBtn"><%= lang.toggleLang %></button>
             </li>
         </ul>
+        
+        
         <div class="search-bar">
             <input type="text" id="jobSearchInput" placeholder="<%= lang.searchJobs || 'search job' %>">
 
@@ -255,6 +269,44 @@
     <footer>
         <p>&copy; 2024 RozgarSetu</p>
     </footer>
+  
+    <div id="success-popup"></div>
+
+    <script>
+        // Function to show success pop-up
+        function showSuccessPopup(message) {
+            const popup = document.getElementById('success-popup');
+            popup.textContent = message;
+            popup.classList.add('show');
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.classList.remove('show');
+                popup.style.display = 'none';
+            },3000); // Hide pop-up after 3 seconds
+        }
+
+        // Check if the login was successful
+        
+        <% if (loginSuccess) { %>
+            showSuccessPopup(`Login successful with phone number: <%= phone %>`);
+        <% } %>
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
     
+            dropdownToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+            });
+    
+            document.addEventListener('click', function (e) {
+                if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

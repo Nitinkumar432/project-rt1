@@ -67,7 +67,7 @@ nav ul li a, nav ul li button {
 /* Search Bar Styles */
 nav .search-bar {
     position: absolute;
-    left: 50%;
+    left: 45%;
     transform: translateX(-50%);
     display: flex;
     align-items: center;
@@ -946,4 +946,130 @@ footer {
 
 .link-unique:hover {
     text-decoration: underline;
+}
+#success-popup {
+    display: none;
+    position: fixed;
+    top: 20px; /* Positioning at the top */
+    right: 20px;
+    background: #5a67d8; /* Soft blue background */
+    color: #ffffff; /* White text color */
+    padding: 20px;
+    border-radius: 12px; /* Slightly more rounded corners */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow */
+    z-index: 1000;
+    font-size: 1em;
+    text-align: center;
+    opacity: 0; /* Start with transparent */
+    transform: translateY(-100%); /* Start above the view */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#success-popup.show {
+    opacity: 1; /* Fade in */
+    transform: translateY(0); /* Slide in from the top */
+}
+/* //drop down feDiffuseLighting */
+/* Dropdown container */
+/* Dropdown container */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown button */
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #1e1e1e, #333333);
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dropdown arrow */
+.dropdown-toggle span {
+    margin-left: 10px;
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #4f4a4a;
+    min-width: 220px;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    border-radius: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: scaleY(0);
+    opacity: 0;
+    transform-origin: top;
+}
+
+/* Show dropdown menu */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+/* Dropdown menu items */
+.dropdown-menu li {
+    padding: 12px 20px;
+    border-bottom: 1px solid #444444;
+}
+
+/* Remove border on last item */
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+/* Dropdown menu links */
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dropdown menu link hover effect */
+.dropdown-menu li a:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+/* Optional: Adding a subtle hover effect to the dropdown button */
+.dropdown-toggle:hover {
+    background: linear-gradient(135deg, #333333, #4d4d4d);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: Adding a subtle hover effect to the dropdown items */
+.dropdown-menu li:hover {
+    background-color: #333333;
+}
+
+/* Adding animation on click */
+.dropdown-toggle:active .dropdown-menu {
+    animation: clickAnimation 0.3s ease-out;
+}
+
+@keyframes clickAnimation {
+    0% { transform: scaleY(1); }
+    100% { transform: scaleY(0); }
 }
