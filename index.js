@@ -281,7 +281,7 @@ app.get('/', (req, res) => {
     }
 });
 
-// token verify
+// token verify 
 const authenticateToken = (req, res, next) => {
     const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
 
@@ -296,10 +296,11 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
-
+//checking which user is login
 app.get('/protected', authenticateToken, (req, res) => {
     res.send(`Welcome, ${req.user.phone}!`);
 });
+//checking web token authentication
 const handleTokenError = (err) => {
     if (err.name === 'JsonWebTokenError') {
         console.error('JWT Error:', err.message);
@@ -309,14 +310,43 @@ const handleTokenError = (err) => {
         console.error('Unknown JWT Error:', err);
     }
 };
-
+// logoutsection
 app.get('/logout', (req, res) => {
     res.clearCookie('token'); // Clear the token cookie
     res.redirect('/'); // Redirect to home page
 });
-
+//forgot password section
 app.get('/forgot-password', (req, res) => {
     res.send('Forgot Password Page');
+});
+app.get('/profile', async (req, res) => {
+    try {
+        const token = req.cookies.token || null;
+        let user = null;
+
+        if (token) {
+            try {
+                const decoded = jwt.verify(token, secretKey);
+                user = await Register.findOne({ phone: decoded.phone });
+                if (!user) {
+                    return res.status(401).send('User not found.');
+                }
+            } catch (err) {
+                console.log('Invalid token:', err);
+                res.clearCookie('token');
+                return res.redirect('/login');
+            }
+        } else {
+            return res.redirect('/login');
+        }
+
+        res.render('profile.ejs', {
+            user: user,
+        });
+    } catch (err) {
+        console.error('Error serving profile page:', err);
+        res.status(500).send('An error occurred while serving the profile page.');
+    }
 });
 
 //puting in job in that

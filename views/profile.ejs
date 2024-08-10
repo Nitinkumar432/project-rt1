@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Profile Card</title>
+    <link rel="stylesheet" href="profile.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons for Icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Reset & Basic Styles */
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">Rozgar_Setu</div>
+        <a href="/"><i class='bx bx-home'></i> Dashboard</a>
+        <a href="#"><i class='bx bx-user'></i> Profile</a>
+        <a href="#"><i class='bx bx-lock'></i> Change Password</a>
+        <a href="/logout"><i class='bx bx-log-out'></i> Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-container">
+        <!-- Header -->
+        <div class="profile-header">
+            <div class="profile-picture">
+                <img src="/path/to/profile-picture.jpg" alt="Profile Picture">
+            </div>
+            <div class="profile-info">
+                <h1><%= user.name %></h1>
+                <p><i class='bx bxs-phone'></i> <%= user.phone %></p>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="profile-content">
+            <!-- Personal Information -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class='bx bxs-user-detail'></i>
+                    <span>Personal Information</span>
+                    <div class="edit-button">Edit</div>
+                </div>
+                <div class="section-content">
+                    <p><i class='bx bx-male'></i> <strong>Name:</strong> <%= user.name %></p>
+                    <p><i class='bx bx-male'></i> <strong>Father's Name:</strong> <%= user.fatherName %></p>
+                    <p><i class='bx bx-female'></i> <strong>Mother's Name:</strong> <%= user.motherName %></p>
+                    <p><i class='bx bx-calendar'></i> <strong>Age:</strong> <%= user.age %></p>
+                    <p><i class='bx bx-briefcase'></i> <strong>Experience:</strong> <%= user.experience %> years</p>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class='bx bxs-contact'></i>
+                    <span>Contact Information</span>
+                    <div class="edit-button">Edit</div>
+                </div>
+                <div class="section-content">
+                    <p><i class='bx bxs-phone-call'></i> <strong>Phone:</strong> <%= user.phone %></p>
+                    <p><i class='bx bxs-map'></i> <strong>Location:</strong> <%= user.location %></p>
+                    <p><i class='bx bxs-map-pin'></i> <strong>State:</strong> <%= user.state %></p>
+                    <p><i class='bx bxs-city'></i> <strong>District:</strong> <%= user.district %></p>
+                </div>
+            </div>
+
+            <!-- Employee Details -->
+            <div class="profile-section">
+                <div class="section-title">
+                    <i class='bx bxs-id-card'></i>
+                    <span>Employee Details</span>
+                    <div class="edit-button">Edit</div>
+                </div>
+                <div class="section-content">
+                    <p><i class='bx bx-id-card'></i> <strong>Employee ID:</strong> <%= user.employee_id %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
