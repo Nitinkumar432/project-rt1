@@ -1,7 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-
+const bodyParser=require("body-parser");
 const app = express();
+//jwt
+const jwt = require('jsonwebtoken');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
@@ -14,6 +16,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //design of backend
 //till here
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 const mongoose = require('mongoose');
 const Register = require('./models/register_data.js');
 const port = 3000;
@@ -132,21 +136,27 @@ app.get('/register', (req, res) => {
 });
 
 // Handle form submission from the register page
-app.post('/register', async  (req, res) => {
+app.post('/register', async (req, res) => {
     console.log('Form submitted');
     console.log('Form Data:', req.body); // Print the submitted form data to console
-    
+
     const { name, fatherName, motherName, experience, age, location, state, district, phone, password, confirmPassword } = req.body;
-  
+
     // Check if passwords match
     if (password !== confirmPassword) {
         return res.status(400).send('Passwords do not match');
     }
-    // if(Register.findOne({phone:phone})){
-    //     return res.status(400).send('Passwords do not match');
-    // }
 
     try {
+        // Check if the phone number already exists
+        const existingUser = await Register.findOne({ phone });
+        if (existingUser) {
+            return res.status(400).send('Phone number already registered');
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         // Create new user
         const newUser = new Register({
             name,
@@ -158,19 +168,32 @@ app.post('/register', async  (req, res) => {
             state,
             district,
             phone,
-            password
+            password: hashedPassword
         });
 
         // Save user to the database
-        await newUser.save();
-        res.status(201).send('User registered successfully');
+        const savedUser = await newUser.save();
+
+        // Generate a unique registration ID
+        const registrationId = `EMP${savedUser._id.toString().slice(-6)}`;
+
+        // Update the user with the registration ID
+        savedUser.employee_id = registrationId;
+        await savedUser.save();
+
+        console.log('User registered successfully');
+        console.log('User Details:', {
+            ...req.body,
+            registrationId
+        });
+
+        // Respond with registration ID
+        res.status(201).json({ message: 'User registered successfully', registrationId });
     } catch (error) {
-      
         console.error('Error saving user to the database:', error);
         return res.status(400).send('Error registering user: ' + error.message);
     }
 });
-
 
 // app.get('/login', (req, res) => {
 //     console.log('Login page accessed');
@@ -191,33 +214,43 @@ app.get('/login',(req,res)=>{
 
 
 })
+
 app.post('/login', async (req, res) => {
     try {
-        const phone = req.body.phone; // Extract phone from request body
-        const password = req.body.password; // Extract password from request body
+        const { phone, password } = req.body;  // Destructure phone and password from req.body
+        console.log(`Received login data: Phone - ${phone}, Entered Password - ${password}`);
 
-        // Find the user in the database
+        // Find the user in the database by phone
         const user = await Register.findOne({ phone: phone });
 
         if (user) {
-            // Compare the provided password with the hashed password
-            const isMatch = await bcrypt.compare(password, user.password);
+            console.log(`User found: ${user}`);
+
+            // Directly compare the entered password with the stored password (no bcrypt needed)
+            const isMatch = password === user.password;
+
+            console.log(`Stored Password: ${user.password}`);
+            console.log(`Password comparison result: ${isMatch}`);
 
             if (isMatch) {
-                console.log(`Logged in with phone: ${phone}`);
-                res.send(`Logged in with phone: ${phone}`);
+                console.log(`Successfully logged in with phone: ${phone}`);
+                res.send('Login successful. Redirecting to the main page...');
+                
+               
             } else {
-                res.send('YOU entered Wrong phone number or password');
+                console.log('Incorrect password attempt.');
+                res.status(401).send('Incorrect phone number or password.');
             }
         } else {
-            res.send('YOU entered Wrong phone number or password');
+            console.log('User not found');
+            res.status(401).send('Incorrect phone number or password.');
         }
     } catch (err) {
         // Handle errors
+        console.error('Error during login:', err);
         res.status(500).send('Server error');
     }
 });
-
 
 app.get('/forgot-password', (req, res) => {
     res.send('Forgot Password Page');

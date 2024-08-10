@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 const registerSchema = new mongoose.Schema({
     name: {
@@ -45,22 +44,12 @@ const registerSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    employee_id: { type: String }
 });
 
-// Pre-save hook to hash the password
-registerSchema.pre('save', async function (next) {
-    try {
-        if (!this.isModified('password')) {
-            return next();
-        }
-        const hashedPassword = await bcrypt.hash(this.password, 10);
-        this.password = hashedPassword;
-        next();
-    } catch (err) {
-        next(err);
-    }
-});
+// No pre-save hook for hashing the password
+// The password will be stored as plain text in the database
 
 const Register = mongoose.model('Register', registerSchema);
 
