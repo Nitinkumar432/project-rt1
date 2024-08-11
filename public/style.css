@@ -20,7 +20,8 @@ nav {
 }
 
 nav .logo img {
-    height: 40px;
+    width:120px;
+    height: 30px;
     transition: transform 0.3s ease;
 }
 
@@ -69,6 +70,7 @@ nav .search-bar {
     position: absolute;
     left: 45%;
     transform: translateX(-50%);
+    border: 1px solid rgb(94, 92, 92);
     display: flex;
     align-items: center;
     /* background-color: #333; */
@@ -76,10 +78,11 @@ nav .search-bar {
     overflow: hidden;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
     transition: box-shadow 0.3s ease-in-out;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 nav .search-bar:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px rgba(34, 33, 33, 0.4);
 }
 
 nav .search-bar input {
@@ -100,23 +103,34 @@ nav .search-bar input::placeholder {
 nav .search-bar button {
     padding: 10px;
     border: none;
-    background-color: #007bff;
+    background-color: transparent;
     color: white;
     cursor: pointer;
     border-radius: 0 25px 25px 0;
     transition: background-color 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/* Hover effect on the button */
 nav .search-bar button:hover {
-    background-color: #0056b3;
+    background-color: #262728;
 }
 
+/* Styling for the search icon */
+nav .search-bar button i {
+    font-size: 16px; /* Adjust the icon size as needed */
+    color: white;
+}
 nav .search-bar button img {
     width: 20px;
     height: 20px;
 }
 .findjob{
-   border:2px solid rgb(8, 103, 167);
+   border: 1px solid #4a4949;
+   
+   box-shadow: 0 6px 12px rgba(61, 60, 60, 0.4);
   
      
     
@@ -626,7 +640,7 @@ footer {
     color: #ffffff;
     overflow: hidden;
     position: relative;
-    height: 70px; /* Increased height for better visibility */
+    height: 50px; /* Increased height for better visibility */
     border-radius: 10px;
     margin: 20px 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); /* Enhanced shadow effect */
@@ -638,7 +652,7 @@ footer {
     display: flex;
     white-space: nowrap;
     animation: scroll 30s linear infinite; /* Increased duration for smoother scrolling */
-    padding: 10px;
+    padding: 5px;
     font-size: 20px; /* Adjusted font size for better readability */
     align-items: center;
     gap: 30px; /* Added more gap between news items */
@@ -899,7 +913,7 @@ footer {
 }
 
 .logo-unique {
-    width: 50px;
+    width: 200px;
     height: 50px;
     display: block;
     margin: 0 auto;
@@ -923,7 +937,7 @@ footer {
 }
 
 .btn-login-submit-unique {
-    background-color: #4CAF50;
+    background-color: #5c0de5;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -933,14 +947,14 @@ footer {
 }
 
 .btn-login-submit-unique:hover {
-    background-color: #45a049;
+    background-color: #5e00ff;
 }
 
 .link-unique {
     text-align: center;
     display: block;
     margin-top: 10px;
-    color: #4CAF50;
+    color:red;
     text-decoration: none;
 }
 
@@ -1007,7 +1021,7 @@ footer {
     right: 0;
     background-color: #4f4a4a;
     min-width: 220px;
-    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 8px 24px rgba(69, 67, 67, 0.4);
     z-index: 1000;
     border-radius: 8px;
     list-style: none;
@@ -1028,7 +1042,7 @@ footer {
 
 /* Dropdown menu items */
 .dropdown-menu li {
-    padding: 12px 20px;
+    padding: 5px 10px;
     border-bottom: 1px solid #444444;
 }
 

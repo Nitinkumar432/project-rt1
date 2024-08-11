@@ -31,12 +31,12 @@ body {
     width: 250px;
 }
 
-.sidebar .logo {
-    font-size: 28px;
-    font-weight: 700;
+.sidebar .logo img {
+  width:120px;
+
     margin-bottom: 50px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+   
+ 
 }
 
 .sidebar a {

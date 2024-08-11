@@ -251,7 +251,7 @@ app.get('/', (req, res) => {
         let user = null;
 
         if (token) {
-            console.log("token is : ",token);
+            // console.log("token is : ",token);
             try {
                 const decoded = jwt.verify(token, secretKey);
                 user = decoded;

@@ -6,13 +6,15 @@
     <title>RozgarSetu</title>
     <link rel="stylesheet" href="/style.css">
     <script src="/script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- <script src="/findjob.js"></script> -->
     <!-- <link rel="stylesheet" href="/findjob.css"> -->
 </head>
 <body>
     <nav>
         <div class="logo">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaC-DSCVmVs7-JAYz0mWL4Ks36S7sMJGmWHA&usqp=CAU" alt="Logo">
+            <img src="/images/trpzgarsetu.png" alt="Logo">
             
         </div>
         <ul>
@@ -22,7 +24,7 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle"><%= user.phone %> <span>&#9662;</span></a> <!-- Dropdown trigger -->
                     <ul class="dropdown-menu">
-                        <li><a href="/profile">Profile</a></li>
+                        <li ><a href="/profile">Profile</a></li>
                         <li><a href="/applied-jobs">Applied Jobs</a></li>
                         <li><a href="/logout">Logout</a></li>
                         <!-- Add more options as needed -->
@@ -40,8 +42,12 @@
         
         <div class="search-bar">
             <input type="text" id="jobSearchInput" placeholder="<%= lang.searchJobs || 'search job' %>">
-
-            <button id="jobSearchBtn"><%= lang.search %></button>
+            <!-- <button type="submit"><i class="fa fa-search"></i></button> -->
+           
+            <button id="jobSearchBtn">
+                <i class="fas fa-search"></i>
+              </button>
+              
         </div>
     </nav>
 
@@ -99,7 +105,7 @@
         <div class="modal-content-unique">
             <span class="close-unique">&times;</span>
             <div class="modal-header-unique">
-                <img src="https://w7.pngwing.com/pngs/140/543/png-transparent-logo-company-business-business-blue-angle-company.png" alt="Company Logo" class="logo-unique">
+                <img src="/images/trpzgarsetu.png" alt="Company Logo" class="logo-unique">
                 <h2>Login</h2>
             </div>
             <form id="loginFormUnique" class="form-unique" action="/login" method="POST">
