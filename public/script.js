@@ -224,3 +224,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// login notification after login
+
+//dropdown toggle of given phone number
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+
+    dropdownToggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.remove('show');
+        }
+    });
+});
+// login spinner model
+document.getElementById('loginFormUnique').addEventListener('submit', function(event) {
+    // Show the spinner overlay
+    document.getElementById('spinnerOverlay').style.display = 'flex';
+});
+// header spinner model

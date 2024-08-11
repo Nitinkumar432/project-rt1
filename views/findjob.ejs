@@ -60,16 +60,14 @@
 
         <!-- Modal for applying to a job -->
         <div id="apply-modal" class="custom-modal">
+       
             <div class="custom-modal-content">
                 <span class="custom-close">&times;</span>
                 <form id="apply-form" action="/apply" method="post" class="custom-form">
                     <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
                     <% if (user) { %>
                         <span class="employee">Employee ID: <%= employee.employee_id %></span>
-                    <% } else { %>
-                        <span class="no-user-found">No employee found.Please Login To Apply</span>
-                    <% } %>
-                    <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
+                        <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
                     <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
         
                     <label for="name" class="custom-label">Your Name</label>
@@ -107,6 +105,17 @@
         
                     <button type="submit" class="custom-submit-button">Submit</button>
                 </form>
+                    <% } else { %>
+                        <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
+                        <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
+                        <span class="no-user-found">No employee found.Please Login To Apply</span>
+                    </form>
+                    <% } %>
+                    
+    
+                
+                    
+                    
             </div>
         </div>
         <div id="success-message" style="display: none;">Job applied successfully!</div>

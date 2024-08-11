@@ -320,7 +320,7 @@ const handleTokenError = (err) => {
 // logoutsection
 app.get('/logout', (req, res) => {
     res.clearCookie('token'); // Clear the token cookie
-    res.redirect('/'); // Redirect to home page
+    res.redirect('/?logout=success');  // Redirect to home page
 });
 //forgot password section
 app.get('/forgot-password', (req, res) => {
@@ -450,6 +450,8 @@ const jobput = [
 app.get('/findjob', authenticateToken, async (req, res) => {
     const lang = req.cookies.lang || 'en';
     const { 'job-title': jobTitle, location, salary } = req.query;
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.log(`Client IP Address: ${ip}`);
 
     let filteredJobs = jobput;
     let employee = await Register.findOne({ phone: req.user.phone });

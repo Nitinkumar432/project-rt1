@@ -26,7 +26,8 @@
                     <ul class="dropdown-menu">
                         <li ><a href="/profile">Profile</a></li>
                         <li><a href="/applied-jobs">Applied Jobs</a></li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/logout" >Logout</a></li>
+
                         <!-- Add more options as needed -->
                     </ul>
                 </li>
@@ -60,14 +61,7 @@
                 <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
                 <% if (user) { %>
                     <span class="employee">Employee ID: <%= employee.employee_id %></span>
-                <% } else { %>
-                    <span class="no-user-found">No employee found.Please Login To Apply</span>
-                <% } %>
-                
-
-            
-                
-                <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
+                    <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
                 <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
     
                 <label for="name" class="custom-label">Your Name</label>
@@ -105,6 +99,17 @@
     
                 <button type="submit" class="custom-submit-button">Submit</button>
             </form>
+                <% } else { %>
+                    <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
+                    <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
+                    <span class="no-user-found">No employee found.Please Login To Apply</span>
+                </form>
+                <% } %>
+                
+
+            
+                
+                
         </div>
     </div>
     <div id="success-message" style="display: none;">Job applied successfully!</div>
@@ -129,7 +134,13 @@
                 <a href="/forgot-password" class="link-unique">Forgot Password?</a>
             </form>
         </div>
+    
+        <!-- Spinner Overlay -->
+        <div id="spinnerOverlay" class="spinner-overlay">
+            <div class="spinner"></div>
+        </div>
     </div>
+    
 
 
 
@@ -310,21 +321,7 @@
         <% } %>
     </script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const dropdownToggle = document.querySelector('.dropdown-toggle');
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-    
-            dropdownToggle.addEventListener('click', function (e) {
-                e.preventDefault();
-                dropdownMenu.classList.toggle('show');
-            });
-    
-            document.addEventListener('click', function (e) {
-                if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                    dropdownMenu.classList.remove('show');
-                }
-            });
-        });
+       
     </script>
 </body>
 </html>
