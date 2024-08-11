@@ -53,10 +53,20 @@
 
     <!-- //job apply model -->
     <div id="apply-modal" class="custom-modal">
+       
         <div class="custom-modal-content">
             <span class="custom-close">&times;</span>
             <form id="apply-form" action="/apply" method="post" class="custom-form">
                 <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
+                <% if (user) { %>
+                    <span class="employee">Employee ID: <%= employee.employee_id %></span>
+                <% } else { %>
+                    <span class="no-user-found">No employee found.Please Login To Apply</span>
+                <% } %>
+                
+
+            
+                
                 <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
                 <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
     
@@ -153,6 +163,7 @@
                     <p><%= job.description %></p>
                     <p><%= lang.location %>: <%= job.location %></p>
                     <button class="apply-btn" data-job-title="<%= job.title %>" data-job-id="<%= job.Job_post_id %>"><%= lang.apply %></button>
+              
 
                     <button  ><%= lang.details %></button>
                 </div>
@@ -207,7 +218,7 @@
     </button>
 
    
-   
+    <% if (!user) { %>
     <div id="laborTermsModal" class="labor-modal">
         <div class="labor-modal-content">
             <span class="labor-close-btn">&times;</span>
@@ -272,6 +283,7 @@
             <button type="button" id="laborSubmitBtn" class="labor-button" disabled>Proceed</button>
         </div>
     </div>
+    <%} %>
     <footer>
         <p>&copy; 2024 RozgarSetu</p>
     </footer>

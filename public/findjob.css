@@ -500,3 +500,126 @@ textarea:focus {
         font-size: 0.9rem;
     }
 }
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Dropdown button */
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+    padding: 3px 20px;
+    /* background: linear-gradient(135deg, #1e1e1e, #333333); */
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Dropdown arrow */
+.dropdown-toggle span {
+    margin-left: 10px;
+    font-size: 1em;
+    transition: transform 0.3s ease;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #4f4a4a;
+    min-width: 220px;
+    box-shadow: 0px 8px 24px rgba(69, 67, 67, 0.4);
+    z-index: 1000;
+    border-radius: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: scaleY(0);
+    opacity: 0;
+    transform-origin: top;
+}
+
+/* Show dropdown menu */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+/* Dropdown menu items */
+.dropdown-menu li {
+    padding: 5px 10px;
+    border-bottom: 1px solid #444444;
+}
+
+/* Remove border on last item */
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+/* Dropdown menu links */
+.dropdown-menu li a {
+    text-decoration: none;
+    color: #ffffff;
+    display: block;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Dropdown menu link hover effect */
+.dropdown-menu li a:hover {
+    /* background-color: #007bff; */
+    color: #ffffff;
+}
+
+/* Optional: Adding a subtle hover effect to the dropdown button */
+.dropdown-toggle:hover {
+    background: linear-gradient(135deg, #333333, #4d4d4d);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: Adding a subtle hover effect to the dropdown items */
+.dropdown-menu li:hover {
+    background-color: #333333;
+}
+
+/* Adding animation on click */
+.dropdown-toggle:active .dropdown-menu {
+    animation: clickAnimation 0.3s ease-out;
+}
+
+@keyframes clickAnimation {
+    0% { transform: scaleY(1); }
+    100% { transform: scaleY(0); }
+}
+/* employee_id present */
+.employee {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #007bff; /* A shade of blue */
+    background-color: #f1f1f1; /* Light grey background */
+ 
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+   
+}
+
+
+.no-user-found {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #ff0000; /* Red color for visibility */
+    padding: 8px 12px;
+    margin-top: 10px;
+    display: inline-block;
+}

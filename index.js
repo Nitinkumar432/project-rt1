@@ -244,16 +244,19 @@ app.post('/login', async (req, res) => {
     }
 });
 // home route
-app.get('/', (req, res) => {
+app.get('/', async  (req, res) => {
     try {
         const lang = req.cookies.lang || 'en';
         const token = req.cookies.token || null;
         let user = null;
+        let  employee;
+        
 
         if (token) {
             // console.log("token is : ",token);
             try {
                 const decoded = jwt.verify(token, secretKey);
+                 employee = await Register.findOne({ phone: decoded.phone });
                 user = decoded;
             } catch (err) {
                 console.log('Invalid token:', err);
@@ -264,6 +267,7 @@ app.get('/', (req, res) => {
         // Check if the login was successful based on query parameters
         const loginSuccess = req.query.login === 'success';
         const phone = req.query.phone || null;
+    
 
         res.render('home.ejs', { 
             lang: language[lang], 
@@ -273,19 +277,21 @@ app.get('/', (req, res) => {
             notices,
             user,
             loginSuccess,
-            phone // Pass phone number for the pop-up
+            phone, // Pass phone number for the pop-up
+            employee:employee
         });
     } catch (err) {
+    
         console.error('Error serving the home page:', err);
         res.status(500).send('An error occurred while serving the home page.');
     }
 });
 
 // token verify 
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
     const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
 
-    if (!token) return res.sendStatus(401);
+    if (!token) return res.status(500).send('An error occurred while serving the job page Please login First.');
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {
@@ -293,6 +299,7 @@ const authenticateToken = (req, res, next) => {
             return res.sendStatus(403);
         }
         req.user = user;
+    
         next();
     });
 };
@@ -440,12 +447,12 @@ const jobput = [
 //     hi: { welcome: "स्वागत है", home: "मुखपृष्ठ", register: "रजिस्टर", login: "लॉगिन", job: "नौकरियाँ खोजें", toggleLang: "भाषा बदलें", intro: "अपना आदर्श नौकरी खोजें" }
 // };
 //logic to finjob section
-app.get('/findjob', (req, res) => {
+app.get('/findjob', authenticateToken, async (req, res) => {
     const lang = req.cookies.lang || 'en';
     const { 'job-title': jobTitle, location, salary } = req.query;
 
     let filteredJobs = jobput;
-
+    let employee = await Register.findOne({ phone: req.user.phone });
     if (jobTitle) {
         filteredJobs = filteredJobs.filter(job => job.title.toLowerCase().includes(jobTitle.toLowerCase()));
     }
@@ -456,8 +463,17 @@ app.get('/findjob', (req, res) => {
         filteredJobs = filteredJobs.filter(job => job.salary >= parseInt(salary));
     }
 
-    res.render('findjob', { lang: language[lang], jobs: filteredJobs, language: language });
+    res.render('findjob', { 
+        lang: language[lang], 
+        jobs: filteredJobs, 
+        language: language,
+        user: req.user, // Pass the authenticated user data to the template
+        employee: employee // Pass the employee data to the template
+    });
+    console.log(req.user);
+    
 });
+
 
 // Route for posting a job
 app.post('/post-job', (req, res) => {

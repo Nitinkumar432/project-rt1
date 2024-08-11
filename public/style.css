@@ -162,9 +162,9 @@ nav .search-bar button img {
     }
 
     nav .search-bar {
-      margin-left: 100px;
+      margin-left: 300px;
         width: 50%;
-        margin-top: 10px;
+        margin-top: 5px;
         left: 0;
         transform: none;
     }
@@ -615,7 +615,7 @@ footer {
 }
 
 .labor-button {
-    background-color: #28a745; /* Green background */
+    background-color: #371adc; /* Green background */
     color: #fff;
     border: none;
     border-radius: 10px; /* Rounded corners */
@@ -626,7 +626,7 @@ footer {
 }
 
 .labor-button:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #250af5; /* Darker green on hover */
     transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
@@ -1086,4 +1086,27 @@ footer {
 @keyframes clickAnimation {
     0% { transform: scaleY(1); }
     100% { transform: scaleY(0); }
+}
+/* 
+//emploee id */
+.employee {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #007bff; /* A shade of blue */
+    background-color: #f1f1f1; /* Light grey background */
+ 
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+   
+}
+
+
+.no-user-found {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: #ff0000; /* Red color for visibility */
+    padding: 8px 12px;
+    margin-top: 10px;
+    display: inline-block;
 }

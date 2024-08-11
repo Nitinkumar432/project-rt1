@@ -14,14 +14,23 @@
                 <ul>
                     <li><a href="/"><%= lang.home %></a></li>
                     <!-- <li><a href="/register"><%= lang.register %></a></li>
-                    <li><a href="/login"><%= lang.login %></a></li>
-                    <li><a href="/findjob"><%= lang.job %></a></li> -->
+                    <li><a href="/login"><%= lang.login %></a></li>-->
+                     <% if (user) { %>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle"><%= user.phone %> <span>&#9662;</span></a> <!-- Dropdown trigger -->
+                            <ul class="dropdown-menu">
+                                <li ><a href="/profile">Profile</a></li>
+                                <li><a href="/applied-jobs">Applied Jobs</a></li>
+                                <li><a href="/logout">Logout</a></li>
+                                <!-- Add more options as needed -->
+                            </ul>
+                        </li>
+                    <% }%> 
                     <li><a href="/change-language?lang=<%= lang === language.en ? 'hi' : 'en' %>"><%= lang.toggleLang %></a></li>
                 </ul>
             </nav>
         </div>
     </header>
-
     <main>
         <h2><%= lang.intro %></h2>
 
@@ -55,6 +64,11 @@
                 <span class="custom-close">&times;</span>
                 <form id="apply-form" action="/apply" method="post" class="custom-form">
                     <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
+                    <% if (user) { %>
+                        <span class="employee">Employee ID: <%= employee.employee_id %></span>
+                    <% } else { %>
+                        <span class="no-user-found">No employee found.Please Login To Apply</span>
+                    <% } %>
                     <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
                     <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
         
@@ -98,11 +112,27 @@
         <div id="success-message" style="display: none;">Job applied successfully!</div>
 
     </main>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+    
+            dropdownToggle.addEventListener('click', function (e) {
+                e.preventDefault();
+                dropdownMenu.classList.toggle('show');
+            });
+    
+            document.addEventListener('click', function (e) {
+                if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
     <footer>
         <p>&copy; 2024 Labour Job Finder</p>
     </footer>
-
+   
     <script src="/findjob.js"></script>
 </body>
 </html>
