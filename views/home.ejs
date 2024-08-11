@@ -99,9 +99,11 @@
                     <input type="text" id="availability" name="availability" placeholder="Availability" required class="custom-input">
         
     
-                    <button type="submit"   class="custom-submit-button">Submit</button>
+                    <button type="submit" class="custom-submit-button">Submit</button>
                 </form>
                 <% } else { %>
+                    <div id="h"></div>
+                    <input type="hidden" id="registration-id-field" name="registrationId" class="custom-hidden-input">
                     <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
                     <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
                     <span class="no-user-found">No employee found. Please log in to apply.</span>
@@ -117,7 +119,7 @@
             <p>Your application has been successfully submitted.</p>
           
             <p>Registration ID: <span id="registration-id-display"></span></p>
-            <p>Please keep Registration ID for Future  </p>
+              <p>Please keep Registration ID for Future  </p>
             <button id="download-form" class="custom-submit-button">Download Form</button>
             <br>
             <button id="close-success-modal" class="custom-submit-button">Close</button>

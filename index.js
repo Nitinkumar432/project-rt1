@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const mongoose = require('mongoose');
 const Register = require('./models/register_data.js');
+const JobApplication = require('./models/job_apply.js');
 const port = 3000;
 main().then(() => {
     console.log('Connection successful');
@@ -326,6 +327,7 @@ app.get('/logout', (req, res) => {
 app.get('/forgot-password', (req, res) => {
     res.send('Forgot Password Page');
 });
+//print all data of current user
 app.get('/profile', async (req, res) => {
     try {
         const token = req.cookies.token || null;
@@ -353,6 +355,44 @@ app.get('/profile', async (req, res) => {
     } catch (err) {
         console.error('Error serving profile page:', err);
         res.status(500).send('An error occurred while serving the profile page.');
+    }
+});
+app.get('/applied-jobs', async (req, res) => {
+    try {
+        const token = req.cookies.token || null;
+        let user = null;
+        let employee_id;
+
+        if (token) {
+            try {
+                const decoded = jwt.verify(token, secretKey); // Verify the JWT token
+                user = await Register.findOne({ phone: decoded.phone }); // Find the user based on the phone number in the decoded token
+                if (!user) {
+                    return res.status(401).send('User not found.');
+                }
+                user_id = user.employee_id; // Get the employee_id from the found user
+                console.log("user employee id",user_id);
+            } catch (err) {
+                console.log('Invalid token:', err);
+                res.clearCookie('token'); // Clear the token cookie if invalid
+                return res.redirect('/login'); // Redirect to login if token is invalid
+            }
+        } else {
+            return res.redirect('/login'); // Redirect to login if no token is present
+        }
+
+        // Find all job applications for the logged-in employee
+        const appliedJobs = await JobApplication.find({ employeeId: user_id });
+   
+        // console.log("user employee id",appliedJobs.employee_id);
+
+        // Render the applied jobs page with the list of jobs
+        res.render('applied-job.ejs', {
+            appliedJobs: appliedJobs, // Pass the list of applied jobs to the EJS template
+        });
+    } catch (err) {
+        console.error('Error serving applied jobs page:', err);
+        res.status(500).send('An error occurred while serving the applied jobs page.');
     }
 });
 
@@ -485,55 +525,60 @@ app.post('/post-job', (req, res) => {
 });
 
 // Route for applying to a job
-app.post('/apply', (req, res) => {
+app.post('/apply', async (req, res) => {
     const { jobTitle, jobPostId, name, fatherName, dob, age, experience, phone, address, pincode, state, minimumSalary, availability, employeeId, registrationId } = req.body;
 
+    console.log(req.body);
     // Log job and applicant details
-    console.log(`Job Applied: ${jobTitle}`);
-    console.log(`Job Post ID: ${jobPostId}`);
-    console.log(`Employee ID: ${employeeId}`);
-    console.log(`Registration ID: ${registrationId}`);
-    console.log('Applicant Details:');
-    console.log(`Name: ${name}`);
-    console.log(`Father's Name: ${fatherName}`);
-    console.log(`Date of Birth: ${dob}`);
-    console.log(`Age: ${age}`);
-    console.log(`Experience: ${experience}`);
-    console.log(`Phone: ${phone}`);
-    console.log(`Address: ${address}`);
-    console.log(`Pincode: ${pincode}`);
-    console.log(`State: ${state}`);
-    console.log(`Expected Minimum Salary: ${minimumSalary}`);
-    console.log(`Availability: ${availability}`);
+    // console.log(`Job Applied: ${jobTitle}`);
+    // console.log(`Job Post ID: ${jobPostId}`);
+    // console.log(`Employee ID: ${employeeId}`);
+    // console.log(`Registration ID: ${registrationId}`);
+    // console.log('Applicant Details:');
+    // console.log(`Name: ${name}`);
+    // console.log(`Father's Name: ${fatherName}`);
+    // console.log(`Date of Birth: ${dob}`);
+    // console.log(`Age: ${age}`);
+    // console.log(`Experience: ${experience}`);
+    // console.log(`Phone: ${phone}`);
+    // console.log(`Address: ${address}`);
+    // console.log(`Pincode: ${pincode}`);
+    // console.log(`State: ${state}`);
+    // console.log(`Expected Minimum Salary: ${minimumSalary}`);
+    // console.log(`Availability: ${availability}`);
 
-    // Here, you would typically save the data to a database.
-    // For example:
-    // db.collection('applications').insertOne({
-    //     jobTitle,
-    //     jobPostId,
-    //     employeeId,
-    //     registrationId,
-    //     name,
-    //     fatherName,
-    //     dob,
-    //     age,
-    //     experience,
-    //     phone,
-    //     address,
-    //     pincode,
-    //     state,
-    //     minimumSalary,
-    //     availability,
-    // }, (err, result) => {
-    //     if (err) {
-    //         console.error('Error saving application:', err);
-    //         return res.status(500).send('Error saving application');
-    //     }
-    //     res.json({ message: 'Application successfully submitted', registrationId });
-    // });
+    try {
+        // Create a new job application document
+        const jobApplication = new JobApplication({
+            jobTitle,
+            jobPostId,
+            employeeId,
+            registrationId,
+            name,
+            fatherName,
+            dob,
+            age,
+            experience,
+            phone,
+            address,
+            pincode,
+            state,
+            minimumSalary,
+            availability,
+        });
 
-    // For demonstration, just return the registration ID and success message
-    // res.json({ message: 'Application successfully submitted', registrationId });
+        // Save the document to MongoDB
+        await jobApplication.save();
+
+        console.log('Job application saved successfully');
+        res.status(200).json({
+            message: 'Application successfully submitted',
+            registrationId: registrationId,
+        });
+    } catch (error) {
+        console.error('Error saving job application:', error);
+        res.status(500).send('Error submitting application.');
+    }
 });
 
 app.listen(port, () => {
