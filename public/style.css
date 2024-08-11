@@ -719,6 +719,7 @@ footer {
 
 /* Modal container */
 /* Modal container */
+/* Base modal styling */
 .custom-modal {
     display: none;
     position: fixed;
@@ -732,7 +733,7 @@ footer {
     z-index: 1000; /* Ensure the modal is on top of other content */
 }
 
-/* Style for the modal content */
+/* Modal content styling */
 .custom-modal-content {
     background-color: #ffffff;
     padding: 1rem;
@@ -749,7 +750,7 @@ footer {
     justify-content: space-between;
 }
 
-/* Ensure buttons are always visible */
+/* Footer buttons always visible */
 .custom-modal-content .modal-footer {
     display: flex;
     justify-content: flex-end;
@@ -757,7 +758,7 @@ footer {
     margin-top: 1rem;
 }
 
-/* Responsive adjustments */
+/* Responsive design adjustments */
 @media (min-width: 600px) {
     .custom-modal-content {
         width: 80%; /* Adjust width for medium screens */
@@ -789,8 +790,7 @@ footer {
     }
 }
 
-
-/* Close button style */
+/* Close button styling */
 .custom-close {
     position: absolute;
     top: 0.5rem; /* Reduced top position */
@@ -809,7 +809,6 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 0.5rem; /* Further reduced gap */
-    
 }
 
 /* Label styling */
@@ -857,18 +856,42 @@ footer {
     background-color: #0056b3;
     transform: translateY(-1px);
 }
+/* succes modal */
+ #success-modal h2 {
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
 
+    #success-modal p {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    #download-form {
+        background-color: #007BFF;
+    }
+
+    #download-form:hover {
+        background-color: #0056b3;
+    }
+
+/* spinner in apply form */
 
 
 /* login model pop up */
 /* Modal Container */
-.btn-login-unique {
-    background-color: #4CAF50;
+.btn-login-submit-unique {
+    background-color: #5c0de5;
     color: white;
-    padding: 15px 20px;
+    padding: 10px 15px;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+}
+
+.btn-login-submit-unique:hover {
+    background-color: #5e00ff;
 }
 
 .modal-unique {
@@ -955,13 +978,28 @@ footer {
     text-align: center;
     display: block;
     margin-top: 10px;
-    color:red;
+    color: red;
+    text-decoration: none;
+}
+.link-unique2 {
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+    color: rgb(4, 54, 4);
     text-decoration: none;
 }
 
-.link-unique:hover {
+.link-unique:hover,.link-unique2:hover {
     text-decoration: underline;
 }
+
+.form-unique span {
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+}
+
 #success-popup {
     display: none;
     position: fixed;

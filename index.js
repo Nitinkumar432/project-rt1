@@ -5,7 +5,7 @@ const app = express();
 //jwt
 app.use(express.json());
 
-
+const jwt = require('jsonwebtoken');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { v4: uuidv4 } = require('uuid');
@@ -214,7 +214,7 @@ app.get('/alldata', async (req,res)=>{
 // })
 
 
-const jwt = require('jsonwebtoken');
+
 const secretKey = 'xyxx'; // Ensure this key is used consistently for signing and verifying tokens
 // post login
 app.post('/login', async (req, res) => {
@@ -486,11 +486,13 @@ app.post('/post-job', (req, res) => {
 
 // Route for applying to a job
 app.post('/apply', (req, res) => {
-    const { jobTitle, jobPostId, name, fatherName, dob, age, experience, phone, address, pincode, state, minimumSalary, availability } = req.body;
+    const { jobTitle, jobPostId, name, fatherName, dob, age, experience, phone, address, pincode, state, minimumSalary, availability, employeeId, registrationId } = req.body;
 
     // Log job and applicant details
     console.log(`Job Applied: ${jobTitle}`);
     console.log(`Job Post ID: ${jobPostId}`);
+    console.log(`Employee ID: ${employeeId}`);
+    console.log(`Registration ID: ${registrationId}`);
     console.log('Applicant Details:');
     console.log(`Name: ${name}`);
     console.log(`Father's Name: ${fatherName}`);
@@ -504,10 +506,35 @@ app.post('/apply', (req, res) => {
     console.log(`Expected Minimum Salary: ${minimumSalary}`);
     console.log(`Availability: ${availability}`);
 
-    // Redirect or send a response
-    // res.redirect('/findjob');
-});
+    // Here, you would typically save the data to a database.
+    // For example:
+    // db.collection('applications').insertOne({
+    //     jobTitle,
+    //     jobPostId,
+    //     employeeId,
+    //     registrationId,
+    //     name,
+    //     fatherName,
+    //     dob,
+    //     age,
+    //     experience,
+    //     phone,
+    //     address,
+    //     pincode,
+    //     state,
+    //     minimumSalary,
+    //     availability,
+    // }, (err, result) => {
+    //     if (err) {
+    //         console.error('Error saving application:', err);
+    //         return res.status(500).send('Error saving application');
+    //     }
+    //     res.json({ message: 'Application successfully submitted', registrationId });
+    // });
 
+    // For demonstration, just return the registration ID and success message
+    // res.json({ message: 'Application successfully submitted', registrationId });
+});
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
