@@ -110,7 +110,7 @@ const sampleCompanies = [
     },
     {
       companyName: "EduFuture Pvt Ltd",
-      contactEmail: "contact@edufuture.com",
+      contactEmail: "nitinraj844126@gmail.com",
       contactPhone: "9345678901",
       companyAddress: "67 Learning Road, Pune, Maharashtra",
       companyRegistration: "EFL123987654",
@@ -126,7 +126,7 @@ const sampleCompanies = [
     },
     {
       companyName: "HealthFirst Hospital",
-      contactEmail: "info@healthfirst.com",
+      contactEmail: "nitinraj844126@gmail.com",
       contactPhone: "9223344556",
       companyAddress: "101 Wellness Street, Hyderabad, Telangana",
       companyRegistration: "HFF678901234",
@@ -142,7 +142,7 @@ const sampleCompanies = [
     },
     {
       companyName: "BrightTech Electronics",
-      contactEmail: "support@brighttech.com",
+      contactEmail: "nitinraj844126@gmail.com",
       contactPhone: "9445566778",
       companyAddress: "202 Innovation Blvd, Chennai, Tamil Nadu",
       companyRegistration: "BTE567890123",

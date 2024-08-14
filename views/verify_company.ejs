@@ -9,7 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
             margin: 0;
-            padding: 20px;
+            /* padding: 20px; */
             color: #333;
         }
         h1, h2 {
@@ -79,16 +79,17 @@
             color: #856404;
         }
         .btn-approve {
-            background-color: #28a745;
+            background-color: #2d9345;
             color: white;
             padding: 10px 16px;
             border: none;
+          
             border-radius: 6px;
             cursor: pointer;
             font-size: 15px;
             transition: background-color 0.3s ease;
             float: right;
-            margin-top: -20px;
+            margin-top: -50px;
         }
         .btn-approve:hover {
             background-color: #218838;
@@ -115,24 +116,59 @@
             color: #155724;
             cursor: pointer;
         }
-        .verified-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        .verified-table th, .verified-table td {
-            padding: 14px;
-            border: 1px solid #dcdcdc;
-            text-align: left;
-            font-size: 16px;
-        }
-        .verified-table th {
-            background-color: #e9f5e9;
-        }
-        .verified-table td {
-            background-color: #ffffff;
-        }
-        .verified .show-details {
+       /* Table Container */
+.verified-table-container {
+    overflow-x: auto; /* Ensures the table is scrollable on smaller screens */
+}
+
+/* Table Styling */
+.verified-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px; /* Increased margin for better spacing */
+}
+
+/* Table Header */
+.verified-table th {
+    padding: 16px; /* Increased padding for better readability */
+    border: 1px solid #004d00; /* Deep green border for header cells */
+    text-align: left;
+    font-size: 18px; /* Slightly larger font size for header */
+    background-color: #003300; /* Deep green background */
+    color: #ffffff; /* White text for better contrast */
+    font-weight: bold; /* Bold text for emphasis */
+}
+
+/* Table Data Cells */
+.verified-table td {
+    padding: 14px;
+    border: 1px solid #004d00; /* Deep green border for data cells */
+    text-align: left;
+    font-size: 16px;
+    background-color: #e6f5e6; /* Light green background for data cells */
+    color: #004d00; /* Deep green text */
+}
+
+/* Alternating Row Colors */
+.verified-table tr:nth-child(even) td {
+    background-color: #d9f2d9; /* Lighter green background for even rows */
+}
+
+/* Table Hover Effect */
+.verified-table tr:hover {
+    background-color: #c2e0c2; /* Slightly darker green on hover */
+    cursor: pointer; /* Pointer cursor on hover for better UX */
+}
+
+/* Responsive Design for Table */
+@media (max-width: 768px) {
+    .verified-table th, .verified-table td {
+        font-size: 14px; /* Slightly smaller font size on small screens */
+        padding: 10px; /* Reduced padding for better fit on smaller screens */
+    }
+}
+
+        .show-details{
             background-color: #007bff;
             color: white;
             padding: 8px 14px;
@@ -141,8 +177,9 @@
             cursor: pointer;
             font-size: 15px;
             transition: background-color 0.3s ease;
+
         }
-        .verified .show-details:hover {
+       .show-details:hover {
             background-color: #0056b3;
         }
 
@@ -158,26 +195,91 @@
             opacity: 1;
             max-height: 1000px;
         }
+        header {
+background-color: #222;
+color: white;
+padding: 15px 0;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 0 30px;
+}
+
+.header-container h1 {
+margin: 0;
+font-size: 24px;
+letter-spacing: 1px;
+}
+header img{
+width:150px;
+height:50px;
+}
+nav ul {
+list-style-type: none;
+margin: 0;
+padding: 0;
+display: flex;
+}
+
+nav ul li {
+margin-left: 25px;
+}
+
+nav ul li a {
+color: white;
+text-decoration: none;
+font-size: 16px;
+font-weight: 500;
+}
+
+nav ul li a:hover {
+color: #4CAF50;
+transition: color 0.3s ease;
+}
+footer {
+text-align: center;
+padding: 20px;
+background-color: #333;
+color: white;
+margin-top: 20px;
+margin-bottom:0px;
+}
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-container">
+           <img src="/images/trpzgarsetu.png" alt="">
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     <div class="container">
         <h1>Verify Companies</h1>
 
-        <div class="filter-section">
+        <!-- <div class="filter-section">
             <form action="/verify_companies/filter" method="GET">
                 <div>
                     <label for="filter">Filter by:</label>
                     <select name="filter" id="filter">
                         <option value="all">All Companies</option>
                         <option value="date">Date</option>
-                        <!-- Add more filters if needed -->
+                        <!-- Add more filters if needed 
                     </select>
                     <input type="text" name="search" placeholder="Search..." />
                 </div>
                 <button type="submit">Apply Filter</button>
             </form>
-        </div>
+        </div> -->
 
         <div>
             <h2 class="section-title">Pending Verification</h2>
@@ -228,6 +330,7 @@
                             <tr>
                                 <td><%= company.companyName %></td>
                                 <td><%= company.contactEmail %></td>
+                                <td><span>Verified by:</span> <%= company.verify_by %>  <%= company.verify_time.toLocaleString() %></td>
                                 <td>
                                     <button class="show-details" onclick="toggleDetails(this)">Show Details</button>
                                     <div class="details hidden">

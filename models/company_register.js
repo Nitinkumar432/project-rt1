@@ -67,6 +67,9 @@ const companySchema = new mongoose.Schema({
     type:String,
   
   },
+  CompanyId:{
+    type:String,
+},
   verify_by:{
     type:String,
     default:"NO YET VERFIED"

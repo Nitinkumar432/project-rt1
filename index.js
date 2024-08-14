@@ -4,6 +4,10 @@ const bodyParser=require("body-parser");
 const app = express();
 //jwt
 app.use(express.json());
+// nodemialer 
+const nodemailer = require('nodemailer');
+// requiring dotenv
+require('dotenv').config();
 
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -44,6 +48,10 @@ async function main() {
 //     console.log(res);
 // }).catch(err=>console.log(err));
 // till backend
+
+
+
+
 
 const language = {
     en: {
@@ -314,18 +322,54 @@ app.get('/verify_company', async (req, res) => {
         const companies = await Company.find({});
         const pendingCompanies = companies.filter(company => !company.isVerified);
         const verifiedCompanies = companies.filter(company => company.isVerified);
+        if(userPhone==7488204975){
         res.render('verify_company.ejs', { 
             pendingCompanies, 
             verifiedCompanies, 
             userPhone 
         });
+        }else{
+            return res.status(400).send('Your are at wrong page');
+        }
     } catch (error) {
         console.error("Error fetching companies:", error);
         res.status(500).send("Internal Server Error");
     }
 });
+// mail transported code
 
 
+
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,  // Email address stored in .env
+        pass: process.env.EMAIL_PASS   // Email password stored in .env
+    }
+});
+
+// Helper function to generate a temporary password
+function generateTempPassword(length = 12) {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+    let tempPassword = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charset.length);
+        tempPassword += charset[randomIndex];
+    }
+    return tempPassword;
+}
+function generateCompanyId(prefix = 'RGSTU', length = 10) {
+    // Generate a numeric sequence (e.g., 6 digits from timestamp)
+    const timestamp = Date.now();
+    const numericSequence = String(timestamp % 1000000).padStart(6, '0');
+
+    // Generate a random suffix (e.g., 4 characters)
+    const randomSuffix = Math.random().toString(36).substring(2, 2 + length).toUpperCase();
+
+    // Combine prefix, numeric sequence, and random suffix
+    return `${prefix}${numericSequence}${randomSuffix}`;
+}
 app.post('/verify_company/approve/:id', async (req, res) => {
     const token = req.cookies.token || null;
 
@@ -334,14 +378,49 @@ app.post('/verify_company/approve/:id', async (req, res) => {
     }
 
     try {
+        // Generate unique company ID and temporary password
+        const companyId = req.params.id;
+        console.log(companyId);
+        const tempPassword = generateTempPassword(); // Generate a temporary password
+
+        // Fetch company details
+        const company = await Company.findById(companyId);
+        if (!company) {
+            return res.status(404).send('Company not found');
+        }
+
+        // Create mail options
+        let mailOptions = {
+            from: process.env.EMAIL_USER,       // Sender address from .env file
+            to: company.contactEmail,     // Recipient's email address from company document
+            subject: 'Account Approval and Temporary Password',      // Subject line
+            text: `Your company has been approved. Here are your details:
+            
+Company ID: ${companyId}
+Temporary Password: ${tempPassword}
+
+Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.`, // Plain text body
+            html: `<p>Your company has been approved. Here are your details:</p>
+<p><strong>Company ID:</strong> ${companyId}</p>
+<p><strong>Temporary Password:</strong> ${tempPassword}</p>
+<p>Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.</p>` // HTML body
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
+
+        // Decode token and update company details
         const decoded = jwt.verify(token, secretKey);
         const userPhone = decoded.phone;
 
-        const companyId = req.params.id;
+        // Update company verification details
         await Company.findByIdAndUpdate(companyId, {
             isVerified: true,
+            CompanyId:generateCompanyId(),
             verify_by: userPhone, // Store phone number of the user verifying
-            verify_time: new Date()
+            verify_time: new Date(),
+            password: tempPassword, // Store the temporary password in the company document if needed
+            // tempPasswordExpiration: new Date(Date.now() + 48 * 60 * 60 * 1000) // Set expiration time for 48 hours from now
         });
 
         res.redirect('/verify_company');
@@ -350,8 +429,6 @@ app.post('/verify_company/approve/:id', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
-
 // app.get('/login',(req,res)=>{
 
 //     res.render("home.ejs");
@@ -361,8 +438,8 @@ app.post('/verify_company/approve/:id', async (req, res) => {
 // })
 
 
-
-const secretKey = 'xyxx'; // Ensure this key is used consistently for signing and verifying tokens
+const secretKey = process.env.JWT_SECRET;
+// const secretKey = 'xyxx'; // Ensure this key is used consistently for signing and verifying tokens
 // post login
 app.post('/login', async (req, res) => {
     try {

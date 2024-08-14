@@ -49,6 +49,7 @@ const registerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    
    
     employee_id: { type: String }
 });
