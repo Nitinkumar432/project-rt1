@@ -60,7 +60,6 @@
 
         <!-- Modal for applying to a job -->
         <div id="apply-modal" class="custom-modal">
-       
             <div class="custom-modal-content">
                 <span class="custom-close">&times;</span>
                 <form id="apply-form" action="/apply" method="post" class="custom-form">
@@ -68,57 +67,70 @@
                     <% if (user) { %>
                         <span class="employee">Employee ID: <%= employee.employee_id %></span>
                         <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
-                    <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input"> <!-- New hidden field for job_post_id -->
+                        <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
+                        <input type="hidden" id="registration-id-field" name="registrationId" class="custom-hidden-input"> <!-- New hidden field for registration_id -->
+                        <input type="hidden" id="employee-id-field" name="employeeId" value="<%= employee.employee_id %>" class="custom-hidden-input"> <!-- Hidden field for employee_id -->
         
-                    <label for="name" class="custom-label">Your Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your Name" required class="custom-input">
+                        <label for="name" class="custom-label">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required class="custom-input">
+            
+                        <label for="fatherName" class="custom-label">Father's Name</label>
+                        <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="custom-input">
+            
+                        <label for="dob" class="custom-label">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" required class="custom-input">
+            
+                        <label for="age" class="custom-label">Your Age</label>
+                        <input type="number" id="age" name="age" placeholder="Your Age" required class="custom-input">
+            
+                        <label for="experience" class="custom-label">Experience</label>
+                        <input type="text" id="experience" name="experience" placeholder="Experience" required class="custom-input">
+            
+                        <label for="phone" class="custom-label">Phone Number</label>
+                        <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="custom-input">
+            
+                        <label for="address" class="custom-label">Address</label>
+                        <input type="text" id="address" name="address" placeholder="Address" required class="custom-input">
+            
+                        <label for="pincode" class="custom-label">Pincode</label>
+                        <input type="text" id="pincode" name="pincode" placeholder="Pincode" required class="custom-input">
+            
+                        <label for="state" class="custom-label">State</label>
+                        <input type="text" id="state" name="state" placeholder="State" required class="custom-input">
+            
+                        <label for="minimumSalary" class="custom-label">Expected Minimum Salary</label>
+                        <input type="number" id="minimumSalary" name="minimumSalary" placeholder="Minimum Salary" required class="custom-input">
+            
+                        <label for="availability" class="custom-label">Availability</label>
+                        <input type="text" id="availability" name="availability" placeholder="Availability" required class="custom-input">
+            
         
-                    <label for="fatherName" class="custom-label">Father's Name</label>
-                    <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="custom-input">
-        
-                    <label for="dob" class="custom-label">Date of Birth</label>
-                    <input type="date" id="dob" name="dob" required class="custom-input">
-        
-                    <label for="age" class="custom-label">Your Age</label>
-                    <input type="number" id="age" name="age" placeholder="Your Age" required class="custom-input">
-        
-                    <label for="experience" class="custom-label">Experience</label>
-                    <input type="text" id="experience" name="experience" placeholder="Experience" required class="custom-input">
-        
-                    <label for="phone" class="custom-label">Phone Number</label>
-                    <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="custom-input">
-        
-                    <label for="address" class="custom-label">Address</label>
-                    <input type="text" id="address" name="address" placeholder="Address" required class="custom-input">
-        
-                    <label for="pincode" class="custom-label">Pincode</label>
-                    <input type="text" id="pincode" name="pincode" placeholder="Pincode" required class="custom-input">
-        
-                    <label for="state" class="custom-label">State</label>
-                    <input type="text" id="state" name="state" placeholder="State" required class="custom-input">
-        
-                    <label for="minimumSalary" class="custom-label">Expected Minimum Salary</label>
-                    <input type="number" id="minimumSalary" name="minimumSalary" placeholder="Minimum Salary" required class="custom-input">
-        
-                    <label for="availability" class="custom-label">Availability</label>
-                    <input type="text" id="availability" name="availability" placeholder="Availability" required class="custom-input">
-        
-                    <button type="submit" class="custom-submit-button">Submit</button>
-                </form>
+                        <button type="submit" class="custom-submit-button">Submit</button>
+                    </form>
                     <% } else { %>
+                        <div id="h"></div>
+                        <input type="hidden" id="registration-id-field" name="registrationId" class="custom-hidden-input">
                         <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
                         <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
-                        <span class="no-user-found">No employee found.Please Login To Apply</span>
+                        <span class="no-user-found">No employee found. Please log in to apply.</span>
                     </form>
                     <% } %>
-                    
-    
-                
-                    
-                    
+                </div>
             </div>
         </div>
-        <div id="success-message" style="display: none;">Job applied successfully!</div>
+        <div id="success-modal" class="custom-modal">
+            <div class="custom-modal-content">
+                <span class="custom-close-success">&times;</span>
+                <h2>Application Submitted!</h2>
+                <p>Your application has been successfully submitted.</p>
+              
+                <p>Registration ID: <span id="registration-id-display"></span></p>
+                  <p>Please keep Registration ID for Future  </p>
+                <button id="download-form" class="custom-submit-button">Download Form</button>
+                <br>
+                <button id="close-success-modal" class="custom-submit-button">Close</button>
+            </div>
+        </div>
 
     </main>
     <script>

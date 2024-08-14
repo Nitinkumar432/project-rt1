@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced Profile Card</title>
     <link rel="stylesheet" href="profile.css">
+    <script src="profile.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Boxicons for Icons -->
@@ -20,9 +21,28 @@
         <div class="logo"><img src="/images/trpzgarsetu.png" alt=""></div>
         <a href="/"><i class='bx bx-home'></i> Dashboard</a>
         <a href="#"><i class='bx bx-user'></i> Profile</a>
-        <a href="#"><i class='bx bx-lock'></i> Change Password</a>
+        <a href="/change-password" class="unique-change-password-link"><i class='bx bx-lock'></i> Change Password</a>
         <a href="/logout"><i class='bx bx-log-out'></i> Logout</a>
     </div>
+<!-- change password design -->
+<div class="unique-popup-overlay" id="unique-popup-overlay">
+    <div class="unique-popup-content">
+        <span class="unique-popup-close" id="unique-popup-close">&times;</span>
+        <h2>Change Password</h2>
+        <form id="unique-change-password-form" action="/change-password" method="POST">
+            <label for="current-password">Current Password</label>
+            <input type="password" id="current-password" name="currentPassword" required>
+            
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" name="newPassword" required>
+            
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirmPassword" required>
+            
+            <button type="submit" class="unique-change-password-button">Change</button>
+        </form>
+    </div>
+</div>
 
     <!-- Main Content -->
     <div class="profile-container">

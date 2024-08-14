@@ -303,3 +303,30 @@ document.getElementById('loginFormUnique').addEventListener('submit', function(e
     document.getElementById('spinnerOverlay').style.display = 'flex';
 });
 // header spinner model
+// register model
+// Get the modal and spinner elements
+var modal = document.getElementById("register-modal");
+var spinnerOverlay = document.getElementById("custom-spinner-overlay");
+var btn = document.getElementById("register-link");
+var closeBtn = document.getElementsByClassName("modal-enhanced-close")[0];
+
+// When the user clicks on the button/link, show the spinner and then the modal
+btn.onclick = function() {
+    spinnerOverlay.style.display = "block"; // Show the spinner overlay
+    setTimeout(function() {
+        spinnerOverlay.style.display = "none"; // Hide the spinner
+        modal.style.display = "block"; // Show the modal
+    }, 1500); // Delay to simulate loading (1.5 seconds)
+}
+
+// When the user clicks on <span> (x), close the modal
+closeBtn.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}

@@ -21,6 +21,10 @@ const registerSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    gender: {
+        type: String,
+        required: true
+    },
     location: {
         type: String,
         required: true
@@ -45,6 +49,7 @@ const registerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+   
     employee_id: { type: String }
 });
 

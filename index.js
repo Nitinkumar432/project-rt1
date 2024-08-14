@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const mongoose = require('mongoose');
 const Register = require('./models/register_data.js');
+const Company = require('./models/company_register.js');
 const JobApplication = require('./models/job_apply.js');
 const port = 3000;
 main().then(() => {
@@ -127,11 +128,103 @@ app.get('/hello', (req, res) => {
     console.log('Visited the hello page');
     res.send('Hello, you are here at the hello page.');
 });
-
 // Handle register and login routes
 app.get('/register', (req, res) => {
-    console.log('Register page accessed');
+    console.log('Labour Register page accessed');
     res.render("register.ejs");
+});
+
+app.get('/company_Register', (req, res) => {
+    console.log('Company Register page accessed');
+    res.render("company_register.ejs");
+});
+app.post('/company_register', async (req, res) => {
+    try {
+        // Extract form data from the request body
+        const {
+            companyName,
+            contactEmail,
+            contactPhone,
+            companyAddress,
+            companyRegistration,
+            taxId,
+            industry,
+            companySize,
+            website,
+            companyDescription,
+            finances,
+            numberOfEmployees
+        } = req.body;
+
+        // Log the received data
+        console.log({
+            companyName,
+            contactEmail,
+            contactPhone,
+            companyAddress,
+            companyRegistration,
+            taxId,
+            industry,
+            companySize,
+            website,
+            companyDescription,
+            finances,
+            numberOfEmployees
+        });
+
+        // Check if a company with the same email or registration number already exists
+        const existingCompany = await Company.findOne({
+            $or: [
+                { contactEmail },
+                { companyRegistration }
+            ]
+        });
+
+        if (existingCompany) {
+            console.log("Duplicated registration found");
+            // Send an error response if the company already exists
+            return res.status(400).json({
+                error: 'Company with this email or registration number already exists!'
+            });
+        }
+        
+
+        // Generate a random reference number
+        const referenceNumber = `REF-${Math.floor(Math.random() * 1000000)}`;
+
+        // Create a new company document
+        const newCompany = new Company({
+            companyName,
+            contactEmail,
+            contactPhone,
+            companyAddress,
+            companyRegistration,
+            taxId,
+            industry,
+            companySize,
+            website,
+            companyDescription,
+            finances,
+            numberOfEmployees,
+            referenceNumber
+        });
+
+        // Save the new company to the database
+        await newCompany.save();
+
+        // Respond to the client with success message and reference number
+        res.json({
+            message: 'Registration successful!',
+            referenceNumber
+        });
+        console.log(referenceNumber);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: 'An error occurred while registering the company.'
+        });
+    }
 });
 
 // Handle form submission from the register page
@@ -139,7 +232,7 @@ app.post('/register', async (req, res) => {
     console.log('Form submitted');
     console.log('Form Data:', req.body); // Print the submitted form data to console
 
-    const { name, fatherName, motherName, experience, age, location, state, district, phone, password, confirmPassword } = req.body;
+    const { name, fatherName, motherName, experience, age,gender, location, state, district, phone, password, confirmPassword } = req.body;
 
     // Check if passwords match
     if (password !== confirmPassword) {
@@ -163,6 +256,7 @@ app.post('/register', async (req, res) => {
             motherName,
             experience,
             age,
+            gender,
             location,
             state,
             district,
@@ -180,7 +274,7 @@ app.post('/register', async (req, res) => {
         savedUser.employee_id = registrationId;
         await savedUser.save();
 
-        console.log('User registered successfully');
+        console.log('User registered successfully and Store in Dtabase');
         console.log('User Details:', {
             ...req.body,
             registrationId
@@ -200,14 +294,66 @@ app.post('/register', async (req, res) => {
 
 //     res.render('login.ejs');
 // });
-app.get('/alldata', async (req,res)=>{
-    let alldata= await Register.find();
-    console.log(alldata);
-    res.render("login.ejs",{alldata});
+// company vefirying
+app.get('/verify_company', async (req, res) => {
+    const token = req.cookies.token || null;
+    let userPhone = null;
+
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, secretKey);
+            userPhone = decoded.phone;
+        } catch (err) {
+            console.log('Invalid token:', err);
+            res.clearCookie('token');
+            return res.redirect('/login');
+        }
+    }
+
+    try {
+        const companies = await Company.find({});
+        const pendingCompanies = companies.filter(company => !company.isVerified);
+        const verifiedCompanies = companies.filter(company => company.isVerified);
+        res.render('verify_company.ejs', { 
+            pendingCompanies, 
+            verifiedCompanies, 
+            userPhone 
+        });
+    } catch (error) {
+        console.error("Error fetching companies:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
+
+
+app.post('/verify_company/approve/:id', async (req, res) => {
+    const token = req.cookies.token || null;
+
+    if (!token) {
+        return res.redirect('/login');
+    }
+
+    try {
+        const decoded = jwt.verify(token, secretKey);
+        const userPhone = decoded.phone;
+
+        const companyId = req.params.id;
+        await Company.findByIdAndUpdate(companyId, {
+            isVerified: true,
+            verify_by: userPhone, // Store phone number of the user verifying
+            verify_time: new Date()
+        });
+
+        res.redirect('/verify_company');
+    } catch (err) {
+        console.error('Error approving company:', err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
 // app.get('/login',(req,res)=>{
-//     const {phone, password} = req.body;
-//     // console.log(`Login With Phone: ${phone}, Password: ${password}`);
+
 //     res.render("home.ejs");
     
 
@@ -221,8 +367,13 @@ const secretKey = 'xyxx'; // Ensure this key is used consistently for signing an
 app.post('/login', async (req, res) => {
     try {
         const { phone, password } = req.body;
+        console.log(req.body);
+      
 
         const user = await Register.findOne({ phone: phone });
+       console.log(user);
+
+
 
         if (user) {
             const isMatch = password === user.password; // Adjust if using bcrypt

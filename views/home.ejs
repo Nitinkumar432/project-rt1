@@ -17,14 +17,19 @@
             <img src="/images/trpzgarsetu.png" alt="Logo">
             
         </div>
+  
         <ul>
             <li class="findjob"><a href="/findjob"><%= lang.job %></a></li>
             <li><a href="/"><%= lang.home %></a></li>
             <% if (user) { %>
+          
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle"><%= user.phone %> <span>&#9662;</span></a> <!-- Dropdown trigger -->
                     <ul class="dropdown-menu">
                         <li ><a href="/profile">Profile</a></li>
+                        <% if (user.phone=="7488204975") { %>
+                            <li ><a href="/verify_company">Verify Jobs</a></li>
+                        <%}%>
                         <li><a href="/applied-jobs">Applied Jobs</a></li>
                         <li><a href="/logout" >Logout</a></li>
 
@@ -32,7 +37,10 @@
                     </ul>
                 </li>
             <% } else { %>
-                <li><a href="/register"><%= lang.register %></a></li>
+                <li>
+                    <a id="register-link"><%= lang.register %></a>
+                </li>
+                <!-- <li><a href="/register"><%= lang.register %></a></li> -->
                 <li><a href="#" id="loginBtnUnique"><%= lang.login %></a></li>
             <% } %>
             <li>
@@ -51,6 +59,32 @@
               
         </div>
     </nav>
+<!-- pop for register  -->
+ <!-- Pop-up Modal -->
+<!-- Register Pop-up Modal -->
+<!-- Register Pop-up Modal -->
+<!-- Spinner Overlay -->
+<div id="custom-spinner-overlay" class="custom-spinner-overlay">
+    <div class="custom-spinner"></div>
+</div>
+
+<!-- Register Pop-up Modal -->
+<div id="register-modal" class="modal-enhanced-overlay">
+    <div class="modal-enhanced-box">
+        <div class="modal-enhanced-logo">
+            <img src="/images/trpzgarsetu.png" alt="Company Logo" class="enhanced-logo-image">
+        </div>
+        <span class="modal-enhanced-close">&times;</span>
+        <h2 class="modal-enhanced-title">Register as:</h2>
+        <div class="modal-enhanced-buttons">
+            <a href="/company_register" class="btn enhanced-button">Company Register</a>
+            <a href="/register" class="btn enhanced-button">Labour Register</a>
+        </div>
+        <p class="modal-enhanced-terms">Terms & Conditions Apply</p>
+    </div>
+</div>
+
+
 
     <!-- //job apply model -->
     <div id="apply-modal" class="custom-modal">

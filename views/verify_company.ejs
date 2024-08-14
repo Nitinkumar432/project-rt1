@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Companies</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #444;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        }
+        .filter-section {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter-section select, .filter-section input {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccd;
+            font-size: 15px;
+            margin-right: 10px;
+        }
+        .filter-section button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .filter-section button:hover {
+            background-color: #0056b3;
+        }
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 6px;
+        }
+        .pending, .verified {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pending:hover, .verified:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .pending {
+            background-color: #ffe9a3;
+            color: #856404;
+            position: relative;
+        }
+        .pending h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            color: #856404;
+        }
+        .btn-approve {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+            float: right;
+            margin-top: -20px;
+        }
+        .btn-approve:hover {
+            background-color: #218838;
+        }
+        .details {
+            margin-top: 15px;
+            font-size: 14px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .details p {
+            margin: 8px 0;
+        }
+        .details span {
+            font-weight: bold;
+            color: #444;
+        }
+
+        /* Verified Section */
+        .verified {
+            background-color: #c8e6c9;
+            color: #155724;
+            cursor: pointer;
+        }
+        .verified-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .verified-table th, .verified-table td {
+            padding: 14px;
+            border: 1px solid #dcdcdc;
+            text-align: left;
+            font-size: 16px;
+        }
+        .verified-table th {
+            background-color: #e9f5e9;
+        }
+        .verified-table td {
+            background-color: #ffffff;
+        }
+        .verified .show-details {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .verified .show-details:hover {
+            background-color: #0056b3;
+        }
+
+        /* Show Details Animation */
+        .details.hidden {
+            display: none;
+            opacity: 0;
+            max-height: 0;
+            transition: opacity 0.5s ease, max-height 0.5s ease;
+        }
+        .details.show {
+            display: block;
+            opacity: 1;
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Verify Companies</h1>
+
+        <div class="filter-section">
+            <form action="/verify_companies/filter" method="GET">
+                <div>
+                    <label for="filter">Filter by:</label>
+                    <select name="filter" id="filter">
+                        <option value="all">All Companies</option>
+                        <option value="date">Date</option>
+                        <!-- Add more filters if needed -->
+                    </select>
+                    <input type="text" name="search" placeholder="Search..." />
+                </div>
+                <button type="submit">Apply Filter</button>
+            </form>
+        </div>
+
+        <div>
+            <h2 class="section-title">Pending Verification</h2>
+            <% if (pendingCompanies.length > 0) { %>
+                <ul>
+                    <% pendingCompanies.forEach(company => { %>
+                        <li class="pending">
+                            <h3><%= company.companyName %></h3> 
+                            <strong>Email:</strong> <%= company.contactEmail %>
+                            <form action="/verify_company/approve/<%= company._id %>" method="POST">
+                                <button type="submit" class="btn-approve">Approve</button>
+                            </form>
+                            <div class="details">
+                                <p><span>Phone:</span> <%= company.contactPhone %></p>
+                                <p><span>Address:</span> <%= company.companyAddress %></p>
+                                <p><span>Registration:</span> <%= company.companyRegistration %></p>
+                                <p><span>Tax ID:</span> <%= company.taxId %></p>
+                                <p><span>Industry:</span> <%= company.industry %></p>
+                                <p><span>Size:</span> <%= company.companySize %></p>
+                                <p><span>Website:</span> <a href="<%= company.website %>" target="_blank"><%= company.website %></a></p>
+                                <p><span>Description:</span> <%= company.companyDescription %></p>
+                                <p><span>Finances:</span> <%= company.finances %></p>
+                                <p><span>Employees:</span> <%= company.numberOfEmployees %></p>
+                                <p><span>Reference:</span> <%= company.referenceNumber %></p>
+                                <p><span>Submission Time:</span> <%= company.submissionTime.toLocaleString() %></p>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <p>No companies pending verification.</p>
+            <% } %>
+        </div>
+
+        <div>
+            <h2 class="section-title">Verified Companies</h2>
+            <% if (verifiedCompanies.length > 0) { %>
+                <table class="verified-table">
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Company Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% verifiedCompanies.forEach(company => { %>
+                            <tr>
+                                <td><%= company.companyName %></td>
+                                <td><%= company.contactEmail %></td>
+                                <td>
+                                    <button class="show-details" onclick="toggleDetails(this)">Show Details</button>
+                                    <div class="details hidden">
+                                        <p><span>Verified by:</span> <%= company.verify_by %></p>
+                                        <p><span>Verification time:</span> <%= company.verify_time.toLocaleString() %></p>
+                                        <p><span>Phone:</span> <%= company.contactPhone %></p>
+                                        <p><span>Address:</span> <%= company.companyAddress %></p>
+                                        <p><span>Registration:</span> <%= company.companyRegistration %></p>
+                                        <p><span>Tax ID:</span> <%= company.taxId %></p>
+                                        <p><span>Industry:</span> <%= company.industry %></p>
+                                        <p><span>Size:</span> <%= company.companySize %></p>
+                                        <p><span>Website:</span> <a href="<%= company.website %>" target="_blank"><%= company.website %></a></p>
+                                        <p><span>Description:</span> <%= company.companyDescription %></p>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p>No verified companies.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(button) {
+            const details = button.nextElementSibling;
+            if (details.classList.contains('hidden')) {
+                details.classList.remove('hidden');
+                details.classList.add('show');
+                button.textContent = 'Hide Details';
+            } else {
+                details.classList.add('hidden');
+                details.classList.remove('show');
+                button.textContent = 'Show Details';
+            }
+        }
+    </script>
+</body>
+</html>

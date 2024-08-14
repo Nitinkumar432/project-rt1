@@ -1,8 +1,103 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f0f0f0;
-    margin: 0;
+
     padding: 0;
+}
+.background-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -4; /* Place behind other elements */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+/* First Curved Section */
+body::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -3; /* Place behind other curved sections */
+    border-radius: 60% 60% 0 0 / 50% 50% 0 0;
+    background: linear-gradient(to bottom, rgba(240, 240, 240, 0.8), rgba(217, 217, 217, 0.6));
+    top: 0;
+    left: 0;
+    transform: rotate(-3deg); /* Slight rotation for effect */
+}
+
+/* Second Curved Section */
+body::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -2; /* Place behind other curved sections */
+    border-radius: 0 0 60% 60% / 0 0 50% 50%;
+    background: linear-gradient(to top, rgba(217, 217, 217, 0.6), rgba(240, 240, 240, 0.8));
+    bottom: 0;
+    right: 0;
+    transform: rotate(3deg); /* Slight rotation for effect */
+}
+
+/* Extra Curved Design */
+body .extra-curved-design {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -5; /* Place behind all other layers */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(200, 200, 200, 0.2));
+    border-radius: 50% 0 50% 0 / 50% 0 50% 0;
+    top: 20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    transform: rotate(15deg); /* Rotate for added visual interest */
+}
+
+/* Keyframes for Animation */
+@keyframes moveCurves {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(10deg) translateY(-10%);
+    }
+    100% {
+        transform: rotate(0deg) translateY(0%);
+    }
+}
+
+/* Apply Animation on Click */
+body.clicked::before,
+body.clicked::after,
+body.clicked .extra-curved-design {
+    animation: moveCurves 1s ease-in-out;
+}
+
+/* Styling for .extra-curved-design */
+body .extra-curved-design {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(to top right, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0.1));
+    border-radius: 50% 0 50% 0 / 50% 0 50% 0;
+    top: 30%;
+    left: -10%;
+    width: 150%;
+    height: 150%;
+    transform: rotate(-5deg);
+}
+
+/* Ensure pseudo-elements cover the full viewport */
+body::before,
+body::after,
+body .extra-curved-design {
+    width: 100%;
+    height: 100%;
 }
 
 /* Header Styles */
@@ -25,7 +120,10 @@ header {
     font-size: 24px;
     letter-spacing: 1px;
 }
-
+header img{
+    width:150px;
+    height:50px;
+}
 nav ul {
     list-style-type: none;
     margin: 0;
@@ -81,7 +179,7 @@ form label {
     color: #555;
 }
 
-form input {
+form input,select {
     padding: 12px;
     margin-bottom: 25px;
     border: 1px solid #ccc;
@@ -99,15 +197,29 @@ form input:focus {
     box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
     transform: scale(1.03);
 }
+form select:focus {
+    border-color: #3009f1;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+    transform: scale(1.03);
+}
 
 form input::placeholder {
     color: #999;
     font-style: italic;
 }
-
+form select::placeholder {
+    color: #999;
+    font-style: italic;
+}
 form input:focus::placeholder {
     color: #bbb;
 }
+form select:focus::placeholder {
+    color: #bbb;
+}
+
 
 /* Submit Button Styles */
 input[type="submit"] {

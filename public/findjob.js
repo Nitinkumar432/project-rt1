@@ -6,6 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalJobTitle = document.getElementById('modal-job-title');
     const modalJobTitleField = document.getElementById('modal-job-title-field');
     const modalJobIdField = document.getElementById('modal-job-id-field');
+    const registrationIdField = document.getElementById('registration-id-field');
+    const successModal = document.getElementById('success-modal');
+    const registrationIdDisplay = document.getElementById('registration-id-display');
+    const closeSuccessModal = document.getElementById('close-success-modal');
+    const downloadFormButton = document.getElementById('download-form');
+
+    // Function to generate a random registration ID
+    const generateRegistrationId = () => {
+        return 'REG-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+    };
 
     applyButtons.forEach(button => {
         button.addEventListener('click', (e) => {
@@ -14,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalJobTitle.textContent = jobTitle;
             modalJobTitleField.value = jobTitle;
             modalJobIdField.value = jobId;
+            registrationIdField.value = generateRegistrationId();
             modal.style.display = 'flex';
         });
     });
@@ -30,20 +41,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applyForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        console.log('Applied for job:', applyForm['jobTitle'].value);
-        console.log('Job Post ID:', applyForm['jobPostId'].value); // Log the job_post_id
-        console.log('Applicant Details:');
-        console.log(`Name: ${applyForm['name'].value}`);
-        console.log(`Father's Name: ${applyForm['fatherName'].value}`);
-        console.log(`Age: ${applyForm['age'].value}`);
-        console.log(`Experience: ${applyForm['experience'].value}`);
-        console.log(`Phone: ${applyForm['phone'].value}`);
-        console.log(`Address: ${applyForm['address'].value}`);
-        console.log(`Pincode: ${applyForm['pincode'].value}`);
-        console.log(`State: ${applyForm['state'].value}`);
-        console.log(`Minimum Salary: ${applyForm['minimumSalary'].value}`);
-        console.log(`Availability: ${applyForm['availability'].value}`);
-        modal.style.display = 'none';
-        applyForm.submit();
+
+        // Hide the apply form
+        applyForm.style.display = 'none';
+
+        fetch('/apply', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                jobTitle: applyForm['jobTitle'].value,
+                jobPostId: applyForm['jobPostId'].value,
+                employeeId: applyForm['employeeId'].value,
+                registrationId: applyForm['registrationId'].value,
+                name: applyForm['name'].value,
+                fatherName: applyForm['fatherName'].value,
+                dob: applyForm['dob'].value,
+                age: applyForm['age'].value,
+                experience: applyForm['experience'].value,
+                phone: applyForm['phone'].value,
+                address: applyForm['address'].value,
+                pincode: applyForm['pincode'].value,
+                state: applyForm['state'].value,
+                minimumSalary: applyForm['minimumSalary'].value,
+                availability: applyForm['availability'].value,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); // 'Application successfully submitted'
+            registrationIdDisplay.textContent = data.registrationId;
+            modal.style.display = 'none'; // Close the application form modal
+            successModal.style.display = 'flex'; // Show the success modal
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Close the success modal
+    closeSuccessModal.addEventListener('click', () => {
+        successModal.style.display = 'none';
+    });
+
+    // Download form button (you would implement the actual download functionality here)
+    downloadFormButton.addEventListener('click', () => {
+        alert('Download form functionality goes here.');
+    });
+
+    // Close success modal by clicking outside of it
+    window.addEventListener('click', (e) => {
+        if (e.target === successModal) {
+            successModal.style.display = 'none';
+        }
+    });
+
+    document.querySelector('.custom-close-success').addEventListener('click', () => {
+        successModal.style.display = 'none';
     });
 });
