@@ -392,19 +392,32 @@ app.post('/verify_company/approve/:id', async (req, res) => {
 
         // Create mail options
         let mailOptions = {
-            from: process.env.EMAIL_USER,       // Sender address from .env file
-            to: company.contactEmail,     // Recipient's email address from company document
-            subject: 'Account Approval and Temporary Password',      // Subject line
-            text: `Your company has been approved. Here are your details:
+            from: process.env.EMAIL_USER, // Sender address from .env file
+            to: company.contactEmail, // Recipient's email address from the company document
+            subject: 'Account Approval and Temporary Password', // Subject line
+            text: `Your company  has been approved. Here are your details:
             
-Company ID: ${companyId}
-Temporary Password: ${tempPassword}
-
-Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.`, // Plain text body
-            html: `<p>Your company has been approved. Here are your details:</p>
-<p><strong>Company ID:</strong> ${company_id}</p>
-<p><strong>Temporary Password:</strong> ${tempPassword}</p>
-<p>Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.</p>` // HTML body
+        Company ID: ${company_id} 
+        Temporary Password: ${tempPassword}
+        
+        Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.`, // Plain text body
+            html: `
+                <div style="text-align: center;">
+                    <img src="cid:companyLogo" alt="Company Logo" style="width: 150px;" />
+                </div>
+                <p>Your company has been approved. Here are your details:</p>
+                <p><strong>Company ID:</strong> ${company_id}</p>
+                <p><strong>Temporary Password:</strong> ${tempPassword}</p>
+                <p>Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.</p>
+                <p>Regards,</p>
+                <p>RozgarSetu</p>`, // HTML body with embedded logo at the top
+            attachments: [
+                {
+                    filename: 'Logo', // Name of the logo file
+                    path: 'public/images/trpzgarsetu.png', // Path to the logo file
+                    cid: 'companyLogo' // Content-ID for embedding the logo
+                }
+            ]
         };
 
         // Send email
@@ -427,7 +440,7 @@ Please use the temporary password to log in and change it within 48 hours. If yo
         res.redirect('/verify_company');
     } catch (err) {
         console.error('Error approving company:', err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send("Internal Server Error to approving it");
     }
 });
 // app.get('/login',(req,res)=>{
@@ -442,6 +455,40 @@ Please use the temporary password to log in and change it within 48 hours. If yo
 const secretKey = process.env.JWT_SECRET;
 // const secretKey = 'xyxx'; // Ensure this key is used consistently for signing and verifying tokens
 // post login
+
+
+// // company_login
+// app.post('/company_login', async (req, res) => {
+//     const { company_id, password } = req.body;
+
+//     try {
+//         // Find the company by ID
+//         const user = await Company.findOne({ CompanyId: company_id });
+        
+//         if (user) {
+//             // Check if the password matches
+//             const isMatch = password === user.password; // Updated variable from company to user
+
+//             if (isMatch) {
+//                 // Generate a JWT token
+//                 const token = jwt.sign({ user: company_id }, secretKey, { expiresIn: '1h' });
+
+//                 // Set the token in a cookie
+//                 res.cookie('token', token, { httpOnly: true });
+//                 res.redirect(`/?login=success&company_id=${company_id}`);
+//             } else {
+//                 res.status(401).send('Incorrect company ID or password.');
+//             }
+//         } else {
+//             res.status(401).send('Incorrect company ID or password.');
+//         }
+//     } catch (err) {
+//         console.error('Error during login:', err);
+//         res.status(500).send('Server error');
+//     }
+// });
+
+
 app.post('/login', async (req, res) => {
     try {
         const { phone, password } = req.body;

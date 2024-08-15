@@ -8,3 +8,4 @@
 # design profile section 12/08
 # design applies job section 13/08
 # design mail system to send temp & company id to company 15/08
+# design to login as a company here 16/08

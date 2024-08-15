@@ -170,14 +170,35 @@
                 <img src="/images/trpzgarsetu.png" alt="Company Logo" class="logo-unique">
                 <h2>Login</h2>
             </div>
-            <form id="loginFormUnique" class="form-unique" action="/login" method="POST">
+    
+            <!-- Toggle Buttons -->
+            <div class="toggle-buttons">
+                <button id="labourBtn" class="btn-toggle active">Login as Labour</button>
+                <button id="companyBtn" class="btn-toggle">Login as Company</button>
+            </div>
+    
+            <!-- Labour Form -->
+            <form id="labourForm" class="form-unique" action="/login" method="POST">
                 <label for="phoneNumberUnique">Phone Number:</label>
                 <input type="number" id="phoneNumberUnique" name="phone" placeholder="Enter Phone Number" required>
-                
+    
                 <label for="passwordUnique">Password:</label>
                 <input type="password" id="passwordUnique" name="password" placeholder="Enter Password" required>
-                
-                <button class="btn-login-submit-unique" type="submit">Login</button>
+    
+                <button class="btn-login-submit-unique" type="submit">Login as Labour</button>
+                <a href="/forgot-password" class="link-unique">Forgot Password?</a>
+                <span>Don't have an account? <a href="/register" class="link-unique2">Register</a></span>
+            </form>
+    
+            <!-- Company Form -->
+            <form id="companyForm" class="form-unique hidden" action="/company_login" method="POST">
+                <label for="companyIdUnique">Company ID:</label>
+                <input type="text" id="companyIdUnique" name="company_id" placeholder="Enter Company ID" required>
+    
+                <label for="companyPasswordUnique">Password:</label>
+                <input type="password" id="companyPasswordUnique" name="password" placeholder="Enter Password" required>
+    
+                <button class="btn-login-submit-unique" type="submit">Login as Company</button>
                 <a href="/forgot-password" class="link-unique">Forgot Password?</a>
                 <span>Don't have an account? <a href="/register" class="link-unique2">Register</a></span>
             </form>

@@ -136,42 +136,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("loginModalUnique");
     const btn = document.getElementById("loginBtnUnique");
     const span = document.getElementsByClassName("close-unique")[0];
-    const form = document.getElementById("loginFormUnique");
-    const phoneNumber = document.getElementById("phoneNumberUnique");
-    const password = document.getElementById("passwordUnique");
+    const labourForm = document.getElementById("labourForm");
+    const companyForm = document.getElementById("companyForm");
+    const labourBtn = document.getElementById("labourBtn");
+    const companyBtn = document.getElementById("companyBtn");
 
     // Show the modal
     btn.onclick = function(event) {
         event.preventDefault();
         modal.style.display = "block";
-        modal.classList.add("show");
         history.pushState(null, null, '/login'); // Change the URL
     }
 
     // Close the modal
     span.onclick = function() {
         modal.style.display = "none";
-        modal.classList.remove("show");
         history.pushState(null, null, '/'); // Revert the URL back
     }
 
     window.onclick = function(event) {
         if (event.target === modal) {
             modal.style.display = "none";
-            modal.classList.remove("show");
             history.pushState(null, null, '/'); // Revert the URL back
         }
     }
 
-    // Validate form before submission
-    form.onsubmit = function(event) {
-        if (phoneNumber.value.trim() === "" || password.value.trim() === "") {
-            event.preventDefault();
-            alert("Please enter both phone number and password.");
-        }
+    // Toggle between forms
+    labourBtn.onclick = function() {
+        labourBtn.classList.add("active");
+        companyBtn.classList.remove("active");
+        labourForm.classList.remove("hidden");
+        companyForm.classList.add("hidden");
+    }
+
+    companyBtn.onclick = function() {
+        companyBtn.classList.add("active");
+        labourBtn.classList.remove("active");
+        companyForm.classList.remove("hidden");
+        labourForm.classList.add("hidden");
     }
 });
-
 
 //logic of apply job
 document.addEventListener('DOMContentLoaded', () => {
@@ -298,10 +302,26 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 // login spinner model
-document.getElementById('loginFormUnique').addEventListener('submit', function(event) {
+document.getElementById('labourForm').addEventListener('submit', function(event) {
     // Show the spinner overlay
     document.getElementById('spinnerOverlay').style.display = 'flex';
+
+    // Set a timeout to hide the spinner after 8 seconds
+    setTimeout(function() {
+        document.getElementById('spinnerOverlay').style.display = 'none';
+    }, 8000);
 });
+
+document.getElementById('companyForm').addEventListener('submit', function(event) {
+    // Show the spinner overlay
+    document.getElementById('spinnerOverlay').style.display = 'flex';
+
+    // Set a timeout to hide the spinner after 8 seconds
+    setTimeout(function() {
+        document.getElementById('spinnerOverlay').style.display = 'none';
+    }, 8000);
+});
+
 // header spinner model
 // register model
 // Get the modal and spinner elements

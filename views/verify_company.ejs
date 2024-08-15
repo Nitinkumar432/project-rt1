@@ -4,253 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Companies</title>
+    <link rel="stylesheet" href="css/verifiedCompanies.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            /* padding: 20px; */
-            color: #333;
-        }
-        h1, h2 {
-            color: #444;
-            font-size: 26px;
-            margin-bottom: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-        }
-        .filter-section {
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .filter-section select, .filter-section input {
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccd;
-            font-size: 15px;
-            margin-right: 10px;
-        }
-        .filter-section button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: background-color 0.3s ease;
-        }
-        .filter-section button:hover {
-            background-color: #0056b3;
-        }
-        .section-title {
-            font-size: 22px;
-            margin-bottom: 15px;
-            border-bottom: 3px solid #007bff;
-            padding-bottom: 6px;
-        }
-        .pending, .verified {
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .pending:hover, .verified:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-        .pending {
-            background-color: #ffe9a3;
-            color: #856404;
-            position: relative;
-        }
-        .pending h3 {
-            margin: 0 0 10px;
-            font-size: 20px;
-            color: #856404;
-        }
-        .btn-approve {
-            background-color: #2d9345;
-            color: white;
-            padding: 10px 16px;
-            border: none;
-          
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: background-color 0.3s ease;
-            float: right;
-            margin-top: -50px;
-        }
-        .btn-approve:hover {
-            background-color: #218838;
-        }
-        .details {
-            margin-top: 15px;
-            font-size: 14px;
-            background-color: #fff;
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        .details p {
-            margin: 8px 0;
-        }
-        .details span {
-            font-weight: bold;
-            color: #444;
-        }
-
-        /* Verified Section */
-        .verified {
-            background-color: #c8e6c9;
-            color: #155724;
-            cursor: pointer;
-        }
-       /* Table Container */
-.verified-table-container {
-    overflow-x: auto; /* Ensures the table is scrollable on smaller screens */
-}
-
-/* Table Styling */
-.verified-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px; /* Increased margin for better spacing */
-}
-
-/* Table Header */
-.verified-table th {
-    padding: 16px; /* Increased padding for better readability */
-    border: 1px solid #004d00; /* Deep green border for header cells */
-    text-align: left;
-    font-size: 18px; /* Slightly larger font size for header */
-    background-color: #003300; /* Deep green background */
-    color: #ffffff; /* White text for better contrast */
-    font-weight: bold; /* Bold text for emphasis */
-}
-
-/* Table Data Cells */
-.verified-table td {
-    padding: 14px;
-    border: 1px solid #004d00; /* Deep green border for data cells */
-    text-align: left;
-    font-size: 16px;
-    background-color: #e6f5e6; /* Light green background for data cells */
-    color: #004d00; /* Deep green text */
-}
-
-/* Alternating Row Colors */
-.verified-table tr:nth-child(even) td {
-    background-color: #d9f2d9; /* Lighter green background for even rows */
-}
-
-/* Table Hover Effect */
-.verified-table tr:hover {
-    background-color: #c2e0c2; /* Slightly darker green on hover */
-    cursor: pointer; /* Pointer cursor on hover for better UX */
-}
-
-/* Responsive Design for Table */
-@media (max-width: 768px) {
-    .verified-table th, .verified-table td {
-        font-size: 14px; /* Slightly smaller font size on small screens */
-        padding: 10px; /* Reduced padding for better fit on smaller screens */
-    }
-}
-
-        .show-details{
-            background-color: #007bff;
-            color: white;
-            padding: 8px 14px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: background-color 0.3s ease;
-
-        }
-       .show-details:hover {
-            background-color: #0056b3;
-        }
-
-        /* Show Details Animation */
-        .details.hidden {
-            display: none;
-            opacity: 0;
-            max-height: 0;
-            transition: opacity 0.5s ease, max-height 0.5s ease;
-        }
-        .details.show {
-            display: block;
-            opacity: 1;
-            max-height: 1000px;
-        }
-        header {
-background-color: #222;
-color: white;
-padding: 15px 0;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.header-container {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 0 30px;
-}
-
-.header-container h1 {
-margin: 0;
-font-size: 24px;
-letter-spacing: 1px;
-}
-header img{
-width:150px;
-height:50px;
-}
-nav ul {
-list-style-type: none;
-margin: 0;
-padding: 0;
-display: flex;
-}
-
-nav ul li {
-margin-left: 25px;
-}
-
-nav ul li a {
-color: white;
-text-decoration: none;
-font-size: 16px;
-font-weight: 500;
-}
-
-nav ul li a:hover {
-color: #4CAF50;
-transition: color 0.3s ease;
-}
-footer {
-text-align: center;
-padding: 20px;
-background-color: #333;
-color: white;
-margin-top: 20px;
-margin-bottom:0px;
-}
+      
     </style>
 </head>
 <body>
+    <div id="spinners" class="spinners-overlay" style="display: none;">
+        <div class="spinners"></div>
+      </div>
     <header>
         <div class="header-container">
            <img src="/images/trpzgarsetu.png" alt="">
@@ -290,7 +52,7 @@ margin-bottom:0px;
                             <h3><%= company.companyName %></h3> 
                             <strong>Email:</strong> <%= company.contactEmail %>
                             <form action="/verify_company/approve/<%= company._id %>" method="POST">
-                                <button type="submit" class="btn-approve">Approve</button>
+                                <button type="submit"  class="action-button">Approve</button>
                             </form>
                             <div class="details">
                                 <p><span>Phone:</span> <%= company.contactPhone %></p>
@@ -369,6 +131,19 @@ margin-bottom:0px;
                 button.textContent = 'Show Details';
             }
         }
+        document.querySelectorAll('.action-button').forEach(button => {
+    button.addEventListener('click', function() {
+      // Show the spinner
+      document.getElementById('spinners').style.display = 'flex';
+      
+      // Simulate some delay (e.g., for form submission or navigation)
+      setTimeout(function() {
+        // Hide the spinner after the operation
+        document.getElementById('spinners').style.display = 'none';
+      }, 3000); // Replace with actual delay or logic for your action
+    });
+  });
+  
     </script>
 </body>
 </html>
