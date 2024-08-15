@@ -381,6 +381,7 @@ app.post('/verify_company/approve/:id', async (req, res) => {
         // Generate unique company ID and temporary password
         const companyId = req.params.id;
         console.log(companyId);
+        const company_id=generateCompanyId();
         const tempPassword = generateTempPassword(); // Generate a temporary password
 
         // Fetch company details
@@ -401,7 +402,7 @@ Temporary Password: ${tempPassword}
 
 Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.`, // Plain text body
             html: `<p>Your company has been approved. Here are your details:</p>
-<p><strong>Company ID:</strong> ${companyId}</p>
+<p><strong>Company ID:</strong> ${company_id}</p>
 <p><strong>Temporary Password:</strong> ${tempPassword}</p>
 <p>Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.</p>` // HTML body
         };
@@ -416,7 +417,7 @@ Please use the temporary password to log in and change it within 48 hours. If yo
         // Update company verification details
         await Company.findByIdAndUpdate(companyId, {
             isVerified: true,
-            CompanyId:generateCompanyId(),
+            CompanyId:company_id,
             verify_by: userPhone, // Store phone number of the user verifying
             verify_time: new Date(),
             password: tempPassword, // Store the temporary password in the company document if needed
