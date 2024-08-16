@@ -51,12 +51,12 @@ const mongoose = require('mongoose');
 const Company = require('./models/company_register'); // Update with the correct path to your model file
 
 // Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/labour_register', { // Update with your actual MongoDB URI and database name
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('Failed to connect to MongoDB', err));
+const uri = 'mongodb+srv://nitin_patel:nitinpatel@rozgarsetu.rdcpc.mongodb.net/applicant?retryWrites=true&w=majority&appName=rozgarsetu';
+
+// Connect to MongoDB
+mongoose.connect(uri)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Failed to connect to MongoDB', err));
 
 // Test data with the gender field
 const sampleCompanies = [

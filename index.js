@@ -22,6 +22,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 //design of backend
 //till here
 
+// exporting job data
+const jobput = require('./jobdata/job_data.js');
+const jobs = require('./jobdata/frontjob1.js');
+const jobs2 = require('./jobdata/frontjob2.js');
+// languauge switch data
+const language=require('./language/entohi.js');
+// headlines data
+const newsItems=require('./news/headlines.js');
+
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const mongoose = require('mongoose');
@@ -29,15 +40,33 @@ const Register = require('./models/register_data.js');
 const Company = require('./models/company_register.js');
 const JobApplication = require('./models/job_apply.js');
 const port = 3000;
-main().then(() => {
-    console.log('Connection successful');
-}).catch(err => console.log(err));
+// secret toke  generate to access from .env
+const secretKey = process.env.JWT_SECRET;
+//MONGO URL
+const uri =process.env.MONGO_URL;
 
-async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/labour_register', {
+// Connect to MongoDB
+mongoose.connect(uri)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Failed to connect to MongoDB', err));
+
+// Define a schema without strict enforcement
+const schema = new mongoose.Schema({}, { strict: false });
+
+// main().then(() => {
+//     console.log('Connection successful');
+// }).catch(err => console.log(err));
+
+// async function main() {
+//     await mongoose.connect('mongodb://127.0.0.1:27017/labour_register', {
      
-    });
-}
+//     });
+// }
+
+
+
+
+
 //storing sample data
 // let logind1=new Login({
 //     phone_number:7488204975,
@@ -53,50 +82,6 @@ async function main() {
 
 
 
-const language = {
-    en: {
-        job:"Find More Job",
-        home: "Home",
-        register: "Register",
-        login: "Login",
-        toggleLang: "Switch to Hindi",
-        welcome: "Welcome to Labour Job Finder",
-        intro: "Find the best jobs near you",
-        jobListings: "Job Listings",
-        location: "Location",
-        apply: "Apply Now",
-        details: "See details"
-    },
-    hi: {
-        job:"नौकरी खोजें",
-        home: "होम",
-        register: "रजिस्टर करें",
-        login: "लॉगिन",
-        toggleLang: "अंग्रेजी में बदलें",
-        welcome: "लेबर जॉब फाइंडर में आपका स्वागत है",
-        intro: "अपने निकटतम सर्वश्रेष्ठ नौकरियां ढूंढें",
-        jobListings: "नौकरी सूची",
-        location: "स्थान",
-        apply: "अभी आवेदन करें",
-        details: "जानकारी देखें"
-    }
-};
-
-// Sample job data
-const jobs = [
-    { title: "Construction Worker", description: "Work on various construction sites.", location: "Delhi",Job_post_id:uuidv4()  },
-    { title: "Gardener", description: "Maintain gardens and landscapes.", location: "Mumbai",Job_post_id:uuidv4() },
-    { title: "Factory Worker", description: "Operate machinery in a factory.", location: "Chennai",Job_post_id:uuidv4() },
-    { title: "Bridge Construction", description: "Operate machinery.", location: "Hazipur",Job_post_id:uuidv4() }
-];
-const jobs2 = [
-    { title: "Electrician", description: "Install and repair electrical systems.", location: "Delhi" ,Job_post_id:uuidv4()},
-    { title: "Plumber", description: "Fix and install plumbing systems.", location: "Mumbai",Job_post_id:uuidv4() },
-    { title: "Machine Operator", description: "Operate and maintain industrial machines.", location: "Chennai" ,Job_post_id:uuidv4()},
-    { title: "Laptop Repair ", description: "Operate and maintain Laptop  parts.", location: "patna",Job_post_id:uuidv4() }
-];
-
-
 const breakingNews = [
     "Breaking News: New policy for workers announced!",
     "Update: Minimum wage increased in Delhi.",
@@ -107,13 +92,7 @@ const notices = [
     "Update: Minimum wage increased in Delhi.",
     "Alert: Heavy rainfall expected in Mumbai this week."
 ];
-const newsItems = [
-    { text: "Breaking News: Major event happening now! - महत्वपूर्ण समाचार: बड़ा घटना अभी हो रही है!" },
-    { text: "Update: New technology launch next week! - अपडेट: अगले सप्ताह नई तकनीक की लॉन्च!" },
-    { text: "Special Report: Market trends analysis - विशेष रिपोर्ट: बाजार प्रवृत्तियों का विश्लेषण" },
-    { text: "Alert: Weather warning issued - अलर्ट: मौसम की चेतावनी जारी" }
-    // Add more news items as needed
-];
+
 
 app.use((req, res, next) => {
     if (!req.cookies.lang) {
@@ -138,6 +117,10 @@ app.get('/hello', (req, res) => {
 });
 // Handle register and login routes
 app.get('/register', (req, res) => {
+    const token = req.cookies.token || null;
+    if(token){
+        return res.status(400).send('you cant access this page please logout first to register the data ');
+    }
     console.log('Labour Register page accessed');
     res.render("register.ejs");
 });
@@ -237,6 +220,9 @@ app.post('/company_register', async (req, res) => {
 
 // Handle form submission from the register page
 app.post('/register', async (req, res) => {
+    const token = req.cookies.token || null;
+    
+ 
     console.log('Form submitted');
     console.log('Form Data:', req.body); // Print the submitted form data to console
 
@@ -329,7 +315,14 @@ app.get('/verify_company', async (req, res) => {
             userPhone 
         });
         }else{
-            return res.status(400).send('Your are at wrong page');
+            return res.status(404).send(`
+                <div style="text-align: center; margin-top: 50px;">
+        <h1>404 - Page Not Found</h1>
+        <p>You seem to be lost. The page you are looking for doesn't exist.</p>
+        <img src="https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1723593600&semt=ais_hybrid" alt="404 Error Image" style="width: 300px; height: auto;">
+    </div>
+            `);
+            
         }
     } catch (error) {
         console.error("Error fetching companies:", error);
@@ -443,19 +436,13 @@ app.post('/verify_company/approve/:id', async (req, res) => {
         res.status(500).send("Internal Server Error to approving it");
     }
 });
-// app.get('/login',(req,res)=>{
 
-//     res.render("home.ejs");
-    
+// app.get('/login', (req, res) => {
+//     console.log('Login page accessed');
+  
 
-
-// })
-
-
-const secretKey = process.env.JWT_SECRET;
-// const secretKey = 'xyxx'; // Ensure this key is used consistently for signing and verifying tokens
-// post login
-
+//     res.render('home.ejs');
+// });
 
 // // company_login
 // app.post('/company_login', async (req, res) => {
@@ -490,6 +477,7 @@ const secretKey = process.env.JWT_SECRET;
 
 
 app.post('/login', async (req, res) => {
+   
     try {
         const { phone, password } = req.body;
         console.log(req.body);
@@ -576,6 +564,7 @@ const authenticateToken = async (req, res, next) => {
             return res.sendStatus(403);
         }
         req.user = user;
+        console.log("authentication verifed");
     
         next();
     });
@@ -633,7 +622,7 @@ app.get('/profile', async (req, res) => {
         res.status(500).send('An error occurred while serving the profile page.');
     }
 });
-app.get('/applied-jobs', async (req, res) => {
+app.get('/applied-jobs',authenticateToken, async (req, res) => {
     try {
         const token = req.cookies.token || null;
         let user = null;
@@ -672,91 +661,6 @@ app.get('/applied-jobs', async (req, res) => {
     }
 });
 
-//puting in job in that
-const jobput = [
-    { 
-        title: "Construction Worker", 
-        Job_post_id:uuidv4(),
-        description: "Work on various construction sites, including residential, commercial, and industrial projects. Responsibilities include site preparation, material handling, and assisting with the construction of structures.", 
-        location: "Delhi",
-        total_post:1100,
-        salary: 15000 
-    
-    },
-    { 
-        title: "Gardener", 
-        Job_post_id:uuidv4(),
-        description: "Maintain gardens and landscapes by planting, watering, weeding, and fertilizing plants. Duties also include lawn mowing, pruning, and landscape design to ensure the aesthetic appeal of gardens and green spaces.", 
-        location: "Mumbai", 
-        total_post:200,
-        salary: 12000 
-    },
-    { 
-        title: "Factory Worker", 
-        Job_post_id:uuidv4(),
-        description: "Operate machinery in a factory setting to assemble, package, and inspect products. Responsibilities include maintaining equipment, following safety protocols, and ensuring high-quality production standards.", 
-        location: "Chennai", 
-        total_post:300,
-        salary: 18000 
-
-    },
-    { 
-        title: "Bridge Construction Worker", 
-        Job_post_id:uuidv4(),
-        description: "Assist in the construction and maintenance of bridges and overpasses. Tasks include operating heavy machinery, reinforcing structures, and collaborating with engineers to ensure structural integrity and safety.", 
-        location: "Hazipur", 
-        total_post:130,
-        salary: 20000 
-    },
-    { 
-        title: "Warehouse Manager", 
-        Job_post_id:uuidv4(),
-        description: "Oversee the daily operations of a warehouse, including inventory management, order fulfillment, and staff supervision. Ensure efficient workflow and adherence to safety and quality standards.", 
-        location: "Kolkata", 
-        total_post:500,
-        salary: 25000 
-    },
-    { 
-        title: "Delivery Driver", 
-        Job_post_id:uuidv4(),
-        description: "Transport goods and packages to various locations in a timely manner. Responsibilities include vehicle maintenance, route planning, and ensuring accurate delivery of items to customers.", 
-        location: "Bangalore", 
-        total_post:100,
-        salary: 14000 
-    },
-    { 
-        title: "Janitor", 
-        Job_post_id:uuidv4(),
-        description: "Perform cleaning and maintenance duties in various facilities such as offices, schools, and hospitals. Tasks include sweeping, mopping, trash removal, and ensuring a clean and hygienic environment.", 
-        location: "Hyderabad", 
-        total_post:120,
-        salary: 11000 
-    },
-    { 
-        title: "Electrician", 
-        Job_post_id:uuidv4(),
-        description: "Install, maintain, and repair electrical systems and wiring in residential and commercial buildings. Duties include troubleshooting electrical issues, ensuring compliance with safety codes, and performing routine inspections.", 
-        location: "Pune", 
-        total_post:720,
-        salary: 22000 
-    },
-    { 
-        title: "Plumber", 
-        Job_post_id:uuidv4(),
-        description: "Install and repair plumbing systems including pipes, fixtures, and appliances. Responsibilities include diagnosing plumbing issues, performing repairs, and ensuring systems are functioning correctly and efficiently.", 
-        location: "Ahmedabad", 
-        total_post:730,
-        salary: 20000 
-    },
-    { 
-        title: "Carpenter", 
-        Job_post_id:uuidv4(),
-        description: "Construct, install, and repair wooden structures and fixtures. Tasks include reading blueprints, measuring and cutting wood, and ensuring accurate and durable construction of furniture and building components.", 
-        location: "Jaipur", 
-        total_post:546,
-        salary: 19000 
-    }
-];
 
 // const language = {
 //     en: { welcome: "Welcome", home: "Home", register: "Register", login: "Login", job: "Find Jobs", toggleLang: "Change Language", intro: "Find Your Ideal Job" },
