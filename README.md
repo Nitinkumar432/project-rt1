@@ -9,3 +9,5 @@
 # design applies job section 13/08
 # design mail system to send temp & company id to company 15/08
 # design to login as a company here 16/08
+
+# add tracking system of registration od for company and employee
