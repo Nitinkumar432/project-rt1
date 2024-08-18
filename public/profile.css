@@ -271,6 +271,140 @@ body {
 /* change password pop -iup */
 /* Unique styles for the change password pop-up */
 
+/* Enhanced Popup Overlay */
+.unique-popup-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9));
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* Adds a blur effect to the background */
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Enhanced Popup Content */
+.unique-popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    width: 350px;
+    transition: transform 0.3s ease;
+    animation: slideUp 0.6s ease-out;
+}
+
+.unique-popup-content:hover {
+    transform: translate(-50%, -48%); /* Slight lift on hover */
+}
+
+/* Close Button with Better UX */
+.unique-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.unique-popup-close:hover {
+    color: #ff5c5c;
+}
+
+/* Input Fields Styling */
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="password"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+    outline: none;
+}
+
+/* Enhanced Button Styling */
+.unique-change-password-button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
+    margin-top: 15px;
+}
+
+.unique-change-password-button:hover {
+    background: linear-gradient(135deg, #0056b3, #004099);
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, 60%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+/* Error Message Styling */
+.error-message {
+    color: #ff5c5c;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    text-align: left;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Additional Styles for Password Fields */
+input[type="password"].error {
+    border-color: #ff5c5c;
+    box-shadow: 0 0 8px rgba(255, 92, 92, 0.5);
+}
+/* spinner design */
+/* Common Styles for Popups */
 .unique-popup-overlay {
     display: none; /* Hidden by default */
     position: fixed;
@@ -292,6 +426,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     width: 300px;
+    text-align: center;
 }
 
 .unique-popup-close {
@@ -302,7 +437,35 @@ body {
     cursor: pointer;
 }
 
-.unique-change-password-button {
+.unique-popup-close:hover {
+    color: #007bff;
+}
+
+/* Styles for Change Password Popup */
+#unique-change-password-form {
+    margin: 0;
+}
+
+#unique-change-password-form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#unique-change-password-form input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#unique-change-password-form input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#unique-change-password-form .unique-change-password-button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -313,6 +476,44 @@ body {
     margin-top: 10px;
 }
 
-.unique-change-password-button:hover {
+#unique-change-password-form .unique-change-password-button:hover {
     background-color: #0056b3;
 }
+
+/* Spinner Styles */
+.spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.spinner img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Styles for Success Popup */
+#success-popup-overlay {
+    display: none; /* Hidden by default */
+}
+
+#success-popup-overlay .unique-popup-content {
+    width: 350px;
+    background-color: #dff0d8; /* Light green background for success */
+    color: #3c763d; /* Dark green text color */
+    border: 1px solid #d6e9c6; /* Light green border */
+}
+
+#success-popup-overlay h2 {
+    margin-top: 0;
+}
+
+#success-popup-overlay .unique-popup-close {
+    color: #3c763d;
+}
+
+#success-popup-overlay .unique-popup-close:hover {
+    color: #2a6434;
+}
+

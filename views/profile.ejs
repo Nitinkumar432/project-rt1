@@ -29,20 +29,46 @@
     <div class="unique-popup-content">
         <span class="unique-popup-close" id="unique-popup-close">&times;</span>
         <h2>Change Password</h2>
+
         <form id="unique-change-password-form" action="/change-password" method="POST">
+            <!-- Error message -->
+            <div id="error-message" style="color: red; display: none;"></div>
+
+            <!-- Password Fields -->
             <label for="current-password">Current Password</label>
             <input type="password" id="current-password" name="currentPassword" required>
-            
+
             <label for="new-password">New Password</label>
             <input type="password" id="new-password" name="newPassword" required>
-            
+
             <label for="confirm-password">Confirm Password</label>
             <input type="password" id="confirm-password" name="confirmPassword" required>
-            
-            <button type="submit" class="unique-change-password-button">Change</button>
+
+            <!-- Submit Button -->
+            <button type="submit" class="unique-change-password-button">Change Password</button>
+
+            <!-- Spinner -->
+            <div id="spinner" class="spinner" style="display: none;">
+                <img src="https://loading.io/assets/mod/spinner/default/lg.gif" alt="Loading..." />
+            </div>
         </form>
     </div>
 </div>
+
+
+<!-- Success Message Popup -->
+<div class="unique-popup-overlay" id="success-popup-overlay" style="display: none;">
+    <div class="unique-popup-content">
+        <span class="unique-popup-close" id="success-popup-close">&times;</span>
+        <h2>Password Updated Successfully!</h2>
+        <p>Your password has been changed successfully.</p>
+    </div>
+</div>
+
+<script>
+
+</script>
+
 
     <!-- Main Content -->
     <div class="profile-container">

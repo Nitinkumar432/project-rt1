@@ -147,7 +147,7 @@ app.post('/company_register', async (req, res) => {
             numberOfEmployees
         } = req.body;
 
-        // Log the received data
+        // Log the received data for debugging
         console.log({
             companyName,
             contactEmail,
@@ -178,7 +178,6 @@ app.post('/company_register', async (req, res) => {
                 error: 'Company with this email or registration number already exists!'
             });
         }
-        
 
         // Generate a random reference number
         const referenceNumber = `REF-${Math.floor(Math.random() * 1000000)}`;
@@ -203,15 +202,45 @@ app.post('/company_register', async (req, res) => {
         // Save the new company to the database
         await newCompany.save();
 
+        // Send email with reference number and logo
+        const mailOptions = {
+            from: process.env.EMAIL_USER, // Sender address
+            to: contactEmail, // Recipient's email address
+            subject: 'Registration Successful - Your Reference Number', // Email subject
+            text: `Dear ${companyName},\n\nHere is your reference number: ${referenceNumber}`, // Plain text body
+            html: `
+                <div style="text-align: center;">
+                    <img src="cid:companyLogo" alt="Company Logo" style="width: 150px;"/>
+                </div>
+                <p>Dear ${companyName},</p>
+                <p>Here is your reference number:</p>
+                <p><strong>${referenceNumber}</strong></p>
+                <p>Thank you for registering with us.</p>
+                <p>Best regards,</p>
+                <p>RozgarSetu</p>`, // HTML body with logo and bold reference number
+            attachments: [
+                {
+                    filename: 'logo.png', // Your logo file
+                    path: 'public/images/trpzgarsetu.png', // Path to your logo file
+                    cid: 'companyLogo' // Content ID for embedding the logo
+                }
+            ]
+        };
+
+        // Send the email
+        await transporter.sendMail(mailOptions);
+
         // Respond to the client with success message and reference number
-        res.json({
-            message: 'Registration successful!',
+        res.status(201).json({
+            message: 'Registration successful! An email has been sent with your reference number.',
             referenceNumber
         });
-        console.log(referenceNumber);
+
+        // Log the reference number for debugging
+        console.log(`Reference Number: ${referenceNumber}`);
 
     } catch (error) {
-        console.error(error);
+        console.error('Error during registration:', error.message);
         res.status(500).json({
             error: 'An error occurred while registering the company.'
         });
@@ -268,7 +297,7 @@ app.post('/register', async (req, res) => {
         savedUser.employee_id = registrationId;
         await savedUser.save();
 
-        console.log('User registered successfully and Store in Dtabase');
+        console.log('User registered successfully and Store in Database');
         console.log('User Details:', {
             ...req.body,
             registrationId
@@ -589,8 +618,55 @@ app.get('/logout', (req, res) => {
     res.redirect('/?logout=success');  // Redirect to home page
 });
 //forgot password section
-app.get('/forgot-password', (req, res) => {
-    res.send('Forgot Password Page');
+app.post('/forgot-password', (req, res) => {
+    console.log(req.body);
+});
+
+
+app.post('/change-password', async (req, res) => {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+    const token = req.cookies.token || null;
+
+    try {
+        if (!token) {
+            return res.redirect('/login');
+        }
+
+        let user = null;
+
+        try {
+            // Verify the token and extract the user's phone number
+            const decoded = jwt.verify(token, secretKey);
+            user = await Register.findOne({ phone: decoded.phone });
+
+            if (!user) {
+                return res.status(401).send('User not found.');
+            }
+        } catch (err) {
+            console.log('Invalid token:', err);
+            res.clearCookie('token');
+            return res.redirect('/login');
+        }
+
+        // Check if the current password matches the one in the database
+        if (currentPassword !== user.password) {
+            return res.status(400).json({ error: 'Incorrect current password' });
+        }
+
+        // Validate that the new password and confirm password match
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ error: 'New password and confirm password do not match' });
+        }
+
+        // Update the user's password with the new one
+        user.password = newPassword;
+        await user.save();
+
+        return res.status(200).json({ success: 'Password changed successfully' });
+    } catch (error) {
+        console.error('Error changing password:', error);
+        return res.status(500).send('An error occurred while changing the password.');
+    }
 });
 //print all data of current user
 app.get('/profile', async (req, res) => {
@@ -758,6 +834,36 @@ app.post('/apply', async (req, res) => {
     } catch (error) {
         console.error('Error saving job application:', error);
         res.status(500).send('Error submitting application.');
+    }
+});
+// track registration 
+app.get('/trackcompany-registration',(req,res)=>{
+    res.render('company_registration_track.ejs');
+    
+});
+app.post('/api/track_reference', async (req, res) => {
+    try {
+        const { referenceNumber } = req.body;
+
+        // Find the company by reference number
+        const company = await Company.findOne({ referenceNumber });
+
+        if (!company) {
+            // If no company is found, send an error response
+            return res.status(404).json({ error: 'Invalid reference number' });
+        }
+
+        // Send the company details if found
+        res.json({
+            companyName: company.companyName,
+            contactEmail: company.contactEmail,
+            contactPhone: company.contactPhone,
+            companyAddress: company.companyAddress,
+            isVerified: company.isVerified
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'An error occurred while tracking the reference number' });
     }
 });
 

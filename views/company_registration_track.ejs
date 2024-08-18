@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Reference Number</title>
+    <link rel="stylesheet" href="css/company_registration_track.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="/images/trpzgarsetu.png" alt="Logo">
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="main">
+        <div class="form-container">
+            <p class="track-reference">Track Your Reference Number</p>
+            <form id="reference-form">
+                <label for="reference-number">Enter Reference Number:</label>
+                <input type="text" id="reference-number" name="reference-number" placeholder="Enter your reference number" required>
+                <button type="submit" id="submit-button">Submit</button>
+            </form>
+            <div id="spinner-overlay" class="spinner-overlay" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+            <div id="result" class="result"></div>
+        </div>
+    </main>
+    
+
+    <script src="/javascript/company_registration_track.js">
+      
+    </script>
+</body>
+</html>

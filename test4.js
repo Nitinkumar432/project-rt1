@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Register = require('./models/register_data.js');
+const JobApplication = require('./models/job_apply.js');
 
 // Connection URI
 const uri = 'mongodb+srv://nitin_patel:nitinpatel@rozgarsetu.rdcpc.mongodb.net/applicant?retryWrites=true&w=majority&appName=rozgarsetu';
@@ -16,33 +16,37 @@ const schema = new mongoose.Schema({}, { strict: false });
 // const Collection = mongoose.model('Collection', schema, 'registar_data');
 
 // Function to add a new document
-const addDocument = async () => {
-  try {
-    const newDocument = new Register({
-      name: 'John Doe',
-      fatherName: 'Robert Doe',
-      motherName: 'Jane Doe',
-      experience: '5 years',
-      age: 30,
-      gender: 'Male',
-      location: 'New York',
-      state: 'NY',
-      district: 'Manhattan',
-      phone: '1234567891',
-      password: 'securepassword', // Ensure to hash passwords before saving in production
-      employee_id: 'EMP-001'
-  });
-    const result = await newDocument.save();
-    console.log('New Document Added:', result);
-  } catch (err) {
-    console.error('Error adding new document', err);
-  }
-};
+const sampleApplication = new JobApplication({
+  jobTitle: 'Software Engineer',
+  Company_Name: 'Tech Innovations',
+  employeeId: 'rzs12345',
+  registrationId: 'rzs56789',
+  name: 'John Doe',
+  fatherName: 'Michael Doe',
+  dob: new Date('1990-05-15'),
+  age: 34,
+  experience: '5 years',
+  phone: '123-456-7890',
+  address: '123 Elm Street, Springfield',
+  pincode: '123456',
+  state: 'Illinois',
+  minimumSalary: 60000,
+  availability: 'Immediate',
+});
 
+sampleApplication.save()
+.then(() => {
+    console.log('Sample data inserted successfully.');
+    mongoose.connection.close();
+})
+.catch(err => {
+    console.error('Error inserting sample data:', err);
+    mongoose.connection.close();
+});
 // Function to find all documents
 const findDocuments = async () => {
   try {
-    const documents = await Register.find();
+    const documents = await JobApplication.find();
     console.log('Documents Found:', documents);
   } catch (err) {
     console.error('Error finding documents', err);
@@ -51,5 +55,5 @@ const findDocuments = async () => {
 
 
 // Run examples
-addDocument();
+
 findDocuments();

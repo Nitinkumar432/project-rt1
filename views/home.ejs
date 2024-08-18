@@ -269,7 +269,24 @@
             <% }); %>
         </div>
     </section>
-    
+    <div class="track-data-container">
+        <div class="track-data-row">
+            <div class="track-data-col track-company-registration">
+                <div class="icon-container">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h2>Track Company Registrations</h2>
+                <a href="/trackcompany-registration" class="track-data-link">View Company Registrations</a>
+            </div>
+            <div class="track-data-col track-job-application">
+                <div class="icon-container">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h2>Track Job Applications</h2>
+                <a href="/job-application" class="track-data-link">View Job Applications</a>
+            </div>
+        </div>
+    </div>
     <section class="notices">
         <h2>Notices</h2>
         <div class="notice-list">
@@ -299,7 +316,7 @@
         <img src="https://img.icons8.com/ios-filled/50/000000/chat.png" alt="Chat">
     </button>
 
-   
+    
     <% if (!user) { %>
     <div id="laborTermsModal" class="labor-modal">
         <div class="labor-modal-content">
