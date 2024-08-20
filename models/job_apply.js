@@ -7,7 +7,7 @@ const jobApplicationSchema = new Schema({
         type: String,
         required: true,
     },
-    jobPostId: {
+    Company_Name: {
         type: String,
         required: true,
     },

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Registration Number</title>
+    <link rel="stylesheet" href="/css/applicanttrack.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="/images/trpzgarsetu.png" alt="Logo">
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="track-form">
+        <h2>Track Registration Number</h2>
+        <form id="trackForm" action="/track" method="GET">
+            <label for="registrationNumber">Enter Your Registration Number</label>
+            <input type="text" id="registrationNumber" name="registrationNumber" required placeholder="Enter Registration Number">
+            <button type="submit">Track</button>
+            <div class="spinner" id="spinner"></div>
+        </form>
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+        
+    </div>
+
+    <footer>
+        <p>&copy; 2024 RozgarSetu</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/javascript/applicanttrack.js"></script>
+    
+</body>
+</html>

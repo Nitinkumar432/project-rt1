@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //till here
 
 // exporting job data
+
 const jobput = require('./jobdata/job_data.js');
 const jobs = require('./jobdata/frontjob1.js');
 const jobs2 = require('./jobdata/frontjob2.js');
@@ -585,7 +586,13 @@ app.get('/', async  (req, res) => {
 const authenticateToken = async (req, res, next) => {
     const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
 
-    if (!token) return res.status(500).send('An error occurred while serving the job page Please login First.');
+    if (!token)   return res.status(401).send(`
+        <div style="text-align: center; margin-top: 50px;">
+<h1 style="color:red" >401 - Unauthorized Access</h1>
+<p style="color:red">Access is Denied due to invaild Credentials .</p>
+<img src="https://i.pinimg.com/originals/37/1f/5a/371f5aab6306463243c58fb21aca3dfa.png" alt="404 Error Image" style="width: 300px; height: auto;">
+</div>
+    `);
 
     jwt.verify(token, secretKey, (err, user) => {
         if (err) {
@@ -807,7 +814,7 @@ app.post('/apply', async (req, res) => {
         // Create a new job application document
         const jobApplication = new JobApplication({
             jobTitle,
-            jobPostId,
+            Company_Name:jobPostId,
             employeeId,
             registrationId,
             name,
@@ -866,7 +873,29 @@ app.post('/api/track_reference', async (req, res) => {
         res.status(500).json({ error: 'An error occurred while tracking the reference number' });
     }
 });
+app.get('/job-application',(req,res)=>{
+    console.log("job-application tracker page accessed");
+    res.render("job-application-status.ejs");
+    
+})
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
+});
+app.get('/track', async (req, res) => {
+    try {
+        const { registrationNumber } = req.query;
+
+        // Find the job application based on the registration number
+        const application = await JobApplication.findOne({ registrationId: registrationNumber });
+
+        if (!application) {
+            return res.status(404).json({ message: 'Application not found' });
+        }
+
+        // Send the application data as JSON
+        res.json(application);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
 });

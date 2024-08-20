@@ -4,93 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recently Applied Jobs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, #f0f4f8, #e0eafc);
+            margin: 0;
+            color: #333;
+        }
+        header {
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        .header-container h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+        header img {
+            width: 150px;
+            height: 50px;
+        }
+        nav ul {
+            list-style-type: none;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
         }
-        
+        nav ul li {
+            margin-left: 25px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        nav ul li a:hover {
+            color: #4CAF50;
+            transition: color 0.3s ease;
+        }
         .container {
             width: 100%;
             max-width: 900px;
             background: #ffffff;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
             animation: fadeIn 1s ease-in;
         }
-
         h1 {
             color: #2C3E50;
             text-align: center;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            color: #34495E;
-            text-align: center;
-            font-weight: normal;
             margin-bottom: 20px;
+            font-size: 32px;
         }
-
         .job-list {
             margin-top: 20px;
         }
-
         .job-item {
-            background: #F8F9FA;
+            background: #ffffff;
             padding: 20px;
             margin-bottom: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             border: 1px solid #E1E8ED;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
-
+        .job-item.active {
+            border: 2px solid #4CAF50;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
         .job-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
-
         .job-item h3 {
-            margin: 0 0 15px;
+            margin: 0;
             color: #2C3E50;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
         }
-
         .job-item p {
             margin: 6px 0;
             color: #57606F;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.6;
         }
-
         .job-item p strong {
             color: #34495E;
         }
-
+        .job-item i {
+            color: #3d3497;
+            margin-right: 8px;
+        }
+        .no-jobs {
+            text-align: center;
+            color: #888888;
+            font-size: 20px;
+            margin-top: 30px;
+        }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        .no-jobs {
+        footer {
             text-align: center;
-            color: #888888;
-            font-size: 18px;
-            margin-top: 30px;
+            padding: 15px;
+            background-color: #222;
+            color: white;
+            /* position: fixed; */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+           /* z-index: 1000; /* Ensures footer is on top */
         }
-
-        /* Responsive Design */
         @media (max-width: 768px) {
             .container {
                 padding: 20px;
             }
-
             .job-item {
                 padding: 15px;
             }
@@ -98,19 +144,30 @@
     </style>
 </head>
 <body>
+    <header>
+        <div class="header-container">
+            <img src="/images/trpzgarsetu.png" alt="Logo">
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
     <div class="container">
-        <h1>Welcome to India</h1>
-        <h2>Your Most Recent Job Applications</h2>
-        
+        <h1>Recently Applied Jobs</h1>
         <div class="job-list">
             <% if (appliedJobs.length > 0) { %>
                 <% appliedJobs.forEach(job => { %>
-                    <div class="job-item">
-                        <h3><%= job.jobTitle %></h3>
-                        <p><strong>Job Post ID:</strong> <%= job.jobPostId %></p>
-                        <p><strong>Employee ID:</strong> <%= job.employeeId %></p>
-                        <p><strong>Registration ID:</strong> <%= job.registrationId %></p>
-                        <p><strong>Applied At:</strong> <%= job.appliedAt.toLocaleDateString() %></p>
+                    <div class="job-item <%= job.isActive ? 'active' : '' %>">
+                        <h3><i class="fas fa-briefcase"></i><%= job.jobTitle %></h3>
+                        <p><i class="fas fa-id-badge"></i><strong>Job Post ID:</strong> <%= job.jobPostId %></p>
+                        <p><i class="fas fa-user"></i><strong>Employee ID:</strong> <%= job.employeeId %></p>
+                        <p><i class="fas fa-clipboard-list"></i><strong>Registration ID:</strong> <%= job.registrationId %></p>
+                        <p><i class="fas fa-calendar-alt"></i><strong>Applied At:</strong> <%= job.appliedAt.toLocaleDateString() %></p>
                     </div>
                 <% }); %>
             <% } else { %>
@@ -118,5 +175,9 @@
             <% } %>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2024 Labour Job Finder</p>
+    </footer>
 </body>
 </html>

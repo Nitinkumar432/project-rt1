@@ -618,6 +618,7 @@ footer {
 .labor-button {
     background-color: #371adc; /* Green background */
     color: #fff;
+
     border: none;
     border-radius: 10px; /* Rounded corners */
     padding: 12px 25px;
@@ -1402,4 +1403,11 @@ footer {
 
 .track-data-link:hover {
     background-color: #0056b3;
+}
+.termlogo{
+    width:120px;
+    height:30px;
+    display: block;
+    margin: auto;
+    align-items: center;
 }
