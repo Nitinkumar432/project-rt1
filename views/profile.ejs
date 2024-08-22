@@ -75,7 +75,12 @@
         <!-- Header -->
         <div class="profile-header">
             <div class="profile-picture">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzCW8ayM9K_iNzX81NSjgpGcl30jDvsTSiIg&s" alt="Profile Picture">
+                <% if(user.gender === 'male') { %>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzCW8ayM9K_iNzX81NSjgpGcl30jDvsTSiIg&s" alt="Profile Picture">
+                <% } else { %>
+                    <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-female-user-avatars-flat-style-women-profession-vector-png-image_4822944.jpg" alt="Profile Picture">
+                <% } %>
+                
             </div>
             <div class="profile-info">
                 <h1><%= user.name %></h1>
@@ -94,6 +99,7 @@
                 </div>
                 <div class="section-content">
                     <p><i class='bx bx-male'></i> <strong>Name:</strong> <%= user.name %></p>
+                    <p><i class='bx bx-male'></i> <strong>Gender:</strong> <%= user.gender %></p>
                     <p><i class='bx bx-male'></i> <strong>Father's Name:</strong> <%= user.fatherName %></p>
                     <p><i class='bx bx-female'></i> <strong>Mother's Name:</strong> <%= user.motherName %></p>
                     <p><i class='bx bx-calendar'></i> <strong>Age:</strong> <%= user.age %></p>

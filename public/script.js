@@ -136,10 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("loginModalUnique");
     const btn = document.getElementById("loginBtnUnique");
     const span = document.getElementsByClassName("close-unique")[0];
-    const labourForm = document.getElementById("labourForm");
-    const companyForm = document.getElementById("companyForm");
-    const labourBtn = document.getElementById("labourBtn");
-    const companyBtn = document.getElementById("companyBtn");
 
     // Show the modal
     btn.onclick = function(event) {
@@ -159,21 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = "none";
             history.pushState(null, null, '/'); // Revert the URL back
         }
-    }
-
-    // Toggle between forms
-    labourBtn.onclick = function() {
-        labourBtn.classList.add("active");
-        companyBtn.classList.remove("active");
-        labourForm.classList.remove("hidden");
-        companyForm.classList.add("hidden");
-    }
-
-    companyBtn.onclick = function() {
-        companyBtn.classList.add("active");
-        labourBtn.classList.remove("active");
-        companyForm.classList.remove("hidden");
-        labourForm.classList.add("hidden");
     }
 });
 

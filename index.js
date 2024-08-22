@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+// const chalk=require('chalk');
 const bodyParser=require("body-parser");
 const app = express();
 //jwt

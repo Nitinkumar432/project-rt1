@@ -78,7 +78,8 @@ const companySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
 
-  }
+  },
+  userType: { type: String, default: 'company' },
 }, { timestamps: true });
 
 const Company = mongoose.model('Company', companySchema);
