@@ -28,7 +28,7 @@
                     <ul class="dropdown-menu">
                         <li ><a href="/profile">Profile</a></li>
                         <% if (user.phone=="7488204975") { %>
-                            <li ><a href="/verify_company">Verify Jobs</a></li>
+                            <li ><a href="/verify_company">Verify Company</a></li>
                         <%}%>
                         <li><a href="/applied-jobs">Applied Jobs</a></li>
                         <li><a href="/logout" >Logout</a></li>
@@ -38,7 +38,7 @@
                 </li>
             <% } else { %>
                 <li>
-                    <a id="register-link"><%= lang.register %></a>
+                    <a href="/register" id="register-link"><%= lang.register %></a>
                 </li>
                 <!-- <li><a href="/register"><%= lang.register %></a></li> -->
                 <li><a href="#" id="loginBtnUnique"><%= lang.login %></a></li>
@@ -69,7 +69,8 @@
 </div>
 
 <!-- Register Pop-up Modal -->
-<div id="register-modal" class="modal-enhanced-overlay">
+<!-- Register Modal -->
+<!-- <div id="register-modal" class="modal-enhanced-overlay">
     <div class="modal-enhanced-box">
         <div class="modal-enhanced-logo">
             <img src="/images/trpzgarsetu.png" alt="Company Logo" class="enhanced-logo-image">
@@ -82,7 +83,10 @@
         </div>
         <p class="modal-enhanced-terms">Terms & Conditions Apply</p>
     </div>
-</div>
+</div> -->
+
+
+
 
 
 
@@ -95,27 +99,30 @@
                 <% if (user) { %>
                     <span class="employee">Employee ID: <%= employee.employee_id %></span>
                     <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
-                    <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
+                    <input type="hidden" id="modal-job-jobid-field" name="job_id" class="custom-hidden-input">
+                    <input type="hidden" id="modal-company-name-field" name="companyName" class="custom-hidden-input">
+
                     <input type="hidden" id="registration-id-field" name="registrationId" class="custom-hidden-input"> <!-- New hidden field for registration_id -->
                     <input type="hidden" id="employee-id-field" name="employeeId" value="<%= employee.employee_id %>" class="custom-hidden-input"> <!-- Hidden field for employee_id -->
     
                     <label for="name" class="custom-label">Your Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your Name" required class="custom-input">
+                    <input type="text" id="name" name="name" placeholder="Your Name" required class="custom-input" value="<%= employee.name %>" />
+                  
         
                     <label for="fatherName" class="custom-label">Father's Name</label>
-                    <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="custom-input">
+                    <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="custom-input" value="<%= employee.fatherName %>">
         
                     <label for="dob" class="custom-label">Date of Birth</label>
                     <input type="date" id="dob" name="dob" required class="custom-input">
         
                     <label for="age" class="custom-label">Your Age</label>
-                    <input type="number" id="age" name="age" placeholder="Your Age" required class="custom-input">
+                    <input type="number" id="age" name="age" placeholder="Your Age" required class="custom-input" value="<%= employee.age %>">
         
                     <label for="experience" class="custom-label">Experience</label>
                     <input type="text" id="experience" name="experience" placeholder="Experience" required class="custom-input">
         
                     <label for="phone" class="custom-label">Phone Number</label>
-                    <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="custom-input">
+                    <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="custom-input" value="<%= employee.phone%>">
         
                     <label for="address" class="custom-label">Address</label>
                     <input type="text" id="address" name="address" placeholder="Address" required class="custom-input">
@@ -137,9 +144,11 @@
                 </form>
                 <% } else { %>
                     <div id="h"></div>
-                    <input type="hidden" id="registration-id-field" name="registrationId" class="custom-hidden-input">
                     <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
-                    <input type="hidden" id="modal-job-id-field" name="jobPostId" class="custom-hidden-input">
+                    <input type="hidden" id="modal-job-jobid-field" name="job_id" class="custom-hidden-input">
+                    <input type="hidden" id="modal-company-name-field" name="companyName" class="custom-hidden-input">
+
+                    <input type="hidden" id="registration-id-field" name="registrationId" class="custom-hidden-input">
                     <span class="no-user-found">No employee found. Please log in to apply.</span>
                 </form>
                 <% } %>
@@ -215,39 +224,50 @@
     </header>
   
     <section class="job-listings">
-        <h2><%= lang.jobListings %> (Normal)</h2>
+        <h2><%= lang.jobListings %> (normal)</h2>
         <div class="jobs" id="jobListings">
             <% jobs.forEach(function(job) { %>
                 <div class="job-card">
                     <h3><%= job.title %></h3>
-                    <h4>Company_Name : <%= job.Job_post_id %></h4>
+                    <h4>Job ID: <%= job.job_id %></h4>
+                    <h4>Company Name: <%= job.companyName %></h4>
+                    
                     <p><%= job.description %></p>
                     <p><%= lang.location %>: <%= job.location %></p>
-                    <button class="apply-btn" data-job-title="<%= job.title %>" data-job-id="<%= job.Job_post_id %>"><%= lang.apply %></button>
-              
-
-                    <button  ><%= lang.details %></button>
-                </div>
-            <% }); %>
-           
-        </div>
-    </section>
-   
-    <section class="job-listings">
-        <h2><%= lang.jobListings %> (Technician)</h2>
-        <div class="jobs" id="jobListings">
-            <% jobs2.forEach(function(job) { %>
-                <div class="job-card">
-                    <h3><%= job.title %></h3>
-                    <h4>Company_Name: <%= job.Job_post_id %></h4>
-                    <p><%= job.description %></p>
-                    <p><%= lang.location %>: <%= job.location %></p>
-                    <button class="apply-btn" data-job-title="<%= job.title %>" data-job-id="<%= job.Job_post_id %>"><%= lang.apply %></button>
+                    <button class="apply-btn" 
+                            data-job-title="<%= job.title %>" 
+                            data-job-company-name="<%= job.companyName %>" 
+                            data-job-jobid="<%= job.job_id %>"><%= lang.apply %></button>
                     <button><%= lang.details %></button>
                 </div>
             <% }); %>
         </div>
     </section>
+    
+    
+   
+    <section class="job-listings">
+        <h2><%= lang.jobListings %> (Technical)</h2>
+        <div class="jobs" id="jobListings">
+            <% jobs2.forEach(function(job) { %>
+                <div class="job-card">
+                    <h3><%= job.title %></h3>
+                    <h4>Job ID: <%= job.job_id %></h4>
+                    <h4>Company Name: <%= job.companyName %></h4>
+                    
+                    <p><%= job.description %></p>
+                    <p><%= lang.location %>: <%= job.location %></p>
+                    <button class="apply-btn" 
+                            data-job-title="<%= job.title %>" 
+                            data-job-company-name="<%= job.companyName %>" 
+                            data-job-jobid="<%= job.job_id %>"><%= lang.apply %></button>
+                    <button><%= lang.details %></button>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+</section>
+
     <div class="track-data-container">
         <div class="track-data-row">
             <div class="track-data-col track-company-registration">

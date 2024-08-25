@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const bodyParser=require("body-parser");
 const app = express();
 //jwt
+
 app.use(express.json());
 // nodemialer 
 const nodemailer = require('nodemailer');
@@ -39,6 +40,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const mongoose = require('mongoose');
 const Register = require('./models/register_data.js');
+const Job_post=require("./models/job_post.js");
 const Company = require('./models/company_register.js');
 const JobApplication = require('./models/job_apply.js');
 const port = 3000;
@@ -790,7 +792,7 @@ app.post('/post-job', (req, res) => {
 
 // Route for applying to a job
 app.post('/apply', async (req, res) => {
-    const { jobTitle, jobPostId, name, fatherName, dob, age, experience, phone, address, pincode, state, minimumSalary, availability, employeeId, registrationId } = req.body;
+    const { jobTitle,job_id ,companyName, name, fatherName, dob, age, experience, phone, address, pincode, state, minimumSalary, availability, employeeId, registrationId } = req.body;
 
     console.log(req.body);
     // Log job and applicant details
@@ -815,7 +817,8 @@ app.post('/apply', async (req, res) => {
         // Create a new job application document
         const jobApplication = new JobApplication({
             jobTitle,
-            Company_Name:jobPostId,
+            job_id,
+            companyName,
             employeeId,
             registrationId,
             name,

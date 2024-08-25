@@ -11,3 +11,4 @@
 # design to login as a company here 16/08
 
 # add tracking system of registration od for company and employee
+# today 22/08/24 create new project for company access
