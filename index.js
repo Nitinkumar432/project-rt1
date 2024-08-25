@@ -40,7 +40,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const mongoose = require('mongoose');
 const Register = require('./models/register_data.js');
-const Job_post=require("./models/job_post.js");
+
 const Company = require('./models/company_register.js');
 const JobApplication = require('./models/job_apply.js');
 const port = 3000;
