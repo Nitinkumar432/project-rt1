@@ -1,10 +1,10 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-// const chalk=require('chalk');
+// const bcrypt = require('bcrypt');
+
 const bodyParser=require("body-parser");
 const app = express();
 //jwt
-
+// const chalk=require('chalk');
 app.use(express.json());
 // nodemialer 
 const nodemailer = require('nodemailer');
@@ -129,128 +129,11 @@ app.get('/register', (req, res) => {
     res.render("register.ejs");
 });
 
-app.get('/company_Register', (req, res) => {
-    console.log('Company Register page accessed');
-    res.render("company_register.ejs");
-});
-app.post('/company_register', async (req, res) => {
-    try {
-        // Extract form data from the request body
-        const {
-            companyName,
-            contactEmail,
-            contactPhone,
-            companyAddress,
-            companyRegistration,
-            taxId,
-            industry,
-            companySize,
-            website,
-            companyDescription,
-            finances,
-            numberOfEmployees
-        } = req.body;
-
-        // Log the received data for debugging
-        console.log({
-            companyName,
-            contactEmail,
-            contactPhone,
-            companyAddress,
-            companyRegistration,
-            taxId,
-            industry,
-            companySize,
-            website,
-            companyDescription,
-            finances,
-            numberOfEmployees
-        });
-
-        // Check if a company with the same email or registration number already exists
-        const existingCompany = await Company.findOne({
-            $or: [
-                { contactEmail },
-                { companyRegistration }
-            ]
-        });
-
-        if (existingCompany) {
-            console.log("Duplicated registration found");
-            // Send an error response if the company already exists
-            return res.status(400).json({
-                error: 'Company with this email or registration number already exists!'
-            });
-        }
-
-        // Generate a random reference number
-        const referenceNumber = `REF-${Math.floor(Math.random() * 1000000)}`;
-
-        // Create a new company document
-        const newCompany = new Company({
-            companyName,
-            contactEmail,
-            contactPhone,
-            companyAddress,
-            companyRegistration,
-            taxId,
-            industry,
-            companySize,
-            website,
-            companyDescription,
-            finances,
-            numberOfEmployees,
-            referenceNumber
-        });
-
-        // Save the new company to the database
-        await newCompany.save();
-
-        // Send email with reference number and logo
-        const mailOptions = {
-            from: process.env.EMAIL_USER, // Sender address
-            to: contactEmail, // Recipient's email address
-            subject: 'Registration Successful - Your Reference Number', // Email subject
-            text: `Dear ${companyName},\n\nHere is your reference number: ${referenceNumber}`, // Plain text body
-            html: `
-                <div style="text-align: center;">
-                    <img src="cid:companyLogo" alt="Company Logo" style="width: 150px;"/>
-                </div>
-                <p>Dear ${companyName},</p>
-                <p>Here is your reference number:</p>
-                <p><strong>${referenceNumber}</strong></p>
-                <p>Thank you for registering with us.</p>
-                <p>Best regards,</p>
-                <p>RozgarSetu</p>`, // HTML body with logo and bold reference number
-            attachments: [
-                {
-                    filename: 'logo.png', // Your logo file
-                    path: 'public/images/trpzgarsetu.png', // Path to your logo file
-                    cid: 'companyLogo' // Content ID for embedding the logo
-                }
-            ]
-        };
-
-        // Send the email
-        await transporter.sendMail(mailOptions);
-
-        // Respond to the client with success message and reference number
-        res.status(201).json({
-            message: 'Registration successful! An email has been sent with your reference number.',
-            referenceNumber
-        });
-
-        // Log the reference number for debugging
-        console.log(`Reference Number: ${referenceNumber}`);
-
-    } catch (error) {
-        console.error('Error during registration:', error.message);
-        res.status(500).json({
-            error: 'An error occurred while registering the company.'
-        });
-    }
-});
-
+// app.get('/company_Register', (req, res) => {
+//     console.log('Company Register page accessed');
+//     res.render("company_register.ejs");
+// });
+// company register
 // Handle form submission from the register page
 app.post('/register', async (req, res) => {
     const token = req.cookies.token || null;
@@ -315,55 +198,6 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// app.get('/login', (req, res) => {
-//     console.log('Login page accessed');
-  
-
-//     res.render('login.ejs');
-// });
-// company vefirying
-app.get('/verify_company', async (req, res) => {
-    const token = req.cookies.token || null;
-    let userPhone = null;
-
-    if (token) {
-        try {
-            const decoded = jwt.verify(token, secretKey);
-            userPhone = decoded.phone;
-        } catch (err) {
-            console.log('Invalid token:', err);
-            res.clearCookie('token');
-            return res.redirect('/login');
-        }
-    }
-
-    try {
-        const companies = await Company.find({});
-        const pendingCompanies = companies.filter(company => !company.isVerified);
-        const verifiedCompanies = companies.filter(company => company.isVerified);
-        if(userPhone==7488204975){
-        res.render('verify_company.ejs', { 
-            pendingCompanies, 
-            verifiedCompanies, 
-            userPhone 
-        });
-        }else{
-            return res.status(404).send(`
-                <div style="text-align: center; margin-top: 50px;">
-        <h1>404 - Page Not Found</h1>
-        <p>You seem to be lost. The page you are looking for doesn't exist.</p>
-        <img src="https://img.freepik.com/free-vector/404-error-with-landscape-concept-illustration_114360-7898.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1723593600&semt=ais_hybrid" alt="404 Error Image" style="width: 300px; height: auto;">
-    </div>
-            `);
-            
-        }
-    } catch (error) {
-        console.error("Error fetching companies:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
-// mail transported code
-
 
 
 
@@ -374,140 +208,6 @@ let transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS   // Email password stored in .env
     }
 });
-
-// Helper function to generate a temporary password
-function generateTempPassword(length = 12) {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
-    let tempPassword = '';
-    for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * charset.length);
-        tempPassword += charset[randomIndex];
-    }
-    return tempPassword;
-}
-function generateCompanyId(prefix = 'RGSTU', length = 10) {
-    // Generate a numeric sequence (e.g., 6 digits from timestamp)
-    const timestamp = Date.now();
-    const numericSequence = String(timestamp % 1000000).padStart(6, '0');
-
-    // Generate a random suffix (e.g., 4 characters)
-    const randomSuffix = Math.random().toString(36).substring(2, 2 + length).toUpperCase();
-
-    // Combine prefix, numeric sequence, and random suffix
-    return `${prefix}${numericSequence}${randomSuffix}`;
-}
-app.post('/verify_company/approve/:id', async (req, res) => {
-    const token = req.cookies.token || null;
-
-    if (!token) {
-        return res.redirect('/login');
-    }
-
-    try {
-        // Generate unique company ID and temporary password
-        const companyId = req.params.id;
-        console.log(companyId);
-        const company_id=generateCompanyId();
-        const tempPassword = generateTempPassword(); // Generate a temporary password
-
-        // Fetch company details
-        const company = await Company.findById(companyId);
-        if (!company) {
-            return res.status(404).send('Company not found');
-        }
-
-        // Create mail options
-        let mailOptions = {
-            from: process.env.EMAIL_USER, // Sender address from .env file
-            to: company.contactEmail, // Recipient's email address from the company document
-            subject: 'Account Approval and Temporary Password', // Subject line
-            text: `Your company  has been approved. Here are your details:
-            
-        Company ID: ${company_id} 
-        Temporary Password: ${tempPassword}
-        
-        Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.`, // Plain text body
-            html: `
-                <div style="text-align: center;">
-                    <img src="cid:companyLogo" alt="Company Logo" style="width: 150px;" />
-                </div>
-                <p>Your company has been approved. Here are your details:</p>
-                <p><strong>Company ID:</strong> ${company_id}</p>
-                <p><strong>Temporary Password:</strong> ${tempPassword}</p>
-                <p>Please use the temporary password to log in and change it within 48 hours. If you don't update your password within this period, you will need to request a new one.</p>
-                <p>Regards,</p>
-                <p>RozgarSetu</p>`, // HTML body with embedded logo at the top
-            attachments: [
-                {
-                    filename: 'Logo', // Name of the logo file
-                    path: 'public/images/trpzgarsetu.png', // Path to the logo file
-                    cid: 'companyLogo' // Content-ID for embedding the logo
-                }
-            ]
-        };
-
-        // Send email
-        await transporter.sendMail(mailOptions);
-
-        // Decode token and update company details
-        const decoded = jwt.verify(token, secretKey);
-        const userPhone = decoded.phone;
-
-        // Update company verification details
-        await Company.findByIdAndUpdate(companyId, {
-            isVerified: true,
-            CompanyId:company_id,
-            verify_by: userPhone, // Store phone number of the user verifying
-            verify_time: new Date(),
-            password: tempPassword, // Store the temporary password in the company document if needed
-            // tempPasswordExpiration: new Date(Date.now() + 48 * 60 * 60 * 1000) // Set expiration time for 48 hours from now
-        });
-
-        res.redirect('/verify_company');
-    } catch (err) {
-        console.error('Error approving company:', err);
-        res.status(500).send("Internal Server Error to approving it");
-    }
-});
-
-// app.get('/login', (req, res) => {
-//     console.log('Login page accessed');
-  
-
-//     res.render('home.ejs');
-// });
-
-// // company_login
-// app.post('/company_login', async (req, res) => {
-//     const { company_id, password } = req.body;
-
-//     try {
-//         // Find the company by ID
-//         const user = await Company.findOne({ CompanyId: company_id });
-        
-//         if (user) {
-//             // Check if the password matches
-//             const isMatch = password === user.password; // Updated variable from company to user
-
-//             if (isMatch) {
-//                 // Generate a JWT token
-//                 const token = jwt.sign({ user: company_id }, secretKey, { expiresIn: '1h' });
-
-//                 // Set the token in a cookie
-//                 res.cookie('token', token, { httpOnly: true });
-//                 res.redirect(`/?login=success&company_id=${company_id}`);
-//             } else {
-//                 res.status(401).send('Incorrect company ID or password.');
-//             }
-//         } else {
-//             res.status(401).send('Incorrect company ID or password.');
-//         }
-//     } catch (err) {
-//         console.error('Error during login:', err);
-//         res.status(500).send('Server error');
-//     }
-// });
-
 
 app.post('/login', async (req, res) => {
    
@@ -883,9 +583,7 @@ app.get('/job-application',(req,res)=>{
     
 })
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-});
+
 app.get('/track', async (req, res) => {
     try {
         const { registrationNumber } = req.query;
@@ -902,4 +600,7 @@ app.get('/track', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
+});
+app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
 });
