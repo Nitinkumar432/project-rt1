@@ -27,8 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // exporting job data
 
 const jobput = require('./jobdata/job_data.js');
-const jobs = require('./jobdata/frontjob1.js');
-const jobs2 = require('./jobdata/frontjob2.js');
+// const jobs = require('./jobdata/frontjob1.js');
+// const jobs2 = require('./jobdata/frontjob2.js');
+const JobPost=require('./models/job_post.js');
 // languauge switch data
 const language=require('./language/entohi.js');
 // headlines data
@@ -57,30 +58,6 @@ mongoose.connect(uri)
 // Define a schema without strict enforcement
 const schema = new mongoose.Schema({}, { strict: false });
 
-// main().then(() => {
-//     console.log('Connection successful');
-// }).catch(err => console.log(err));
-
-// async function main() {
-//     await mongoose.connect('mongodb://127.0.0.1:27017/labour_register', {
-     
-//     });
-// }
-
-
-
-
-
-//storing sample data
-// let logind1=new Login({
-//     phone_number:7488204975,
-//     password:"Nitin@123"
-
-// })
-// logind1.save().then((res)=>{
-//     console.log(res);
-// }).catch(err=>console.log(err));
-// till backend
 
 
 
@@ -115,10 +92,6 @@ app.get('/change-language', (req, res) => {
     res.redirect('back');
 });
 
-app.get('/hello', (req, res) => {
-    console.log('Visited the hello page');
-    res.send('Hello, you are here at the hello page.');
-});
 // Handle register and login routes
 app.get('/register', (req, res) => {
     const token = req.cookies.token || null;
@@ -242,19 +215,19 @@ app.post('/login', async (req, res) => {
     }
 });
 // home route
-app.get('/', async  (req, res) => {
+
+
+app.get('/', async (req, res) => {
     try {
         const lang = req.cookies.lang || 'en';
         const token = req.cookies.token || null;
         let user = null;
-        let  employee;
-        
+        let employee;
 
         if (token) {
-            // console.log("token is : ",token);
             try {
                 const decoded = jwt.verify(token, secretKey);
-                 employee = await Register.findOne({ phone: decoded.phone });
+                employee = await Register.findOne({ phone: decoded.phone });
                 user = decoded;
             } catch (err) {
                 console.log('Invalid token:', err);
@@ -262,10 +235,18 @@ app.get('/', async  (req, res) => {
             }
         }
 
+        // Fetch jobs that are verified and sort them by `verified_time` in descending order
+        const verifiedJobs = await JobPost.find({ status: 'Verified' })
+            .sort({ verified_time: -1 })  // Sort by verified_time (descending)
+            .limit(8);  // Fetch only the top 8 verified jobs
+
+        // Split jobs into two groups of 4
+        const jobs = verifiedJobs.slice(0, 4);  // First 4 jobs
+        const jobs2 = verifiedJobs.slice(4, 8);  // Next 4 jobs
+
         // Check if the login was successful based on query parameters
         const loginSuccess = req.query.login === 'success';
         const phone = req.query.phone || null;
-    
 
         res.render('home.ejs', { 
             lang: language[lang], 
@@ -276,10 +257,9 @@ app.get('/', async  (req, res) => {
             user,
             loginSuccess,
             phone, // Pass phone number for the pop-up
-            employee:employee
+            employee
         });
     } catch (err) {
-    
         console.error('Error serving the home page:', err);
         res.status(500).send('An error occurred while serving the home page.');
     }

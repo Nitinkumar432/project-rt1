@@ -8,7 +8,7 @@ const jobApplicationSchema = new Schema({
         required: true,
     },
     job_id:{
-        type: Number,
+        type: String,
         required: true,
 
 

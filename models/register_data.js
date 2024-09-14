@@ -53,7 +53,7 @@ const registerSchema = new mongoose.Schema({
     
    
     employee_id: { type: String }
-});
+},{ timestamps: true });
 
 // No pre-save hook for hashing the password
 // The password will be stored as plain text in the database

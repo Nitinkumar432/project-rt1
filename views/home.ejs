@@ -93,7 +93,7 @@
         <div class="custom-modal-content">
             <span class="custom-close">&times;</span>
             <form id="apply-form" action="/apply" method="post" class="custom-form">
-                <h2>Apply for <span id="modal-job-title" class="custom-job-title"></span></h2>
+                <h2>Apply for <span style="color:rgb(47, 47, 199)" id="modal-job-title" class="custom-job-title"></span></h2>
                 <% if (user) { %>
                     <span class="employee">Employee ID: <%= employee.employee_id %></span>
                     <input type="hidden" id="modal-job-title-field" name="jobTitle" class="custom-hidden-input">
@@ -230,8 +230,8 @@
                     <h4>Job ID: <%= job.job_id %></h4>
                     <h4>Company Name: <%= job.companyName %></h4>
                     
-                    <p><%= job.description %></p>
-                    <p><%= lang.location %>: <%= job.location %></p>
+                    <p>Job Description : <%= job.description %></p>
+                    <p> <%= lang.location %>: <%= job.location.streetAddress %>,<%= job.location.city %>,<%= job.location.state %></p>
                     <button class="apply-btn" 
                             data-job-title="<%= job.title %>" 
                             data-job-company-name="<%= job.companyName %>" 
@@ -253,8 +253,8 @@
                     <h4>Job ID: <%= job.job_id %></h4>
                     <h4>Company Name: <%= job.companyName %></h4>
                     
-                    <p><%= job.description %></p>
-                    <p><%= lang.location %>: <%= job.location %></p>
+                    <p>Job Description : <%= job.description %></p>
+                    <p> <%= lang.location %>: <%= job.location.streetAddress %>,<%= job.location.city %>,<%= job.location.state %></p>
                     <button class="apply-btn" 
                             data-job-title="<%= job.title %>" 
                             data-job-company-name="<%= job.companyName %>" 
@@ -399,14 +399,12 @@
             },3000); // Hide pop-up after 3 seconds
         }
 
-        // Check if the login was successful
-        
-        <% if (loginSuccess) { %>
-            showSuccessPopup(`Login successful with phone number: <%= phone %>`);
-        <% } %>
-    </script>
-    <script>
+       
+      
        
     </script>
+ <% if (loginSuccess) { %>
+   <script>showSuccessPopup(`Login successful with phone number: <%= phone %>`);</script> 
+<% } %>
 </body>
 </html>
