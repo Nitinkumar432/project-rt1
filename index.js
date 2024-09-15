@@ -434,41 +434,46 @@ app.get('/applied-jobs',authenticateToken, async (req, res) => {
 // };
 //logic to finjob section
 app.get('/findjob', authenticateToken, async (req, res) => {
+    console.log("find job accessed");
     const lang = req.cookies.lang || 'en';
     const { 'job-title': jobTitle, location, salary } = req.query;
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    console.log(`Client IP Address: ${ip}`);
 
-    let filteredJobs = jobput;
-    let employee = await Register.findOne({ phone: req.user.phone });
+    let query = { status: 'Verified' };
+
     if (jobTitle) {
-        filteredJobs = filteredJobs.filter(job => job.title.toLowerCase().includes(jobTitle.toLowerCase()));
-    }
-    if (location) {
-        filteredJobs = filteredJobs.filter(job => job.location.toLowerCase().includes(location.toLowerCase()));
-    }
-    if (salary) {
-        filteredJobs = filteredJobs.filter(job => job.salary >= parseInt(salary));
+        query.title = { $regex: new RegExp(jobTitle, 'i') };  // Case-insensitive search for job title
     }
 
-    res.render('findjob', { 
-        lang: language[lang], 
-        jobs: filteredJobs, 
-        language: language,
-        user: req.user, // Pass the authenticated user data to the template
-        employee: employee // Pass the employee data to the template
-    });
-    console.log(req.user);
-    
+    if (location) {
+        query['location.city'] = { $regex: new RegExp(location, 'i') };  // Case-insensitive search for location
+    }
+
+    if (salary) {
+        query.salary = { $gte: parseInt(salary) };  // Search for jobs with salary >= provided value
+    }
+
+    try {
+        let filteredJobs = await JobPost.find(query).sort({ verified_time: -1 });
+
+        // Fetch employee data for authenticated user
+        let employee = await Register.findOne({ phone: req.user.phone });
+
+        // Render the findjob page with the filtered jobs
+        res.render('findjob', { 
+            lang: language[lang], 
+            jobs: filteredJobs, 
+            language: language, 
+            user: req.user, 
+            employee: employee 
+        });
+    } catch (error) {
+        console.error('Error fetching jobs:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 
 // Route for posting a job
-app.post('/post-job', (req, res) => {
-    const { title, location, salary, description } = req.body;
-    jobput.push({ title, location, salary: parseInt(salary), description });
-    res.redirect('/findjob');
-});
 
 // Route for applying to a job
 app.post('/apply', async (req, res) => {

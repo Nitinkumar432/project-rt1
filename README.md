@@ -12,3 +12,4 @@
 
 # add tracking system of registration od for company and employee
 # today 22/08/24 create new project for company access
+# adding pushing real data to as job post in local host:??3000

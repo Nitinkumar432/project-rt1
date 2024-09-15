@@ -707,3 +707,17 @@ textarea:focus {
 .custom-close:hover {
     color: #dc3545;
 }
+/* best jobs neares */
+#detected-location-container {
+    display: flex;
+    justify-content: center; /* Horizontally centers the content */
+    align-items: center; /* Vertically centers the content */
+ 
+}
+
+#detected-location-display {
+    text-align: center; /* Centers the text inside the div */
+    padding: 20px;
+    width: 50%; /* Optional: Adjust the width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add some shadow for better appearance */
+}

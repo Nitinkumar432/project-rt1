@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Jobs</title>
     <link rel="stylesheet" href="/findjob.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
     <header>
@@ -33,14 +37,19 @@
     </header>
     <main>
         <h2><%= lang.intro %></h2>
-
         <form action="/findjob" method="get" class="search-form">
-            <input type="text" name="job-title" placeholder="Job Title" class="search-input">
-            <input type="text" name="location" placeholder="Location" class="search-input">
-            <input type="number" name="salary" placeholder="Minimum Salary" class="search-input">
-            <button type="submit" class="search-button">Search</button>
-            <button type="button" id="detect-location" class="detect-location-button">Detect Location</button>
+            <input type="text" name="job-title" placeholder="Job Title" class="search-input form-control mb-2">
+            <input type="text" name="location" id="location" placeholder="Location" class="search-input form-control mb-2" />
+            <input type="number" name="salary" placeholder="Minimum Salary" class="search-input form-control mb-2">
+            <button type="submit" class="search-button btn btn-primary">Search</button>
+            <button type="button" id="detect-location" class="detect-location-button btn btn-secondary">Detect Location</button>
         </form>
+
+        <div id="detected-location-container">
+            <div id="detected-location-display" class="alert alert-info mt-3"></div>
+        </div>
+        
+
 
         <div class="jobs-container">
             <% jobs.forEach(job => { %>
@@ -49,15 +58,22 @@
                         <h3 class="job-description-header"><%= job.title %></h3>
                         <p>Job_id : <%=job.job_id%></p>
                         <p>Company_Name: <%= job.companyName %></p>
-                        <p class="job-description-details"><%= job.description %></p>
-                        <p><%= lang.location %>: <%= job.location %></p>
+                        <p class="job-description-details"> Decription : <%= job.description %></p>
+                        <p> <%= lang.location %>: <%= job.location.streetAddress %>,<%= job.location.city %>,<%= job.location.state %></p>
+                    
                         <p>Total Posts: <%= job.total_post %></p>
-                        <p>Salary: ₹<%= job.salary %></p>
-                        <button class="apply-btn" 
-                            data-job-title="<%= job.title %>" 
-                            data-job-company-name="<%= job.companyName %>" 
-                            data-job-jobid="<%= job.job_id %>"><%= lang.apply %></button>
-                       <button class="apply-btn" ><%= lang.details %></button>
+                        <p>Salary: ₹<%= job.salary.minSalary %> - <%= job.salary.maxSalary %></p>
+                        <button class="apply-btn btn btn-primary" 
+                        data-job-title="<%= job.title %>" 
+                        data-job-company-name="<%= job.companyName %>" 
+                        data-job-jobid="<%= job.job_id %>">
+                    <%= lang.apply %>
+                </button>
+                
+                <button class="details-btn btn btn-outline-info">
+                    <%= lang.details %>
+                </button>
+                
                     </div>
                 </div>
             <% }) %>

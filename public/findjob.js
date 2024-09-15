@@ -121,3 +121,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// search functionlity
+document.getElementById('detect-location').addEventListener('click', function () {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            // Fetch reverse geocoding details using latitude and longitude
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`)
+                .then(response => response.json())
+                .then(data => {
+                    const city = data.city || data.locality || 'City not found';
+                    const state = data.principalSubdivision || 'State not found';
+                    const district = data.localityInfo.administrative[1]?.name || 'District not found';
+                    
+                    // Set the value of the location input field with city, state, and district
+                    document.getElementById('location').value = `${city}, ${district}, ${state}`;
+
+                    // Log the location details to the console for debugging
+                    console.log('Detected Location:', { city, district, state });
+
+                    // Display the detected location details in an enhanced way
+                    document.getElementById('detected-location-display').innerHTML = `
+                        <strong>Detected Location:</strong><br>
+                        <strong>City:</strong> ${city}<br>
+                       
+                        <strong>State:</strong> ${state}
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error detecting location:', error);
+                    document.getElementById('detected-location-display').innerText = 'Error detecting location';
+                });
+        }, function (error) {
+            console.error('Geolocation error:', error);
+            document.getElementById('detected-location-display').innerText = 'Unable to retrieve your location';
+        });
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+});
