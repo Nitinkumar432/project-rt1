@@ -222,7 +222,7 @@
     </header>
   
     <section class="job-listings">
-        <h2><%= lang.jobListings %> (normal)</h2>
+        <h2><%= lang.jobListings %> (Technical)</h2>
         <div class="jobs" id="jobListings">
             <% jobs.forEach(function(job) { %>
                 <div class="job-card">
@@ -230,13 +230,18 @@
                     <h4>Job ID: <%= job.job_id %></h4>
                     <h4>Company Name: <%= job.companyName %></h4>
                     
-                    <p>Job Description : <%= job.description %></p>
-                    <p> <%= lang.location %>: <%= job.location.streetAddress %>,<%= job.location.city %>,<%= job.location.state %></p>
+                    <p>Job Description: <%= job.description %></p>
+                    <p><%= lang.location %>: <%= job.location.streetAddress %>, <%= job.location.city %>, <%= job.location.state %></p>
+                    
                     <button class="apply-btn" 
                             data-job-title="<%= job.title %>" 
                             data-job-company-name="<%= job.companyName %>" 
                             data-job-jobid="<%= job.job_id %>"><%= lang.apply %></button>
-                    <button><%= lang.details %></button>
+    
+                    <!-- Keeping the button structure, but wrapping it in an anchor -->
+                    <a href="/job/<%= job.job_id %>" class="details-link">
+                        <button class="details-btn"><%= lang.details %></button>
+                    </a>
                 </div>
             <% }); %>
         </div>
@@ -253,17 +258,23 @@
                     <h4>Job ID: <%= job.job_id %></h4>
                     <h4>Company Name: <%= job.companyName %></h4>
                     
-                    <p>Job Description : <%= job.description %></p>
-                    <p> <%= lang.location %>: <%= job.location.streetAddress %>,<%= job.location.city %>,<%= job.location.state %></p>
+                    <p>Job Description: <%= job.description %></p>
+                    <p><%= lang.location %>: <%= job.location.streetAddress %>, <%= job.location.city %>, <%= job.location.state %></p>
+                    
                     <button class="apply-btn" 
                             data-job-title="<%= job.title %>" 
                             data-job-company-name="<%= job.companyName %>" 
                             data-job-jobid="<%= job.job_id %>"><%= lang.apply %></button>
-                    <button><%= lang.details %></button>
+    
+                    <!-- Keeping the button structure, but wrapping it in an anchor -->
+                    <a href="/job/<%= job.job_id %>" class="details-link">
+                        <button class="details-btn"><%= lang.details %></button>
+                    </a>
                 </div>
             <% }); %>
         </div>
     </section>
+    
 </section>
 
     <div class="track-data-container">

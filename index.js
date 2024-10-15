@@ -264,8 +264,7 @@ app.get('/', async (req, res) => {
         res.status(500).send('An error occurred while serving the home page.');
     }
 });
-
-// token verify 
+// authentiocation part;
 const authenticateToken = async (req, res, next) => {
     const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
 
@@ -282,12 +281,37 @@ const authenticateToken = async (req, res, next) => {
             console.error('Error verifying token:', err);
             return res.sendStatus(403);
         }
+       
         req.user = user;
-        console.log("authentication verifed");
+        console.log(user);
+         console.log("authentication verifed");
     
         next();
     });
 };
+// here we implemnted the function to see detaisl button to see details relalated to job post ok
+app.get('/job/:id',authenticateToken, async (req, res) => {
+    const jobId = req.params.id;
+    
+
+    try {
+        // Use findOne to get a single job by job_id
+        const job = await JobPost.findOne({ job_id: jobId });
+
+        if (job) {
+            res.render('job-details', { job ,user:req.user}); // Render the job details page
+        } else {
+            res.status(404).send('Job not found'); // Handle job not found
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error'); // Handle server errors
+    }
+});
+
+
+// token verify 
+
 //checking which user is login
 app.get('/protected', authenticateToken, (req, res) => {
     res.send(`Welcome, ${req.user.phone}!`);
@@ -480,24 +504,6 @@ app.post('/apply', async (req, res) => {
     const { jobTitle,job_id ,companyName, name, fatherName, dob, age, experience, phone, address, pincode, state, minimumSalary, availability, employeeId, registrationId } = req.body;
 
     console.log(req.body);
-    // Log job and applicant details
-    // console.log(`Job Applied: ${jobTitle}`);
-    // console.log(`Job Post ID: ${jobPostId}`);
-    // console.log(`Employee ID: ${employeeId}`);
-    // console.log(`Registration ID: ${registrationId}`);
-    // console.log('Applicant Details:');
-    // console.log(`Name: ${name}`);
-    // console.log(`Father's Name: ${fatherName}`);
-    // console.log(`Date of Birth: ${dob}`);
-    // console.log(`Age: ${age}`);
-    // console.log(`Experience: ${experience}`);
-    // console.log(`Phone: ${phone}`);
-    // console.log(`Address: ${address}`);
-    // console.log(`Pincode: ${pincode}`);
-    // console.log(`State: ${state}`);
-    // console.log(`Expected Minimum Salary: ${minimumSalary}`);
-    // console.log(`Availability: ${availability}`);
-
     try {
         // Create a new job application document
         const jobApplication = new JobApplication({
@@ -530,6 +536,27 @@ app.post('/apply', async (req, res) => {
     } catch (error) {
         console.error('Error saving job application:', error);
         res.status(500).send('Error submitting application.');
+    }
+});
+app.get('/apply/:jobId', authenticateToken, async (req, res) => {
+    console.log("/apply/:jobId accessed");
+    try {
+        console.log(req.user.phone);
+        const employee = await Register.findOne({ phone: req.user.phone });
+        // console.log(user);
+
+        const jobId = req.params.jobId;
+        const jobData = await JobPost.findOne({ job_id: jobId });
+        // console.log(jobData);
+
+        if (!employee || !jobData) {
+            return res.status(404).send('User or Job not found');
+        }
+
+        res.render('applyforstatic.ejs', { employee, jobData });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).send('Internal Server Error');
     }
 });
 // track registration 
@@ -568,7 +595,7 @@ app.get('/job-application',(req,res)=>{
     
 })
 
-
+// trackign data of employeers to
 app.get('/track', async (req, res) => {
     try {
         const { registrationNumber } = req.query;
