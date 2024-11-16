@@ -23,7 +23,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 //design of backend
 //till here
-
+const UserNotification=require('./models/UserNotification.js');
+const SeparateNotification=require('./models/SeparateNotification.js');
 // exporting job data
 
 const jobput = require('./jobdata/job_data.js');
@@ -94,8 +95,8 @@ app.get('/change-language', (req, res) => {
 
 // Handle register and login routes
 app.get('/register', (req, res) => {
-    const token = req.cookies.token || null;
-    if(token){
+    const usertoken = req.cookies.usertoken || null;
+    if(usertoken){
         return res.status(400).send('you cant access this page please logout first to register the data ');
     }
     console.log('Labour Register page accessed');
@@ -109,7 +110,7 @@ app.get('/register', (req, res) => {
 // company register
 // Handle form submission from the register page
 app.post('/register', async (req, res) => {
-    const token = req.cookies.token || null;
+    const usertoken = req.cookies.usertoken || null;
     
  
     console.log('Form submitted');
@@ -198,9 +199,9 @@ app.post('/login', async (req, res) => {
             const isMatch = password === user.password; // Adjust if using bcrypt
 
             if (isMatch) {
-                const token = jwt.sign({ phone: phone }, secretKey, { expiresIn: '1h' });
+                const usertoken = jwt.sign({ phone: phone }, secretKey, { expiresIn: '1h' });
 
-                res.cookie('token', token, { httpOnly: true });
+                res.cookie('usertoken', usertoken, { httpOnly: true });
                 res.redirect(`/?login=success&phone=${phone}`);
             } else {
                 res.status(401).send('Incorrect phone number or password.');
@@ -220,18 +221,18 @@ app.post('/login', async (req, res) => {
 app.get('/', async (req, res) => {
     try {
         const lang = req.cookies.lang || 'en';
-        const token = req.cookies.token || null;
+        const usertoken = req.cookies.usertoken || null;
         let user = null;
         let employee;
 
-        if (token) {
+        if (usertoken) {
             try {
-                const decoded = jwt.verify(token, secretKey);
+                const decoded = jwt.verify(usertoken, secretKey);
                 employee = await Register.findOne({ phone: decoded.phone });
                 user = decoded;
             } catch (err) {
-                console.log('Invalid token:', err);
-                res.clearCookie('token');
+                console.log('Invalid usertoken:', err);
+                res.clearCookie('usertoken');
             }
         }
 
@@ -265,10 +266,10 @@ app.get('/', async (req, res) => {
     }
 });
 // authentiocation part;
-const authenticateToken = async (req, res, next) => {
-    const token = req.cookies.token || req.headers['authorization']?.split(' ')[1];
+const authenticateusertoken = async (req, res, next) => {
+    const usertoken = req.cookies.usertoken || req.headers['authorization']?.split(' ')[1];
 
-    if (!token)   return res.status(401).send(`
+    if (!usertoken)   return res.status(401).send(`
         <div style="text-align: center; margin-top: 50px;">
 <h1 style="color:red" >401 - Unauthorized Access</h1>
 <p style="color:red">Access is Denied due to invaild Credentials .</p>
@@ -276,9 +277,9 @@ const authenticateToken = async (req, res, next) => {
 </div>
     `);
 
-    jwt.verify(token, secretKey, (err, user) => {
+    jwt.verify(usertoken, secretKey, (err, user) => {
         if (err) {
-            console.error('Error verifying token:', err);
+            console.error('Error verifying usertoken:', err);
             return res.sendStatus(403);
         }
        
@@ -290,7 +291,7 @@ const authenticateToken = async (req, res, next) => {
     });
 };
 // here we implemnted the function to see detaisl button to see details relalated to job post ok
-app.get('/job/:id',authenticateToken, async (req, res) => {
+app.get('/job/:id',authenticateusertoken, async (req, res) => {
     const jobId = req.params.id;
     
 
@@ -310,17 +311,17 @@ app.get('/job/:id',authenticateToken, async (req, res) => {
 });
 
 
-// token verify 
+// usertoken verify 
 
 //checking which user is login
-app.get('/protected', authenticateToken, (req, res) => {
+app.get('/protected', authenticateusertoken, (req, res) => {
     res.send(`Welcome, ${req.user.phone}!`);
 });
-//checking web token authentication
-const handleTokenError = (err) => {
-    if (err.name === 'JsonWebTokenError') {
+//checking web usertoken authentication
+const handleusertokenError = (err) => {
+    if (err.name === 'JsonWebusertokenError') {
         console.error('JWT Error:', err.message);
-    } else if (err.name === 'TokenExpiredError') {
+    } else if (err.name === 'usertokenExpiredError') {
         console.error('JWT Expired:', err.message);
     } else {
         console.error('Unknown JWT Error:', err);
@@ -328,7 +329,7 @@ const handleTokenError = (err) => {
 };
 // logoutsection
 app.get('/logout', (req, res) => {
-    res.clearCookie('token'); // Clear the token cookie
+    res.clearCookie('usertoken'); // Clear the usertoken cookie
     res.redirect('/?logout=success');  // Redirect to home page
 });
 //forgot password section
@@ -339,26 +340,26 @@ app.post('/forgot-password', (req, res) => {
 
 app.post('/change-password', async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
-    const token = req.cookies.token || null;
+    const usertoken = req.cookies.usertoken || null;
 
     try {
-        if (!token) {
+        if (!usertoken) {
             return res.redirect('/login');
         }
 
         let user = null;
 
         try {
-            // Verify the token and extract the user's phone number
-            const decoded = jwt.verify(token, secretKey);
+            // Verify the usertoken and extract the user's phone number
+            const decoded = jwt.verify(usertoken, secretKey);
             user = await Register.findOne({ phone: decoded.phone });
 
             if (!user) {
                 return res.status(401).send('User not found.');
             }
         } catch (err) {
-            console.log('Invalid token:', err);
-            res.clearCookie('token');
+            console.log('Invalid usertoken:', err);
+            res.clearCookie('usertoken');
             return res.redirect('/login');
         }
 
@@ -385,19 +386,19 @@ app.post('/change-password', async (req, res) => {
 //print all data of current user
 app.get('/profile', async (req, res) => {
     try {
-        const token = req.cookies.token || null;
+        const usertoken = req.cookies.usertoken || null;
         let user = null;
 
-        if (token) {
+        if (usertoken) {
             try {
-                const decoded = jwt.verify(token, secretKey);
+                const decoded = jwt.verify(usertoken, secretKey);
                 user = await Register.findOne({ phone: decoded.phone });
                 if (!user) {
                     return res.status(401).send('User not found.');
                 }
             } catch (err) {
-                console.log('Invalid token:', err);
-                res.clearCookie('token');
+                console.log('Invalid usertoken:', err);
+                res.clearCookie('usertoken');
                 return res.redirect('/login');
             }
         } else {
@@ -412,39 +413,47 @@ app.get('/profile', async (req, res) => {
         res.status(500).send('An error occurred while serving the profile page.');
     }
 });
-app.get('/applied-jobs',authenticateToken, async (req, res) => {
+app.get('/applied-jobs',authenticateusertoken, async (req, res) => {
     try {
-        const token = req.cookies.token || null;
+        const usertoken = req.cookies.usertoken || null;
         let user = null;
         let employee_id;
 
-        if (token) {
+        if (usertoken) {
             try {
-                const decoded = jwt.verify(token, secretKey); // Verify the JWT token
-                user = await Register.findOne({ phone: decoded.phone }); // Find the user based on the phone number in the decoded token
+                const decoded = jwt.verify(usertoken, secretKey); // Verify the JWT usertoken
+                user = await Register.findOne({ phone: decoded.phone }); // Find the user based on the phone number in the decoded usertoken
                 if (!user) {
                     return res.status(401).send('User not found.');
                 }
                 user_id = user.employee_id; // Get the employee_id from the found user
                 console.log("user employee id",user_id);
             } catch (err) {
-                console.log('Invalid token:', err);
-                res.clearCookie('token'); // Clear the token cookie if invalid
-                return res.redirect('/login'); // Redirect to login if token is invalid
+                console.log('Invalid usertoken:', err);
+                res.clearCookie('usertoken'); // Clear the usertoken cookie if invalid
+                return res.redirect('/login'); // Redirect to login if usertoken is invalid
             }
         } else {
-            return res.redirect('/login'); // Redirect to login if no token is present
+            return res.redirect('/login'); // Redirect to login if no usertoken is present
         }
 
         // Find all job applications for the logged-in employee
-        const appliedJobs = await JobApplication.find({ employeeId: user_id });
+      const appliedJobs = await JobApplication.find({ employeeId: user_id });
+
+    // Filter jobs
+    const activeJob = appliedJobs.find(job => job.isActive); // Current active job
+    console.log(activeJob);
+    const jobHistory = appliedJobs.filter(job => job.jobLeft); // Jobs where the user has left
+    const appliedHistory = appliedJobs.filter(job => !job.isActive && !job.jobLeft); // Jobs in progress
+
+    res.render('applied-job.ejs', { activeJob: activeJob || [], jobHistory : jobHistory || [], appliedHistory : appliedHistory  || []});
    
         // console.log("user employee id",appliedJobs.employee_id);
 
         // Render the applied jobs page with the list of jobs
-        res.render('applied-job.ejs', {
-            appliedJobs: appliedJobs, // Pass the list of applied jobs to the EJS template
-        });
+        // res.render('applied-job.ejs', {
+        //     appliedJobs: appliedJobs, // Pass the list of applied jobs to the EJS template
+        // });
     } catch (err) {
         console.error('Error serving applied jobs page:', err);
         res.status(500).send('An error occurred while serving the applied jobs page.');
@@ -457,7 +466,7 @@ app.get('/applied-jobs',authenticateToken, async (req, res) => {
 //     hi: { welcome: "स्वागत है", home: "मुखपृष्ठ", register: "रजिस्टर", login: "लॉगिन", job: "नौकरियाँ खोजें", toggleLang: "भाषा बदलें", intro: "अपना आदर्श नौकरी खोजें" }
 // };
 //logic to finjob section
-app.get('/findjob', authenticateToken, async (req, res) => {
+app.get('/findjob', authenticateusertoken, async (req, res) => {
     console.log("find job accessed");
     const lang = req.cookies.lang || 'en';
     const { 'job-title': jobTitle, location, salary } = req.query;
@@ -538,7 +547,7 @@ app.post('/apply', async (req, res) => {
         res.status(500).send('Error submitting application.');
     }
 });
-app.get('/apply/:jobId', authenticateToken, async (req, res) => {
+app.get('/apply/:jobId', authenticateusertoken, async (req, res) => {
     console.log("/apply/:jobId accessed");
     try {
         console.log(req.user.phone);
@@ -613,6 +622,67 @@ app.get('/track', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+
+
+
+// adding notiifcation posted by admin
+app.get('/notifications/:employee_id', async (req, res) => {
+    const { employee_id } = req.params;
+    console.log(employee_id);
+    try {
+        // Fetch UserNotification as it is
+        const notifications = await UserNotification.find().sort({ createdAt: -1 });
+
+        // Fetch messages from the SeparateNotification collection for the specific employee
+        const userMessages = await SeparateNotification.find({ recipients: { $in: [employee_id] } }).sort({ timestamp: -1 });
+
+        console.log(userMessages);
+
+        // Pass both datasets to the template
+        res.render('userNotifications', { notifications, userMessages });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Failed to fetch notifications.');
+    }
+});
+  app.post('/notifications/mark-as-read', async (req, res) => {
+    try {
+      const { notificationId } = req.body;
+      if (!notificationId) {
+        return res.status(400).json({ error: 'Notification ID is required' });
+      }
+  
+      await UserNotification.findByIdAndUpdate(notificationId, { read: true });
+      res.status(200).json({ success: true, message: 'Notification marked as read' });
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  });
+  app.post('/messages/mark-as-read', async (req, res) => {
+    try {
+      const { messageId } = req.body;
+      if (!messageId) return res.status(400).json({ error: 'Message ID is required' });
+  
+      const message = await SeparateNotification.findByIdAndUpdate(
+        messageId,
+        { isRead: true },
+        { new: true }
+      );
+  
+      if (!message) return res.status(404).json({ error: 'Message not found' });
+  
+      res.json({ success: true, message });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+
+
+//   SEPARATE Notification to User 
+
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });

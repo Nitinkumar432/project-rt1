@@ -22,9 +22,10 @@
             <li class="findjob"><a href="/findjob"><%= lang.job %></a></li>
             <li><a href="/"><%= lang.home %></a></li>
             <% if (user) { %>
+                
           
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle"><%= user.phone %> <span>&#9662;</span></a> <!-- Dropdown trigger -->
+                    <a href="#" class="dropdown-toggle"><%= employee.employee_id %> <span>&#9662;</span></a> <!-- Dropdown trigger -->
                     <ul class="dropdown-menu">
                         <li ><a href="/profile">Profile</a></li>
                        
@@ -34,6 +35,13 @@
                         <!-- Add more options as needed -->
                     </ul>
                 </li>
+                <div class="notification-container">
+                    <a href="/notifications/<%= employee.employee_id %>"><i class="fa-solid fa-bell notification-icon"></i></a>
+
+                    <% if (5 > 0) { %>
+                      <span class="notification-count"><%= 5 %></span>
+                    <% } %>
+                  </div>
             <% } else { %>
                 <li>
                     <a href="/register" id="register-link"><%= lang.register %></a>

@@ -137,6 +137,44 @@ nav .search-bar button img {
     
 
 } 
+/* notification section  */
+.notification-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  /* Bell icon styling */
+  .notification-icon {
+    margin-top:10px;
+    margin-left:10px;
+    font-size: 28px;
+    color: #f8c6c6;
+    transition: color 0.3s ease;
+  }
+
+  .notification-icon:hover {
+    color: #f38787;
+  }
+
+  /* Notification count badge */
+  .notification-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: red;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50%;
+    min-width: 20px;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     /* Border to separate badge from the icon */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
 
 
 /* Responsive Design */

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recently Applied Jobs</title>
+    <title>Job History</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: 'Poppins', Arial, sans-serif;
@@ -40,65 +41,96 @@
             background-color: #333;
             color: white;
         }
-        h1 {
-            font-size: 36px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        h2 {
-            font-size: 28px;
-            color: #555;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
-        .card {
-            background-color: #fff;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
         .job-item {
-            padding: 15px;
+            position: relative;
             margin-bottom: 20px;
-            border-left: 5px solid #007bff;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        .job-item.active {
-            border-left: 5px solid #28a745;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .search-input {
-            margin-bottom: 20px;
-            padding: 12px;
+            padding: 20px;
             border-radius: 10px;
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border-left: 5px solid #007bff;
         }
-        .search-input:focus {
-            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        .job-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+        .job-item h3 {
+            font-size: 22px;
+            color: #007bff;
+        }
+        .job-item .badge {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 12px;
+        }
+        .progress {
+            height: 8px;
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar {
+            transition: width 0.4s ease;
+        }
+        .icon-action {
+            color: #007bff;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .icon-action:hover {
+            color: #0056b3;
         }
         .no-jobs {
             text-align: center;
-            color: #888888;
+            color: #888;
             font-size: 22px;
             margin-top: 40px;
-            animation: fadeIn 0.5s ease-in-out;
+        }
+        .job-section {
+            margin-top: 30px;
+        }
+        .job-item button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .job-item button:hover {
+            background-color: #0056b3;
+        }
+        .progress-bar-success {
+            background-color: #28a745;
+        }
+        .progress-bar-warning {
+            background-color: #ffc107;
+        }
+        .progress-bar-danger {
+            background-color: #dc3545;
+        }
+        .job-history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .job-history .job-item {
+            width: calc(33% - 20px);
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .job-history .job-item {
+                width: calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .job-history .job-item {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -117,76 +149,104 @@
     </header>
     
     <div class="container mt-4">
-        <h1 class="text-center">Recently Applied Jobs</h1>
+        <h1 class="text-center">Your Job History</h1>
 
-        <!-- Search functionality -->
-        <div class="row mb-3">
-            <div class="col-12">
-                <input type="text" id="jobSearch" class="form-control search-input" placeholder="Search job or company name...">
-            </div>
+        <!-- Active Jobs Section -->
+        <div class="job-section">
+            <h2>Active Job</h2>
+            <% if (activeJob && activeJob.length > 0) { %>
+                <p>hello</p>
+                <div class="job-item">
+                    <h3><i class="fas fa-briefcase"></i> <%= activeJob[0].jobTitle %></h3>
+                    <span class="badge bg-primary">Active</span>
+                    <p><strong>Company:</strong> <%= activeJob[0].companyName %></p>
+                    <p><strong>Applied On:</strong> <%= new Date(activeJob[0].appliedAt).toLocaleDateString() %></p>
+
+                    <!-- Progress Bar for Active Job -->
+                    <% 
+                        let progressClass = 'progress-bar-warning';
+                        let progressPercentage = 50;
+                        if (activeJob[0].status === 'In Progress') {
+                            progressClass = 'progress-bar-warning';
+                            progressPercentage = 50;
+                        } else if (activeJob[0].status === 'Completed') {
+                            progressClass = 'progress-bar-success';
+                            progressPercentage = 100;
+                        } else {
+                            progressClass = 'progress-bar-danger';
+                            progressPercentage = 0;
+                        }
+                    %>
+                    <div class="progress mt-2">
+                        <div class="progress-bar <%= progressClass %>" style="width: <%= progressPercentage %>%;">
+                            <%= activeJob[0].status %>
+                        </div>
+                    </div>
+
+                    <button class="btn-details" onclick="window.location.href='/job/<%= activeJob[0]._id %>'">See Full Details</button>
+                </div>
+            <% } else { %>
+                <p class="no-jobs">No active job found.</p>
+            <% } %>
         </div>
 
-        <div class="job-list row">
-            <!-- Show the currently active job first -->
-            <% if (appliedJobs.length > 0) { %>
-                <h2>Active Job</h2>
-                <% const activeJob = appliedJobs.find(job => job.isActive); %>
-                <% if (activeJob) { %>
-                    <div class="col-md-12">
-                        <div class="card mb-3 job-item active shadow-sm">
-                            <div class="card-body">
-                                <h3 class="text-primary"><i class="fas fa-briefcase"></i> <%= activeJob.jobTitle %></h3>
-                                <p><strong>Job Post ID:</strong> <%= activeJob.job_id %></p>
-                                <p><strong>Employee ID:</strong> <%= activeJob.employeeId %></p>
-                                <p><strong>Registration ID:</strong> <%= activeJob.registrationId %></p>
-                                <p><strong>Applied At:</strong> <%= activeJob.appliedAt.toLocaleDateString() %></p>
-                                <p><strong>Company Name:</strong> <%= activeJob.companyName %></p>
-                            </div>
-                        </div>
-                    </div>
-                <% } %>
+        <!-- Job History Section -->
+        <div class="job-section">
+            <h2>Job History</h2>
+            <% if (jobHistory && jobHistory.length > 0) { %>
+                <div class="job-history">
+                    <% jobHistory.forEach(job => { %>
+                        <div class="job-item">
+                            <h3><i class="fas fa-briefcase"></i> <%= job.jobTitle %></h3>
+                            <span class="badge bg-secondary">Completed</span>
+                            <p><strong>Company:</strong> <%= job.companyName %></p>
+                            <p><strong>Applied On:</strong> <%= new Date(job.appliedAt).toLocaleDateString() %></p>
 
-                <!-- Show past job history -->
-                <h2>Job History</h2>
-                <% appliedJobs.filter(job => !job.isActive).forEach(job => { %>
-                    <div class="col-md-6">
-                        <div class="card mb-3 job-item shadow-sm">
-                            <div class="card-body">
-                                <h3 class="text-primary"><i class="fas fa-briefcase"></i> <%= job.jobTitle %></h3>
-                                <p><strong>Job Post ID:</strong> <%= job.job_id %></p>
-                                <p><strong>Employee ID:</strong> <%= job.employeeId %></p>
-                                <p><strong>Registration ID:</strong> <%= job.registrationId %></p>
-                                <p><strong>Applied At:</strong> <%= job.appliedAt.toLocaleDateString() %></p>
-                                <p><strong>Company Name:</strong> <%= job.companyName %></p>
+                            <!-- Progress Bar for Completed Job -->
+                            <% 
+                                let progressClass = 'progress-bar-success';
+                                let progressPercentage = 100;
+                            %>
+                            <div class="progress mt-2">
+                                <div class="progress-bar <%= progressClass %>" style="width: <%= progressPercentage %>%;">
+                                    <%= job.status %>
+                                </div>
                             </div>
+
+                            <button class="btn-details" onclick="window.location.href='/job/<%= job._id %>'">See Full Details</button>
                         </div>
-                    </div>
-                <% }); %>
+                    <% }); %>
+                </div>
             <% } else { %>
-                <p class="no-jobs">You have not applied to any jobs yet.</p>
+                <p class="no-jobs">No job history found.</p>
+            <% } %>
+        </div>
+
+        <!-- Applied Job History Section -->
+        <div class="job-section">
+            <h2>Applied Job History</h2>
+            <% if (appliedHistory && appliedHistory.length > 0) { %>
+                <div class="job-history">
+                    <% appliedHistory.forEach(job => { %>
+                        <div class="job-item">
+                            <h3><i class="fas fa-briefcase"></i> <%= job.jobTitle %></h3>
+                            <span class="badge bg-info">Applied</span>
+                            <p><strong>Company:</strong> <%= job.companyName %></p>
+                            <p><strong>Applied On:</strong> <%= new Date(job.appliedAt).toLocaleDateString() %></p>
+                            <button class="btn-details" onclick="window.location.href='/job/<%= job._id %>'">See Full Details</button>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p class="no-jobs">No applied job history found.</p>
             <% } %>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2024 Labour Job Finder</p>
+        <p>© 2024 Job Finder. All rights reserved.</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('jobSearch').addEventListener('input', function() {
-            let searchValue = this.value.toLowerCase();
-            let jobItems = document.querySelectorAll('.job-item');
-            jobItems.forEach(function(item) {
-                let jobTitle = item.querySelector('h3').textContent.toLowerCase();
-                let companyName = item.querySelector('p:last-of-type').textContent.toLowerCase();
-                if (jobTitle.includes(searchValue) || companyName.includes(searchValue)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </body>
 </html>

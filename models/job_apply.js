@@ -72,7 +72,12 @@ const jobApplicationSchema = new Schema({
     appliedAt: {
         type: Date,
         default: Date.now,
-    }
+    },
+    progress: { type: String, default: "Applied" }, // e.g., "Applied", "In Review", "Interview Scheduled"
+    expectedJoiningDate: { type: Date },
+    expectedEndingDate: { type: Date },
+    isActive: { type: Boolean, default: false },
+    jobLeft: { type: Boolean, default: false }
 });
 
 // Create the JobApplication model
