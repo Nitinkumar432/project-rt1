@@ -26,4 +26,5 @@ const language = {
         details: "जानकारी देखें"
     }
 };
+
 module.exports=language;

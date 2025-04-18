@@ -59,5 +59,4 @@ const registerSchema = new mongoose.Schema({
 // The password will be stored as plain text in the database
 
 const Register = mongoose.model('Register', registerSchema);
-
 module.exports = Register;

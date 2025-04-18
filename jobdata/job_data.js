@@ -91,5 +91,4 @@ const jobput = [
         salary: 19000 
     }
 ];
-
 module.exports = jobput;

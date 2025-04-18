@@ -5,4 +5,5 @@ const jobs = [
     { title: "Factory Worker", job_id:1234,description: "Operate machinery in a factory.", location: "Chennai",companyName:"Hrtc ltd"  },
     { title: "Bridge Construction", job_id:1234,description: "Operate machinery.", location: "Hazipur",companyName:"Hrtc ltd"  }
 ];
+
 module.exports=jobs;

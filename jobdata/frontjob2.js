@@ -5,4 +5,5 @@ const jobs2 = [
     { title: "Machine Operator",job_id:1234, description: "Operate and maintain industrial machines.", location: "Chennai" ,companyName:"Hrtc ltd" },
     { title: "Laptop Repair ",job_id:1234, description: "Operate and maintain Laptop  parts.", location: "patna",companyName:"Hrtc ltd" }
 ];
+
 module.exports=jobs2;
