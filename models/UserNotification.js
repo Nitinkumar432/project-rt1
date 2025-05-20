@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const notificationSchema = new mongoose.Schema(
   {
@@ -15,7 +15,7 @@ const notificationSchema = new mongoose.Schema(
     },
     author: {
       type: String,
-      default: 'Admin',
+      default: "Admin",
     },
     recipients: {
       type: [String],
@@ -25,20 +25,17 @@ const notificationSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    read :{
-      type:Boolean,
-      default:false
-
-
+    read: {
+      type: Boolean,
+      default: false,
     },
     status: {
       type: String,
-      enum: ['Pending', 'Sent', 'Failed'],
-      default: 'Pending',
+      enum: ["Pending", "Sent", "Failed"],
+      default: "Pending",
     },
   },
   { timestamps: true }
 );
 
-
-module.exports = mongoose.model('notificationSchema', notificationSchema);
+module.exports = mongoose.model("notificationSchema", notificationSchema);
