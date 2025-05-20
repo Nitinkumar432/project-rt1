@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 //jwt
+
 // const chalk=require('chalk');
 app.use(express.json());
 // nodemialer

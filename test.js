@@ -166,6 +166,7 @@ const sampleCompanies = [
   },
 ];
 
+
 // You can use the Company.insertMany() method to insert these documents into your MongoDB collection.
 Company.insertMany(sampleCompanies)
   .then(() => console.log("Sample data inserted successfully"))
