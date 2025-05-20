@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+
 const jobput = [
     { 
         title: "Construction Worker", 
@@ -91,4 +92,5 @@ const jobput = [
         salary: 19000 
     }
 ];
+
 module.exports = jobput;
