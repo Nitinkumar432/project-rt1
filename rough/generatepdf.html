@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>jsPDF Test</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <button id="generatePDF">Generate PDF</button>
 
     <script>
-        document.getElementById('generatePDF').addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text('Hello world!', 10, 10);
-            doc.save('test.pdf');
-        });
+      document.getElementById("generatePDF").addEventListener("click", () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("Hello world!", 10, 10);
+        doc.save("test.pdf");
+      });
     </script>
-</body>
+  </body>
 </html>

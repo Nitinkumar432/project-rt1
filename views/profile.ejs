@@ -1,139 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Enhanced Profile Card</title>
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="profile.css" />
     <script src="profile.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <!-- Boxicons for Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <style>
-        /* Reset & Basic Styles */
-
+      /* Reset & Basic Styles */
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo"><img src="/images/trpzgarsetu.png" alt=""></div>
-        <a href="/"><i class='bx bx-home'></i> Dashboard</a>
-        <a href="#"><i class='bx bx-user'></i> Profile</a>
-        <a href="/change-password" class="unique-change-password-link"><i class='bx bx-lock'></i> Change Password</a>
-        <a href="/logout"><i class='bx bx-log-out'></i> Logout</a>
+      <div class="logo"><img src="/images/trpzgarsetu.png" alt="" /></div>
+      <a href="/"><i class="bx bx-home"></i> Dashboard</a>
+      <a href="#"><i class="bx bx-user"></i> Profile</a>
+      <a href="/change-password" class="unique-change-password-link"
+        ><i class="bx bx-lock"></i> Change Password</a
+      >
+      <a href="/logout"><i class="bx bx-log-out"></i> Logout</a>
     </div>
-<!-- change password design -->
-<div class="unique-popup-overlay" id="unique-popup-overlay">
-    <div class="unique-popup-content">
+    <!-- change password design -->
+    <div class="unique-popup-overlay" id="unique-popup-overlay">
+      <div class="unique-popup-content">
         <span class="unique-popup-close" id="unique-popup-close">&times;</span>
         <h2>Change Password</h2>
 
-        <form id="unique-change-password-form" action="/change-password" method="POST">
-            <!-- Error message -->
-            <div id="error-message" style="color: red; display: none;"></div>
+        <form
+          id="unique-change-password-form"
+          action="/change-password"
+          method="POST"
+        >
+          <!-- Error message -->
+          <div id="error-message" style="color: red; display: none"></div>
 
-            <!-- Password Fields -->
-            <label for="current-password">Current Password</label>
-            <input type="password" id="current-password" name="currentPassword" required>
+          <!-- Password Fields -->
+          <label for="current-password">Current Password</label>
+          <input
+            type="password"
+            id="current-password"
+            name="currentPassword"
+            required
+          />
 
-            <label for="new-password">New Password</label>
-            <input type="password" id="new-password" name="newPassword" required>
+          <label for="new-password">New Password</label>
+          <input
+            type="password"
+            id="new-password"
+            name="newPassword"
+            required
+          />
 
-            <label for="confirm-password">Confirm Password</label>
-            <input type="password" id="confirm-password" name="confirmPassword" required>
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirmPassword"
+            required
+          />
 
-            <!-- Submit Button -->
-            <button type="submit" class="unique-change-password-button">Change Password</button>
+          <!-- Submit Button -->
+          <button type="submit" class="unique-change-password-button">
+            Change Password
+          </button>
 
-            <!-- Spinner -->
-            <div id="spinner" class="spinner" style="display: none;">
-                <img src="https://loading.io/assets/mod/spinner/default/lg.gif" alt="Loading..." />
-            </div>
+          <!-- Spinner -->
+          <div id="spinner" class="spinner" style="display: none">
+            <img
+              src="https://loading.io/assets/mod/spinner/default/lg.gif"
+              alt="Loading..."
+            />
+          </div>
         </form>
+      </div>
     </div>
-</div>
 
-
-<!-- Success Message Popup -->
-<div class="unique-popup-overlay" id="success-popup-overlay" style="display: none;">
-    <div class="unique-popup-content">
+    <!-- Success Message Popup -->
+    <div
+      class="unique-popup-overlay"
+      id="success-popup-overlay"
+      style="display: none"
+    >
+      <div class="unique-popup-content">
         <span class="unique-popup-close" id="success-popup-close">&times;</span>
         <h2>Password Updated Successfully!</h2>
         <p>Your password has been changed successfully.</p>
+      </div>
     </div>
-</div>
 
-<script>
-
-</script>
-
+    <script></script>
 
     <!-- Main Content -->
     <div class="profile-container">
-        <!-- Header -->
-        <div class="profile-header">
-            <div class="profile-picture">
-                <% if(user.gender === 'male') { %>
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzCW8ayM9K_iNzX81NSjgpGcl30jDvsTSiIg&s" alt="Profile Picture">
-                <% } else { %>
-                    <img src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-female-user-avatars-flat-style-women-profession-vector-png-image_4822944.jpg" alt="Profile Picture">
-                <% } %>
-                
-            </div>
-            <div class="profile-info">
-                <h1><%= user.name %></h1>
-                <p><i class='bx bx-id-card'></i> <%= user.employee_id %></p>
-            </div>
+      <!-- Header -->
+      <div class="profile-header">
+        <div class="profile-picture">
+          <% if(user.gender === 'male') { %>
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzCW8ayM9K_iNzX81NSjgpGcl30jDvsTSiIg&s"
+            alt="Profile Picture"
+          />
+          <% } else { %>
+          <img
+            src="https://png.pngtree.com/png-clipart/20190924/original/pngtree-female-user-avatars-flat-style-women-profession-vector-png-image_4822944.jpg"
+            alt="Profile Picture"
+          />
+          <% } %>
+        </div>
+        <div class="profile-info">
+          <h1><%= user.name %></h1>
+          <p><i class="bx bx-id-card"></i> <%= user.employee_id %></p>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="profile-content">
+        <!-- Personal Information -->
+        <div class="profile-section">
+          <div class="section-title">
+            <i class="bx bxs-user-detail"></i>
+            <span>Personal Information</span>
+            <div class="edit-button">Edit</div>
+          </div>
+          <div class="section-content">
+            <p>
+              <i class="bx bx-male"></i> <strong>Name:</strong> <%= user.name %>
+            </p>
+            <p>
+              <i class="bx bx-male"></i> <strong>Gender:</strong> <%=
+              user.gender %>
+            </p>
+            <p>
+              <i class="bx bx-male"></i> <strong>Father's Name:</strong> <%=
+              user.fatherName %>
+            </p>
+            <p>
+              <i class="bx bx-female"></i> <strong>Mother's Name:</strong> <%=
+              user.motherName %>
+            </p>
+            <p>
+              <i class="bx bx-calendar"></i> <strong>Age:</strong> <%= user.age
+              %>
+            </p>
+            <p>
+              <i class="bx bx-briefcase"></i> <strong>Experience:</strong> <%=
+              user.experience %> years
+            </p>
+          </div>
         </div>
 
-        <!-- Content -->
-        <div class="profile-content">
-            <!-- Personal Information -->
-            <div class="profile-section">
-                <div class="section-title">
-                    <i class='bx bxs-user-detail'></i>
-                    <span>Personal Information</span>
-                    <div class="edit-button">Edit</div>
-                </div>
-                <div class="section-content">
-                    <p><i class='bx bx-male'></i> <strong>Name:</strong> <%= user.name %></p>
-                    <p><i class='bx bx-male'></i> <strong>Gender:</strong> <%= user.gender %></p>
-                    <p><i class='bx bx-male'></i> <strong>Father's Name:</strong> <%= user.fatherName %></p>
-                    <p><i class='bx bx-female'></i> <strong>Mother's Name:</strong> <%= user.motherName %></p>
-                    <p><i class='bx bx-calendar'></i> <strong>Age:</strong> <%= user.age %></p>
-                    <p><i class='bx bx-briefcase'></i> <strong>Experience:</strong> <%= user.experience %> years</p>
-                </div>
-            </div>
-
-            <!-- Contact Information -->
-            <div class="profile-section">
-                <div class="section-title">
-                    <i class='bx bxs-contact'></i>
-                    <span>Contact Information</span>
-                    <div class="edit-button">Edit</div>
-                </div>
-                <div class="section-content">
-                    <p><i class='bx bxs-phone-call'></i> <strong>Phone:</strong> <%= user.phone %></p>
-                    <p><i class='bx bxs-map'></i> <strong>Location:</strong> <%= user.location %></p>
-                    <p><i class='bx bxs-map-pin'></i> <strong>State:</strong> <%= user.state %></p>
-                    <p><i class='bx bxs-city'></i> <strong>District:</strong> <%= user.district %></p>
-                </div>
-            </div>
-
-            <!-- Employee Details -->
-            <div class="profile-section">
-                <div class="section-title">
-                    <i class='bx bxs-id-card'></i>
-                    <span>Employee Details</span>
-                    <div class="edit-button">Edit</div>
-                </div>
-                <div class="section-content">
-                    <p><i class='bx bx-id-card'></i> <strong>Employee ID:</strong> <%= user.employee_id %></p>
-                </div>
-            </div>
+        <!-- Contact Information -->
+        <div class="profile-section">
+          <div class="section-title">
+            <i class="bx bxs-contact"></i>
+            <span>Contact Information</span>
+            <div class="edit-button">Edit</div>
+          </div>
+          <div class="section-content">
+            <p>
+              <i class="bx bxs-phone-call"></i> <strong>Phone:</strong> <%=
+              user.phone %>
+            </p>
+            <p>
+              <i class="bx bxs-map"></i> <strong>Location:</strong> <%=
+              user.location %>
+            </p>
+            <p>
+              <i class="bx bxs-map-pin"></i> <strong>State:</strong> <%=
+              user.state %>
+            </p>
+            <p>
+              <i class="bx bxs-city"></i> <strong>District:</strong> <%=
+              user.district %>
+            </p>
+          </div>
         </div>
+
+        <!-- Employee Details -->
+        <div class="profile-section">
+          <div class="section-title">
+            <i class="bx bxs-id-card"></i>
+            <span>Employee Details</span>
+            <div class="edit-button">Edit</div>
+          </div>
+          <div class="section-content">
+            <p>
+              <i class="bx bx-id-card"></i> <strong>Employee ID:</strong> <%=
+              user.employee_id %>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

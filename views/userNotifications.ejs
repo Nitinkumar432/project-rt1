@@ -1,182 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Notifications</title>
-  <link rel="stylesheet" href="/css/notification.css">;
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Notifications</title>
+    <link rel="stylesheet" href="/css/notification.css" />
+    ;
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      .btn-mark-read {
+        font-size: 14px;
+        padding: 8px 12px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
+      .btn-mark-read i {
+        font-size: 16px;
+      }
 
+      .btn-mark-read:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+      }
 
+      .btn-mark-read.disabled {
+        background-color: #adb5bd;
+        cursor: not-allowed;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="notifications-container">
+        <h3 class="text-center mb-4">User Notifications</h3>
 
-
-  .btn-mark-read {
-    font-size: 14px;
-    padding: 8px 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .btn-mark-read i {
-    font-size: 16px;
-  }
-
-  .btn-mark-read:hover {
-    background-color: #218838;
-    transform: scale(1.05);
-  }
-
-  .btn-mark-read.disabled {
-    background-color: #adb5bd;
-    cursor: not-allowed;
-  }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="notifications-container">
-      <h3 class="text-center mb-4">User Notifications</h3>
-
-      <h4 class="mb-3 mt-4">Messages Addressed to You</h4>
-      <% if (userMessages.length === 0) { %>
-        <div class="text-center text-muted">No personal messages available.</div>
-      <% } else { %>
-        <% userMessages.forEach(message => { %>
-          <div class="notification-card <%= message.isRead ? 'read' : '' %>" id="message-<%= message._id %>">
-            <div class="d-flex align-items-center">
-              <i class="fas fa-envelope notification-icon <%= message.isRead ? 'read' : '' %>"></i>
-              <div class="notification-content">
-                <div class="notification-title"><%= message.title %></div>
-                <div class="notification-text"><%= message.content %></div>
-                <div class="notification-meta">
-                  Sent by <strong><%= message.sender %></strong> on <%= new Date(message.timestamp).toLocaleDateString() %> at <%= new Date(message.timestamp).toLocaleTimeString() %>
-                </div>
+        <h4 class="mb-3 mt-4">Messages Addressed to You</h4>
+        <% if (userMessages.length === 0) { %>
+        <div class="text-center text-muted">
+          No personal messages available.
+        </div>
+        <% } else { %> <% userMessages.forEach(message => { %>
+        <div
+          class="notification-card <%= message.isRead ? 'read' : '' %>"
+          id="message-<%= message._id %>"
+        >
+          <div class="d-flex align-items-center">
+            <i
+              class="fas fa-envelope notification-icon <%= message.isRead ? 'read' : '' %>"
+            ></i>
+            <div class="notification-content">
+              <div class="notification-title"><%= message.title %></div>
+              <div class="notification-text"><%= message.content %></div>
+              <div class="notification-meta">
+                Sent by <strong><%= message.sender %></strong> on <%= new
+                Date(message.timestamp).toLocaleDateString() %> at <%= new
+                Date(message.timestamp).toLocaleTimeString() %>
               </div>
             </div>
-            <div>
-              <% if (!message.isRead) { %>
-                <button 
-                  class="btn btn-mark-read" 
-                  data-id="<%= message._id %>" 
-                  onclick="markMessageAsRead('<%= message._id %>')"
-                >
-                  <i class="fas fa-check-circle"></i> Mark as Read
-                </button>
-              <% } else { %>
-                <button class="btn btn-mark-read disabled" disabled>
-                  <i class="fas fa-check"></i> Read
-                </button>
-              <% } %>
-            </div>
           </div>
-        <% }); %>
-      <% } %>
+          <div>
+            <% if (!message.isRead) { %>
+            <button
+              class="btn btn-mark-read"
+              data-id="<%= message._id %>"
+              onclick="markMessageAsRead('<%= message._id %>')"
+            >
+              <i class="fas fa-check-circle"></i> Mark as Read
+            </button>
+            <% } else { %>
+            <button class="btn btn-mark-read disabled" disabled>
+              <i class="fas fa-check"></i> Read
+            </button>
+            <% } %>
+          </div>
+        </div>
+        <% }); %> <% } %>
 
-      <!-- General Notifications -->
-      <h4 class="mb-3">General Notifications</h4>
-      <% if (notifications.length === 0) { %>
-        <div class="text-center text-muted">No general notifications available.</div>
-      <% } else { %>
-        <% notifications.forEach(notification => { %>
-          <div class="notification-card <%= notification.read ? 'read' : '' %>" id="notification-<%= notification._id %>">
-            <div class="d-flex align-items-center">
-              <i class="fas fa-bell notification-icon <%= notification.read ? 'read' : '' %>"></i>
-              <div class="notification-content">
-                <div class="notification-title"><%= notification.title %></div>
-                <div class="notification-text"><%= notification.content %></div>
-                <div class="notification-meta">
-                  Posted by <strong><%= notification.author %></strong> on <%= new Date(notification.sentAt).toLocaleDateString() %> at <%= new Date(notification.sentAt).toLocaleTimeString() %>
-                </div>
+        <!-- General Notifications -->
+        <h4 class="mb-3">General Notifications</h4>
+        <% if (notifications.length === 0) { %>
+        <div class="text-center text-muted">
+          No general notifications available.
+        </div>
+        <% } else { %> <% notifications.forEach(notification => { %>
+        <div
+          class="notification-card <%= notification.read ? 'read' : '' %>"
+          id="notification-<%= notification._id %>"
+        >
+          <div class="d-flex align-items-center">
+            <i
+              class="fas fa-bell notification-icon <%= notification.read ? 'read' : '' %>"
+            ></i>
+            <div class="notification-content">
+              <div class="notification-title"><%= notification.title %></div>
+              <div class="notification-text"><%= notification.content %></div>
+              <div class="notification-meta">
+                Posted by <strong><%= notification.author %></strong> on <%= new
+                Date(notification.sentAt).toLocaleDateString() %> at <%= new
+                Date(notification.sentAt).toLocaleTimeString() %>
               </div>
             </div>
-            <div>
-              <% if (!notification.read) { %>
-                <button 
-                  class="btn btn-mark-read" 
-                  data-id="<%= notification._id %>" 
-                  onclick="markAsRead('<%= notification._id %>')"
-                >
-                  <i class="fas fa-check-circle"></i> Mark as Read
-                </button>
-              <% } else { %>
-                <button class="btn btn-mark-read disabled" disabled>
-                  <i class="fas fa-check"></i> Read
-                </button>
-              <% } %>
-            </div>
           </div>
-        <% }); %>
-      <% } %>
+          <div>
+            <% if (!notification.read) { %>
+            <button
+              class="btn btn-mark-read"
+              data-id="<%= notification._id %>"
+              onclick="markAsRead('<%= notification._id %>')"
+            >
+              <i class="fas fa-check-circle"></i> Mark as Read
+            </button>
+            <% } else { %>
+            <button class="btn btn-mark-read disabled" disabled>
+              <i class="fas fa-check"></i> Read
+            </button>
+            <% } %>
+          </div>
+        </div>
+        <% }); %> <% } %>
 
-      <!-- User-Specific Messages -->
-    
+        <!-- User-Specific Messages -->
+      </div>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-  <script>
-    async function markAsRead(notificationId) {
-      try {
-        const response = await fetch('/notifications/mark-as-read', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ notificationId })
-        });
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+      async function markAsRead(notificationId) {
+        try {
+          const response = await fetch("/notifications/mark-as-read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ notificationId }),
+          });
 
-        if (response.ok) {
-          const card = document.getElementById(`notification-${notificationId}`);
-          card.classList.add('read');
-          const icon = card.querySelector('.notification-icon');
-          icon.classList.add('read');
-          const button = card.querySelector('.btn-mark-read');
-          button.classList.add('disabled');
-          button.innerHTML = '<i class="fas fa-check"></i> Read';
-          button.disabled = true;
-        } else {
-          console.error('Failed to mark as read');
+          if (response.ok) {
+            const card = document.getElementById(
+              `notification-${notificationId}`
+            );
+            card.classList.add("read");
+            const icon = card.querySelector(".notification-icon");
+            icon.classList.add("read");
+            const button = card.querySelector(".btn-mark-read");
+            button.classList.add("disabled");
+            button.innerHTML = '<i class="fas fa-check"></i> Read';
+            button.disabled = true;
+          } else {
+            console.error("Failed to mark as read");
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error('Error:', error);
       }
-    }
 
-    async function markMessageAsRead(messageId) {
-      try {
-        const response = await fetch('/messages/mark-as-read', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messageId })
-        });
+      async function markMessageAsRead(messageId) {
+        try {
+          const response = await fetch("/messages/mark-as-read", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ messageId }),
+          });
 
-        if (response.ok) {
-          const card = document.getElementById(`message-${messageId}`);
-          card.classList.add('read');
-          const icon = card.querySelector('.notification-icon');
-          icon.classList.add('read');
-          const button = card.querySelector('.btn-mark-read');
-          button.classList.add('disabled');
-          button.innerHTML = '<i class="fas fa-check"></i> Read';
-          button.disabled = true;
-        } else {
-          console.error('Failed to mark as read');
+          if (response.ok) {
+            const card = document.getElementById(`message-${messageId}`);
+            card.classList.add("read");
+            const icon = card.querySelector(".notification-icon");
+            icon.classList.add("read");
+            const button = card.querySelector(".btn-mark-read");
+            button.classList.add("disabled");
+            button.innerHTML = '<i class="fas fa-check"></i> Read';
+            button.disabled = true;
+          } else {
+            console.error("Failed to mark as read");
+          }
+        } catch (error) {
+          console.error("Error:", error);
         }
-      } catch (error) {
-        console.error('Error:', error);
       }
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>

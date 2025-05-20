@@ -1,312 +1,433 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Job Application Form</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <style>
-    body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+      body {
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-.application-form-container {
-    max-width: 600px;
-    margin: 50px auto;
-    background: linear-gradient(135deg, #ffffff, #f1f1f1);
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid #e0e0e0;
-}
+      .application-form-container {
+        max-width: 600px;
+        margin: 50px auto;
+        background: linear-gradient(135deg, #ffffff, #f1f1f1);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+      }
 
-.application-form-container:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.6);
-    z-index: -1;
-    border-radius: 15px;
-    transition: 0.3s;
-}
+      .application-form-container:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.6);
+        z-index: -1;
+        border-radius: 15px;
+        transition: 0.3s;
+      }
 
-.application-form-container:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
+      .application-form-container:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      }
 
-.custom-label {
-    margin-bottom: 10px;
-    font-size: 14px;
-    color: #2c3e50;
-    font-weight: 600;
-}
+      .custom-label {
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
 
-.custom-input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
+      .custom-input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #dcdcdc;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
 
-.custom-input:focus {
-    border-color: #3498db;
-    outline: none;
-    background-color: #ffffff;
-}
+      .custom-input:focus {
+        border-color: #3498db;
+        outline: none;
+        background-color: #ffffff;
+      }
 
-.custom-submit-button {
-    background-color: #3498db;
-    color: white;
-    padding: 14px;
-    width: 100%;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
+      .custom-submit-button {
+        background-color: #3498db;
+        color: white;
+        padding: 14px;
+        width: 100%;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
 
-.custom-submit-button:hover {
-    background-color: #2980b9;
-    transform: translateY(-2px);
-}
+      .custom-submit-button:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+      }
 
-.custom-submit-button:active {
-    background-color: #1c6e9b;
-    transform: translateY(0);
-}
+      .custom-submit-button:active {
+        background-color: #1c6e9b;
+        transform: translateY(0);
+      }
 
-.popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    padding: 40px;
-    border: 2px solid #3498db;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
-}
+      .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        padding: 40px;
+        border: 2px solid #3498db;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in-out;
+      }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8) translate(-50%, -50%); }
-    to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
-}
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8) translate(-50%, -50%);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translate(-50%, -50%);
+        }
+      }
 
-.popup h3 {
-    margin-bottom: 20px;
-    font-size: 22px;
-    color: #2c3e50;
-    text-align: center;
-}
+      .popup h3 {
+        margin-bottom: 20px;
+        font-size: 22px;
+        color: #2c3e50;
+        text-align: center;
+      }
 
-.popup button {
-    padding: 14px 24px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    display: block;
-    margin: 0 auto;
-}
+      .popup button {
+        padding: 14px 24px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        display: block;
+        margin: 0 auto;
+      }
 
-.popup button:hover {
-    background-color: #2980b9;
-}
+      .popup button:hover {
+        background-color: #2980b9;
+      }
 
-.spinner {
-    display: none;
-    border: 6px solid #f3f3f3;
-    border-top: 6px solid #3498db;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
+      .spinner {
+        display: none;
+        border: 6px solid #f3f3f3;
+        border-top: 6px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+      }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-/* Additional Styling for Static Form Appearance */
-.application-form-container-static {
-    background-color: #ffffff;
-    border: 1px solid #dcdcdc;
-    padding: 50px 30px;
-    box-shadow: none;
-    border-radius: 10px;
-}
+      /* Additional Styling for Static Form Appearance */
+      .application-form-container-static {
+        background-color: #ffffff;
+        border: 1px solid #dcdcdc;
+        padding: 50px 30px;
+        box-shadow: none;
+        border-radius: 10px;
+      }
 
-.application-form-container-static h2 {
-    font-size: 28px;
-    text-align: center;
-    color: #3498db;
-    margin-bottom: 20px;
-}
+      .application-form-container-static h2 {
+        font-size: 28px;
+        text-align: center;
+        color: #3498db;
+        margin-bottom: 20px;
+      }
 
-.custom-input-static {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid #dcdcdc;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-}
+      .custom-input-static {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #dcdcdc;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+      }
 
-.custom-input-static:focus {
-    border-color: #3498db;
-}
-
+      .custom-input-static:focus {
+        border-color: #3498db;
+      }
     </style>
-</head>
-<body>
-
-
+  </head>
+  <body>
     <div class="application-form-container">
-        <h2 class="text-center">Apply for <span id="modal-job-title"><%= jobData.title %></span></h2>
-    
-        <form id="apply-form">
-            <!-- Hidden Fields -->
-            <input type="hidden" id="modal-job-jobid-field" name="jobTitle" value="<%= jobData.title %>">
-            <input type="hidden" id="modal-job-jobid-field" name="job_id" value="<%= jobData.job_id %>">
-            <input type="hidden" id="modal-company-name-field" name="companyName" value="<%= jobData.companyName %>">
-            <input type="hidden" id="registration-id-field" name="registrationId" value="REG-<%= Math.floor(Math.random() * 1000000).toString().padStart(6, '0') %>">
-            <input type="hidden" id="employee-id-field" name="employeeId" value="<%= employee.employee_id %>">
-    
-            <!-- Prefilled Fields -->
-            <div class="form-group">
-                <label for="name" class="custom-label">Your Name</label>
-                <input type="text" id="name" name="name" placeholder="Your Name" required class="form-control custom-input" value="<%= employee.name %>" readonly>
-            </div>
-            <div class="form-group">
-                <label for="fatherName" class="custom-label">Father's Name</label>
-                <input type="text" id="fatherName" name="fatherName" placeholder="Father's Name" required class="form-control custom-input" value="<%= employee.fatherName %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="dob" class="custom-label">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required class="form-control custom-input" value="<%= employee.dob %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="age" class="custom-label">Your Age</label>
-                <input type="number" id="age" name="age" placeholder="Your Age" required class="form-control custom-input" value="<%= employee.age %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="experience" class="custom-label">Experience</label>
-                <input type="text" id="experience" name="experience" placeholder="Experience" required class="form-control custom-input" value="<%= employee.experience %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="phone" class="custom-label">Phone Number</label>
-                <input type="text" id="phone" name="phone" placeholder="Phone Number" required class="form-control custom-input" value="<%= employee.phone %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="address" class="custom-label">Address</label>
-                <input type="text" id="address" name="address" placeholder="Address" required class="form-control custom-input" value="<%= employee.address %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="pincode" class="custom-label">Pincode</label>
-                <input type="text" id="pincode" name="pincode" placeholder="Pincode" required class="form-control custom-input" value="<%= employee.pincode %>">
-            </div>
-    
-            <div class="form-group">
-                <label for="state" class="custom-label">State</label>
-                <input type="text" id="state" name="state" placeholder="State" required class="form-control custom-input" value="<%= employee.state %>">
-            </div>
-    
-            <!-- Availability -->
-            <div class="form-group">
-                <label for="availability" class="custom-label">Availability</label>
-                <input type="text" id="availability" name="availability" placeholder="Availability" required class="form-control custom-input">
-            </div>
-            <!-- Other Fields (similarly defined) -->
-            <div class="form-group">
-                <label for="minimumSalary" class="custom-label">Minimum Salary</label>
-                <input type="text" id="minimumSalary" name="minimumSalary" placeholder="Minimum Salary" required class="form-control custom-input">
-            </div>
-    
-            <!-- Submit Button -->
-            <button type="submit" class="custom-submit-button">Submit</button>
-        </form>
+      <h2 class="text-center">
+        Apply for <span id="modal-job-title"><%= jobData.title %></span>
+      </h2>
+
+      <form id="apply-form">
+        <!-- Hidden Fields -->
+        <input
+          type="hidden"
+          id="modal-job-jobid-field"
+          name="jobTitle"
+          value="<%= jobData.title %>"
+        />
+        <input
+          type="hidden"
+          id="modal-job-jobid-field"
+          name="job_id"
+          value="<%= jobData.job_id %>"
+        />
+        <input
+          type="hidden"
+          id="modal-company-name-field"
+          name="companyName"
+          value="<%= jobData.companyName %>"
+        />
+        <input
+          type="hidden"
+          id="registration-id-field"
+          name="registrationId"
+          value="REG-<%= Math.floor(Math.random() * 1000000).toString().padStart(6, '0') %>"
+        />
+        <input
+          type="hidden"
+          id="employee-id-field"
+          name="employeeId"
+          value="<%= employee.employee_id %>"
+        />
+
+        <!-- Prefilled Fields -->
+        <div class="form-group">
+          <label for="name" class="custom-label">Your Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Your Name"
+            required
+            class="form-control custom-input"
+            value="<%= employee.name %>"
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="fatherName" class="custom-label">Father's Name</label>
+          <input
+            type="text"
+            id="fatherName"
+            name="fatherName"
+            placeholder="Father's Name"
+            required
+            class="form-control custom-input"
+            value="<%= employee.fatherName %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="dob" class="custom-label">Date of Birth</label>
+          <input
+            type="date"
+            id="dob"
+            name="dob"
+            required
+            class="form-control custom-input"
+            value="<%= employee.dob %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="age" class="custom-label">Your Age</label>
+          <input
+            type="number"
+            id="age"
+            name="age"
+            placeholder="Your Age"
+            required
+            class="form-control custom-input"
+            value="<%= employee.age %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="experience" class="custom-label">Experience</label>
+          <input
+            type="text"
+            id="experience"
+            name="experience"
+            placeholder="Experience"
+            required
+            class="form-control custom-input"
+            value="<%= employee.experience %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="custom-label">Phone Number</label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            placeholder="Phone Number"
+            required
+            class="form-control custom-input"
+            value="<%= employee.phone %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="address" class="custom-label">Address</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            placeholder="Address"
+            required
+            class="form-control custom-input"
+            value="<%= employee.address %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="pincode" class="custom-label">Pincode</label>
+          <input
+            type="text"
+            id="pincode"
+            name="pincode"
+            placeholder="Pincode"
+            required
+            class="form-control custom-input"
+            value="<%= employee.pincode %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="state" class="custom-label">State</label>
+          <input
+            type="text"
+            id="state"
+            name="state"
+            placeholder="State"
+            required
+            class="form-control custom-input"
+            value="<%= employee.state %>"
+          />
+        </div>
+
+        <!-- Availability -->
+        <div class="form-group">
+          <label for="availability" class="custom-label">Availability</label>
+          <input
+            type="text"
+            id="availability"
+            name="availability"
+            placeholder="Availability"
+            required
+            class="form-control custom-input"
+          />
+        </div>
+        <!-- Other Fields (similarly defined) -->
+        <div class="form-group">
+          <label for="minimumSalary" class="custom-label">Minimum Salary</label>
+          <input
+            type="text"
+            id="minimumSalary"
+            name="minimumSalary"
+            placeholder="Minimum Salary"
+            required
+            class="form-control custom-input"
+          />
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="custom-submit-button">Submit</button>
+      </form>
     </div>
-    
 
-<!-- Success Pop-up -->
-<div class="popup" id="success-popup">
-    <h3>Application submitted successfully!</h3>
-    <p>Your registration ID is: <span id="registration-id-display"></span></p>
-    <div class="spinner" id="popup-spinner"></div>
-    <button id="popup-ok-btn">OK</button>
-</div>
+    <!-- Success Pop-up -->
+    <div class="popup" id="success-popup">
+      <h3>Application submitted successfully!</h3>
+      <p>Your registration ID is: <span id="registration-id-display"></span></p>
+      <div class="spinner" id="popup-spinner"></div>
+      <button id="popup-ok-btn">OK</button>
+    </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#apply-form').on('submit', function(event) {
-        event.preventDefault(); // Prevent form from submitting the default way
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#apply-form").on("submit", function (event) {
+          event.preventDefault(); // Prevent form from submitting the default way
 
-        const formData = $(this).serialize(); // Serialize form data
+          const formData = $(this).serialize(); // Serialize form data
 
-        // Show the spinner during form submission
-        $('#popup-spinner').show();
+          // Show the spinner during form submission
+          $("#popup-spinner").show();
 
-        $.ajax({
-            url: '/apply', // Endpoint to handle the form submission
-            type: 'POST',
+          $.ajax({
+            url: "/apply", // Endpoint to handle the form submission
+            type: "POST",
             data: formData,
-            success: function(response) {
-                // Hide the spinner after successful submission
-                $('#popup-spinner').hide();
+            success: function (response) {
+              // Hide the spinner after successful submission
+              $("#popup-spinner").hide();
 
-                // Show the success pop-up
-                $('#registration-id-display').text(response.registrationId);
-                $('#success-popup').fadeIn(300);
+              // Show the success pop-up
+              $("#registration-id-display").text(response.registrationId);
+              $("#success-popup").fadeIn(300);
 
-                // Blur the form container
-                $('#form-container').addClass('blurred');
+              // Blur the form container
+              $("#form-container").addClass("blurred");
 
-                // Remove the form after submission
-                $('#apply-form').remove();
+              // Remove the form after submission
+              $("#apply-form").remove();
             },
-            error: function() {
-                alert('Error submitting the application.');
-                $('#popup-spinner').hide();
-            }
+            error: function () {
+              alert("Error submitting the application.");
+              $("#popup-spinner").hide();
+            },
+          });
         });
-    });
 
-    // Handle the OK button in the pop-up
-    $('#popup-ok-btn').on('click', function() {
-        $('#success-popup').fadeOut(300); // Hide the pop-up
-        $('#form-container').removeClass('blurred'); // Remove blur effect
-    });
-});
-</script>
-
-</body>
+        // Handle the OK button in the pop-up
+        $("#popup-ok-btn").on("click", function () {
+          $("#success-popup").fadeOut(300); // Hide the pop-up
+          $("#form-container").removeClass("blurred"); // Remove blur effect
+        });
+      });
+    </script>
+  </body>
 </html>
